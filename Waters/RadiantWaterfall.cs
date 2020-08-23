@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
  
-namespace InfiniteSuffering.Waters
+namespace ExpiryMode.Waters
 {
     public class RadiantWaterfall : ModWaterfallStyle
     {

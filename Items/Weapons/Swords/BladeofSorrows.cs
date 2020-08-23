@@ -2,10 +2,10 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using static Terraria.ModLoader.ModContent;
-using InfiniteSuffering.Projectiles;
-using InfiniteSuffering.Buffs.BadBuffs;
+using ExpiryMode.Projectiles;
+using ExpiryMode.Buffs.BadBuffs;
 
-namespace InfiniteSuffering.Items.Weapons.Swords
+namespace ExpiryMode.Items.Weapons.Swords
 {
 	public class BladeofSorrows : ModItem
 	{

@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
  
-namespace InfiniteSuffering.Tiles.Trees
+namespace ExpiryMode.Tiles.Trees
 {
     public class RottenTreeTile : ModTile
     {

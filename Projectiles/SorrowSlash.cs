@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace InfiniteSuffering.Projectiles
+namespace ExpiryMode.Projectiles
 {
     class SorrowSlash : ModProjectile
     {

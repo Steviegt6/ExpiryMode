@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace InfiniteSuffering.Items.Tools
+namespace ExpiryMode.Items.Tools
 {
 	public class RadianiteHamaxe : ModItem
 	{

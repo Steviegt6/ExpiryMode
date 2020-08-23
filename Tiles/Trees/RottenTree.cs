@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
  
-namespace YourModName.Tiles
+namespace ExpiryMode.Tiles
 {
     public class RottenTree : ModTree
     {

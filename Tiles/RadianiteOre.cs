@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace InfiniteSuffering.Tiles
+namespace ExpiryMode.Tiles
 {
 	public class RadianiteOre : ModTile
 	{

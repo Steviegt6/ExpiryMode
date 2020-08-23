@@ -5,10 +5,10 @@ using Terraria;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using InfiniteSuffering.Items.Materials;
-using InfiniteSuffering.Projectiles;
+using ExpiryMode.Items.Materials;
+using ExpiryMode.Projectiles;
 
-namespace InfiniteSuffering.Items.Weapons.Bows
+namespace ExpiryMode.Items.Weapons.Bows
 {
 	public class BlackbirdBow : ModItem
 	{

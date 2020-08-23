@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace InfiniteSuffering.Mod_
+namespace ExpiryMode.Mod_
 {
     //TODO: Rotting away debuff lasts forever (client side) after leaving. (until death)
     //TODO: 

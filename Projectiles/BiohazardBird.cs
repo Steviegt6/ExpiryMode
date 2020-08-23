@@ -7,10 +7,10 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
-using InfiniteSuffering.Buffs.BadBuffs;
+using ExpiryMode.Buffs.BadBuffs;
 using Terraria.Localization;
 
-namespace InfiniteSuffering.Projectiles
+namespace ExpiryMode.Projectiles
 {
     public class BiohazardBird : ModProjectile
     {

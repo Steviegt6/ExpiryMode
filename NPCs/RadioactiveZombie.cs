@@ -1,15 +1,15 @@
-using InfiniteSuffering;
-using InfiniteSuffering.Waters;
+using ExpiryMode;
+using ExpiryMode.Waters;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using InfiniteSuffering.Buffs.BadBuffs;
+using ExpiryMode.Buffs.BadBuffs;
 using Microsoft.Xna.Framework;
 
 
-namespace InfiniteSuffering.NPCs
+namespace ExpiryMode.NPCs
 {
 	public class RadioactiveZombie : ModNPC
 	{

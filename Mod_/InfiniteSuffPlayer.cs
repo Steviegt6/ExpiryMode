@@ -3,13 +3,13 @@ using Terraria.ID;
 using Terraria.DataStructures;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader;
-using InfiniteSuffering.Buffs.BadBuffs;
-using InfiniteSuffering.Buffs.GoodBuffs;
+using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Buffs.GoodBuffs;
 using System.Collections.Generic;
-using InfiniteSuffering.Items.Materials;
+using ExpiryMode.Items.Materials;
 using Terraria.GameInput;
 
-namespace InfiniteSuffering.Mod_
+namespace ExpiryMode.Mod_
 // TODO: Make custom sky not apply to all players
 {
     public class InfiniteSuffPlayer : ModPlayer
@@ -42,8 +42,8 @@ namespace InfiniteSuffering.Mod_
         {
             if (ZoneRadiated && player.whoAmI == Main.myPlayer)
             {
-                Main.sunTexture = GetTexture("InfiniteSuffering/Assets/RottenSun");
-                Main.rainTexture = GetTexture("InfiniteSuffering/Assets/RadiatedRain");
+                Main.sunTexture = GetTexture("ExpiryMode/Assets/RottenSun");
+                Main.rainTexture = GetTexture("ExpiryMode/Assets/RadiatedRain");
             }
             else
             {

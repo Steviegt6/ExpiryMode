@@ -1,11 +1,11 @@
-using InfiniteSuffering.Items.Materials;
+using ExpiryMode.Items.Materials;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace InfiniteSuffering.Items.Tools
+namespace ExpiryMode.Items.Tools
 {
 	public class RadianiteAxe : ModItem
 	{

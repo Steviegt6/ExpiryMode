@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace InfiniteSuffering.Items.Materials
+namespace ExpiryMode.Items.Materials
 {
 	public class RadianiteBarItem : ModItem
 	{

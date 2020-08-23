@@ -6,7 +6,7 @@ using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.DataStructures;
 
-namespace InfiniteSuffering.Tiles
+namespace ExpiryMode.Tiles
 {
 	public class RadianiteBar : ModTile
 	{

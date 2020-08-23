@@ -4,9 +4,9 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
 using System.Linq;
-using IL.Terraria;
+using Terraria;
 
-namespace InfiniteSuffering.Items.Materials
+namespace ExpiryMode.Items.Materials
 {
 	public class PendantPiece : ModItem
 	{

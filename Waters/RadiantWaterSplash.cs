@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
  
-namespace InfiniteSuffering.Waters
+namespace ExpiryMode.Waters
 {
     public class RadiantWaterSplash : ModDust
     {

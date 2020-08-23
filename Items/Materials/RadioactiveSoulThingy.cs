@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 
-namespace InfiniteSuffering.Items.Materials
+namespace ExpiryMode.Items.Materials
 {
 	public class RadioactiveSoulThingy : ModItem
 	{

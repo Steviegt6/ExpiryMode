@@ -2,7 +2,7 @@ using IL.Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace InfiniteSuffering.Items.Materials
+namespace ExpiryMode.Items.Materials
 {
 	public class Paper : ModItem
 	{

@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using InfiniteSuffering.Buffs.GoodBuffs;
+using ExpiryMode.Buffs.GoodBuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace InfiniteSuffering.Items.Potions
+namespace ExpiryMode.Items.Potions
 {
 	public class PotionPure : ModItem
 	{

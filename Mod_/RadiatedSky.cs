@@ -4,7 +4,7 @@ using System;
 using Terraria;
 using Terraria.Graphics.Effects;
 
-namespace InfiniteSuffering.Mod_
+namespace ExpiryMode.Mod_
 {
 	public class RadiatedSky : CustomSky
 	{
