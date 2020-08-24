@@ -2,6 +2,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using ExpiryMode.Tiles.Trees;
 
 namespace ExpiryMode.Tiles
 {
@@ -22,6 +23,7 @@ namespace ExpiryMode.Tiles
         }
         public override bool CreateDust(int i, int j, ref int type)
         {
+            // This method is called entirely on the fact that the block is being hit with a pickaxe, or is destroyed by an explosive
             if (Main.rand.Next(1) == 0)
             {
                 Dust.NewDust(new Vector2(i, j).ToWorldCoordinates(), 16, 16, DustID.Smoke, 0, 0, 0, new Color(100, 100, 100), 1);
@@ -32,12 +34,12 @@ namespace ExpiryMode.Tiles
             }
             return false;
         }
-        public override int SaplingGrowthType(ref int style)
+        public override int SaplingGrowthType(ref int style) // This method is not necessarily helping me, as my trees do NOT work yet.
         {
             style = 0;
-            return ModContent.TileType<Tiles.Trees.RottenSapling>();
+            return ModContent.TileType<RottenSapling>();
         }
-        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) // Modify the light that this tile produces, if any at all
 		{
 			r = 0.0f;
 			g = 0.0f;

@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
  
 namespace ExpiryMode.Waters
 {
@@ -8,22 +9,22 @@ namespace ExpiryMode.Waters
     {
         public override bool ChooseWaterStyle()
         {
-            return Main.bgStyle == mod.GetSurfaceBgStyleSlot("RadiantBackground");    //this is where u choose where the custom water/waterfalls will appear. it will appear in base of backgrounds so add your surface background name.
+            return Main.bgStyle == mod.GetSurfaceBgStyleSlot("RadiantBackground"); // When this background is enabled, use this custom water style
         }
  
         public override int ChooseWaterfallStyle()
         {
-            return mod.GetWaterfallStyleSlot("RadiantWaterfall");   //this is the waterfall style
+            return mod.GetWaterfallStyleSlot("RadiantWaterfall");   // Spritesheet grabber for the waterfall
         }
  
         public override int GetSplashDust()
         {
-            return mod.DustType("RadiantWaterSplash");   //this is the water splash dust
+            return DustType<RadiantWaterSplash>(); // This gets the dust that emits when you jump INTO the water
         }
  
         public override int GetDropletGore()
         {
-            return mod.GetGoreSlot("Waters/RadiantWater_Block");     //this is the water droplet
+            return mod.GetGoreSlot("Waters/RadiantWater_Block"); // The droplet that comes out of ceilings
         }
  
         public override void LightColorMultiplier(ref float r, ref float g, ref float b)
@@ -32,7 +33,7 @@ namespace ExpiryMode.Waters
             g = 0.63529411764f;
             b = 0.01176470588f;
         }
- 
+
         public override Color BiomeHairColor()
         {
             return Color.Green;

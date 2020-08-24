@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
  
@@ -8,13 +7,13 @@ namespace ExpiryMode.Waters
     {
         public override void SetDefaults()
         {
-            updateType = 33;
+            updateType = 33; // Copy defaults of another DustID
         }
         public override void OnSpawn(Dust dust)
         {
-            dust.alpha = 170; //this is the dust visibiliti, the bigger is the value less visible
-            dust.velocity *= 0.9f;  //this is the velocity of dust
-            dust.velocity.Y += 1f;  //and this is the velocity of dust when it goes up
+            dust.alpha = 170; // The higher you go with this field, the more transparent the dust gets
+            dust.velocity *= 0.9f;  // The default pixels travelled/tick
+            dust.velocity.Y += 1f;  // The velocity of this dust when shot up
         }
     }
 }
