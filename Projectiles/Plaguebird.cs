@@ -2,12 +2,11 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Projectiles;
 
 namespace ExpiryMode.Projectiles
 {
@@ -179,7 +178,7 @@ namespace ExpiryMode.Projectiles
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Rectangle frame = new Rectangle(0, projectile.frame * 72, 56, 72);
-            spriteBatch.Draw(GetTexture("InfiniteSuffering/Projectiles/BiohazardBird"), projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition, frame, lightColor, projectile.rotation + (float)0.1 * (projectile.spriteDirection), new Vector2(56, 72) / 2, projectile.scale, projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
+            spriteBatch.Draw(GetTexture("ExpiryMode/Projectiles/BiohazardBird"), projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition, frame, lightColor, projectile.rotation + (float)0.1 * (projectile.spriteDirection), new Vector2(56, 72) / 2, projectile.scale, projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
             return false;
         }
         public override void AI()

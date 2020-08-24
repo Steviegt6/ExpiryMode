@@ -1,8 +1,9 @@
 using Terraria.ID;
-using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework;
 using ExpiryMode.Items.Materials;
+using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Projectiles;
 
 namespace ExpiryMode.Items.Weapons.Bows
