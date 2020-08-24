@@ -4,7 +4,12 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
+using Terraria.ID;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using static Terraria.Main;
 using System;
+using ReLogic.OS;
 
 namespace ExpiryMode.Mod_
 {
@@ -19,6 +24,7 @@ namespace ExpiryMode.Mod_
         public override void Unload() { ShiftIsPressed = null; }
         public override void Load()
         {
+            Platform.Current.SetWindowUnicodeTitle(instance.Window, "Terrraria: See, You Got Boofed...");
             ShiftIsPressed = RegisterHotKey("ALT to view details", "LeftAlt");
             if (!Main.dedServ)
             {
