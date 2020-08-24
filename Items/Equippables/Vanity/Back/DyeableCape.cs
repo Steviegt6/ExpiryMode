@@ -1,10 +1,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ExpiryMode.Items.Equippables.Vanity;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using ExpiryMode.Mod_;
 
 namespace ExpiryMode.Items.Equippables.Vanity.Back
 {

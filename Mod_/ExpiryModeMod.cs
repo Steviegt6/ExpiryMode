@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using static Terraria.Main;
 using System;
 using ReLogic.OS;
-using System.Threading;
 
 namespace ExpiryMode.Mod_
 {
@@ -27,13 +26,13 @@ namespace ExpiryMode.Mod_
             switch (rand.Next(7))
             {
                 default:
-                    ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__? Yeah, he's pretty annoying";
+                    ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
                     break;
                 case 1:
                     ScreenLoadChance = "tModLoader: You've Been Distracted!";
                     break;
                 case 2:
-                    ScreenLoadChance = "tModLoader: Close the application for free candy in the back of my truck";
+                    ScreenLoadChance = "tModLoader: Close the application";
                     break;
                 case 3:
                     ScreenLoadChance = "tStandalone: Wait, wrong mod";
@@ -111,8 +110,8 @@ namespace ExpiryMode.Mod_
             Player player = Main.player[Main.myPlayer];
             if (player.name != "Light Yagami")
                 Main.NewText("You don't wield the necessary power to perform this command...", Color.Red);
-                if (player.name == "Light Yagami")
-                {
+            if (player.name == "Light Yagami")
+            {
                 if (Main.rand.Next(8) == 0)
                 {
                     player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} couldn't take it anymore."), player.statLife, 1);
@@ -123,5 +122,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+        internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
+        +"\n you are a good observer.";
     }
 }
