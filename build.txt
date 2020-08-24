@@ -1,6 +1,6 @@
 displayName = Expiry Mode (Pre-Release)
 author = Ryan and the Dev Team
-version = 0.2.0.3
+version = 0.2.0.5
 buildIgnore = *.csproj, *user, obj\*, bin\*
 ignorePDB = true
 homepage = https://discord.gg/pT2BzSG
