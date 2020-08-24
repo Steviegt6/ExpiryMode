@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.DataStructures;
+using Terraria.Localization;
+using ExpiryMode.Items.Materials;
 
 namespace ExpiryMode.Tiles
 {
@@ -12,19 +14,25 @@ namespace ExpiryMode.Tiles
 	{
         public override void SetDefaults()
         {
+            Main.tileShine[Type] = 1100;
             Main.tileSolid[Type] = true;
-			Main.tileSolidTop[Type] = true;
-            Main.tileMergeDirt[Type] = true;
-            Main.tileBlockLight[Type] = true;
-            Main.tileLighted[Type] = true;
-            drop = mod.ItemType("RadianiteBarItem");
-            AddMapEntry(new Color(50, 50, 50));
-            soundType = SoundID.Tink;
-            minPick = 0;
-            Main.tileMerge[Type][TileID.Stone] = true;
-            Main.tileMerge[TileID.Stone][Type] = true;
+            Main.tileSolidTop[Type] = true;
+            Main.tileFrameImportant[Type] = true;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.addTile(Type);
+            base.AddMapEntry(new Color(0, 255, 0), Language.GetText("MapObject.RadianiteBar"));
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             //TileObjectData.addTile(Type);
+        }
+        public override bool Drop(int i, int j)
+        {
+            if (Main.tile[i, j].frameX / 18 == 0)
+            {
+                Item.NewItem(i * 16, j * 16, 16, 16, ModContent.ItemType<RadianiteBarItem>(), 1, false, 0, false, false);
+            }
+            return base.Drop(i, j);
         }
         public override bool CreateDust(int i, int j, ref int type)
         {
