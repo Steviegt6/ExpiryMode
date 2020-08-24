@@ -3,3 +3,4 @@ author = Ryan and the Dev Team
 version = 0.2.0.2
 buildIgnore = *.csproj, *user, obj\*, bin\*
 ignorePDB = true
+homepage = https://discord.gg/pT2BzSG

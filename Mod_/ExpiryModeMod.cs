@@ -4,9 +4,6 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
-using Terraria.ID;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using static Terraria.Main;
 using System;
 using ReLogic.OS;
@@ -24,7 +21,34 @@ namespace ExpiryMode.Mod_
         public override void Unload() { ShiftIsPressed = null; }
         public override void Load()
         {
-            Platform.Current.SetWindowUnicodeTitle(instance.Window, "Terrraria: See, You Got Boofed...");
+            string ScreenLoadChance = "tModLoader: This is getting repetitive";
+
+            switch (rand.Next(7))
+            {
+                default:
+                    ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__? Yeah, he's pretty annoying";
+                    break;
+                case 1:
+                    ScreenLoadChance = "tModLoader: You've Been Distracted!";
+                    break;
+                case 2:
+                    ScreenLoadChance = "tModLoader: Close the application for free candy in the back of my truck";
+                    break;
+                case 3:
+                    ScreenLoadChance = "tStandalone: Wait, wrong mod";
+                    break;
+                case 4:
+                    ScreenLoadChance = "tModLoader: what.ogg is the best song";
+                    break;
+                case 5:
+                    ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
+                    break;
+                case 6:
+                    if (ModLoader.GetMod("rterrariatod") != null)
+                       ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
+                    break;
+            }
+            Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             ShiftIsPressed = RegisterHotKey("ALT to view details", "LeftAlt");
             if (!Main.dedServ)
             {
