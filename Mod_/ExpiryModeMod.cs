@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using static Terraria.Main;
 using System;
 using ReLogic.OS;
+using System.Threading;
 
 namespace ExpiryMode.Mod_
 {
