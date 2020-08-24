@@ -1,8 +1,5 @@
 using Terraria.ID;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna;
-using Terraria;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Materials;
@@ -66,7 +63,8 @@ namespace ExpiryMode.Items.Weapons.Bows
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "RadianiteBarItem", 8);
+            recipe.AddIngredient(ItemType<RadianiteBarItem>(), 8);
+			recipe.AddIngredient(ItemType<RadioactiveSoulThingy>(), 5);
 			recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
 			recipe.AddRecipe();

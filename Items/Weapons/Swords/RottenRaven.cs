@@ -4,6 +4,7 @@ using Terraria;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Projectiles;
 using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Items.Materials;
 
 namespace ExpiryMode.Items.Weapons.Swords
 {
@@ -37,7 +38,8 @@ namespace ExpiryMode.Items.Weapons.Swords
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "RadianiteBarItem", 12);
+            recipe.AddIngredient(ItemType<RadianiteBarItem>(), 12);
+			recipe.AddIngredient(ItemType<RadioactiveSoulThingy>(), 5);
 			recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
