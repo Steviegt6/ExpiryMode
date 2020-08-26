@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using ExpiryMode.Tiles;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ModLoader.IO;
+using Terraria.ID;
 
 namespace ExpiryMode.Mod_
 {
@@ -29,11 +30,14 @@ namespace ExpiryMode.Mod_
                     int XvalueMid = Xvalue - 75;
                     int YvalueMid = Yvalue - 75;
                     Tile tile = Framing.GetTileSafely(Xvalue, Yvalue);
+                    if (tile.active() && tile.type == TileID.Grass)
+                    {
+                        WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(500, 1000), 1, TileType<RottenGrass>(), false, 0f, 0f, true, true);
+                    }
                     {
                         WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(500, 1000), 1, TileType<DoomGravel>(), false, 0f, 0f, true, true);
                         WorldGen.digTunnel(Xvalue + 400, Yvalue + 400, 0f, 0f, WorldGen.genRand.Next(15, 18), WorldGen.genRand.Next(14, 17), false);
                     }
-
                 }
             }));
         }

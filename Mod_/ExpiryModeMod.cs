@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework;
 using static Terraria.Main;
 using System;
 using ReLogic.OS;
+using Terraria.Localization;
+using Terraria.ID;
+using ExpiryMode.Items.Blocks;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Mod_
 {
@@ -14,6 +18,34 @@ namespace ExpiryMode.Mod_
     //TODO: 
     public class InfiniteSuffering : Mod
     {
+        public override void Close()
+        {
+            // Fix a tModLoader bug.
+            var slots = new int[] {
+                GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic"),
+                GetSoundSlot(SoundType.Music, "Sounds/Custom/Pop")
+            };
+            foreach (var slot in slots) // Other mods crashing during loading can leave Main.music in a weird state.
+            {
+                if (Main.music.IndexInRange(slot) && Main.music[slot]?.IsPlaying == true)
+                {
+                    Main.music[slot].Stop(Microsoft.Xna.Framework.Audio.AudioStopOptions.Immediate);
+                }
+            }
+
+            base.Close();
+        }
+        public override void AddRecipeGroups()
+        {
+            RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
+            RecipeGroup.RegisterGroup("ExpiryMode:BiomeSouls", group);
+            if (RecipeGroup.recipeGroupIDs.ContainsKey("Wood"))
+            {
+                int num1 = RecipeGroup.recipeGroupIDs["Wood"];
+                group = RecipeGroup.recipeGroups[num1];
+                group.ValidItems.Add(ModContent.ItemType<IrridiatedWood>());
+            }
+        }
         public static ModHotKey ShiftIsPressed;
         public InfiniteSuffering() { }
         public override void AddRecipes() { }
@@ -123,6 +155,7 @@ namespace ExpiryMode.Mod_
             }
         }
         internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
-        +"\n you are a good observer.";
+        + "\n you are a good observer.";
     }
+
 }

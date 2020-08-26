@@ -23,5 +23,5 @@ namespace ExpiryMode.Items.Equippables.Vanity.Stickman
         {
             return false;
         }
-	}
+    }
 }
