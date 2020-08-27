@@ -30,7 +30,7 @@ namespace ExpiryMode.Mod_
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
             removeDebuffs = false;
-            ;
+            
         }
         /*public override void OnEnterWorld(Player player)
         {

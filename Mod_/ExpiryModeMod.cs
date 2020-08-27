@@ -179,34 +179,37 @@ namespace ExpiryMode.Mod_
             }*/
             IL.Terraria.Main.DrawMenu += HookMenuSplash;
             //Process.Start("https://discord.gg/pT2BzSG");
-            string ScreenLoadChance = "tModLoader: This is getting repetitive";
-
-            switch (rand.Next(7))
+            if (!Main.dedServ)
             {
-                default:
-                    ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
-                    break;
-                case 1:
-                    ScreenLoadChance = "tModLoader: You've Been Distracted!";
-                    break;
-                case 2:
-                    ScreenLoadChance = "tModLoader: Close the application";
-                    break;
-                case 3:
-                    ScreenLoadChance = "tStandalone: Wait, wrong mod";
-                    break;
-                case 4:
-                    ScreenLoadChance = "tModLoader: what.ogg is the best song";
-                    break;
-                case 5:
-                    ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
-                    break;
-                case 6:
-                    if (ModLoader.GetMod("rterrariatod") != null)
-                        ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
-                    break;
+                string ScreenLoadChance = "tModLoader: Terraria";
+
+                switch (rand.Next(7))
+                {
+                    default:
+                        ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
+                        break;
+                    case 1:
+                        ScreenLoadChance = "tModLoader: You've Been Distracted!";
+                        break;
+                    case 2:
+                        ScreenLoadChance = "tModLoader: Close the application";
+                        break;
+                    case 3:
+                        ScreenLoadChance = "tStandalone: Wait, wrong mod";
+                        break;
+                    case 4:
+                        ScreenLoadChance = "tModLoader: what.ogg is the best song";
+                        break;
+                    case 5:
+                        ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
+                        break;
+                    case 6:
+                        if (ModLoader.GetMod("rterrariatod") != null)
+                            ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
+                        break;
+                }
+                ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             }
-            ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
             if (!Main.dedServ)
             {
