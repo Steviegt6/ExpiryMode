@@ -8,6 +8,7 @@ using ExpiryMode.Buffs.GoodBuffs;
 using System.Collections.Generic;
 using ExpiryMode.Items.Materials;
 using Terraria.GameInput;
+using System.Net;
 
 namespace ExpiryMode.Mod_
 // TODO: Make custom sky not apply to all players
@@ -27,7 +28,21 @@ namespace ExpiryMode.Mod_
         {
             player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
         }
-
+        public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
+        {
+            removeDebuffs = false;
+            price = 1000000;
+        }
+        /*public override void OnEnterWorld(Player player)
+        {
+            if (!ExpiryModeMod.ModVersion.Equals(ExpiryModeMod.CurrentVersion))
+            {
+                Main.NewText($"[c/AB40FF:The Extra Explosives Mod had an update available.]");
+                Main.NewText($"[c/AB40FF:Current Version Installed: {ExpiryModeMod.ModVersion}]");
+                Main.NewText($"[c/AB40FF:Mod Browser Version: {ExpiryModeMod.CurrentVersion}]");
+                Main.NewText($"[c/AB40FF:You can find the latests version in the tML mod browser.]");
+            }
+        }*/
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
             Item item5 = new Item();

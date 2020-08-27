@@ -6,6 +6,8 @@ using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using static Terraria.Dust;
 using ExpiryMode.Buffs.NPCDebuffs;
+using Terraria.Graphics.Shaders;
+using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Projectiles
 {
@@ -29,34 +31,62 @@ namespace ExpiryMode.Projectiles
             projectile.light = 0f;
             projectile.ignoreWater = false;
             projectile.damage = player.HeldItem.damage;
-            projectile.penetrate = 2;
+            projectile.penetrate = 3;
             projectile.knockBack = 2;
-            projectile.rotation += 0.4f * projectile.direction;
+            projectile.arrow = true;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate--;
-            if (projectile.penetrate <= 2)
-            {
                 Main.PlaySound(SoundID.Item93, projectile.position);
                 projectile.Kill();
-                // You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
+                Dust dust;
                 Vector2 position = projectile.Center;
-                for (int i = 0; i < 6; i++)
-                    _ = Main.dust[NewDust(position, 26, 31, 70, 0f, 2.368422f, 26, new Color(0, 142, 255), 0.9210526f)];
-            }
+                for (int i = 20; i >= 0; i--) // I do this because i am a rebel
+                {
+                    dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
+                    dust.noGravity = true;
+                    dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+                }
             return false;
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit) //error is on this line
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            Dust dust;
+            Vector2 position = projectile.Center;
+            for (int i = 20; i >= 0; i--) // I do this because i am a rebel
+            {
+                dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
+                dust.noGravity = true;
+                dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+            }
             _ = Main.player[Main.myPlayer];
-            target.AddBuff(BuffType<Paralysis>(), 90);
+            target.AddBuff(BuffType<Paralysis>(), 30);
+            target.AddBuff(BuffType<RadiatedWater>(), 30);
         }
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
+            target.AddBuff(BuffType<RadiatedWater>(), 30);
+            Dust dust;
+            Vector2 position = projectile.Center;
+            for (int i = 20; i >= 0; i--) // I do this because i am a rebel
+            {
+                dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
+                dust.noGravity = true;
+                dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+            }
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
+            target.AddBuff(BuffType<RadiatedWater>(), 30);
+            Dust dust;
+            Vector2 position = projectile.Center;
+            for (int i = 20; i >= 0; i--) // I do this because i am a rebel
+            {
+                dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
+                dust.noGravity = true;
+                dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+            }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
@@ -72,7 +102,7 @@ namespace ExpiryMode.Projectiles
         }
         public override void AI()
         {
-            if (++projectile.frameCounter >= 6)
+            if (++projectile.frameCounter >= 3)
             {
                 projectile.frameCounter = 0;
                 if (++projectile.frame >= Main.projFrames[projectile.type])
@@ -80,13 +110,19 @@ namespace ExpiryMode.Projectiles
                     projectile.frame = 0;
                 }
             }
-            projectile.spriteDirection = projectile.direction;
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
             projectile.velocity.Y = projectile.velocity.Y + 0.1f; // 0.1f for arrow gravity, 0.4f for knife gravity
             if (projectile.velocity.Y > 16f) // This check implements "terminal velocity". We don't want the projectile to keep getting faster and faster. Past 16f this projectile will travel through blocks, so this check is useful.
             {
-                projectile.velocity.Y = 30f;
+                projectile.velocity.Y = 16f;
             }
+            Dust dust;
+            // You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
+            Vector2 position = projectile.Center;
+            dust = NewDustPerfect(position, 91, new Vector2(0f, 0f), 0, new Color(0, 255, 17), 1f);
+            dust.noGravity = true;
+            dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+
         }
     }
 }

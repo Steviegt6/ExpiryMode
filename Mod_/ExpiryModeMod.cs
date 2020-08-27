@@ -14,6 +14,8 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 using ReLogic.Graphics;
 using System.Diagnostics;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace ExpiryMode.Mod_
 {
@@ -21,6 +23,21 @@ namespace ExpiryMode.Mod_
     //TODO: MAKE DISCORD APPEAR AS UI IN THE MENU
     public class ExpiryModeMod : Mod
     {
+        public static string CurrentVersion = "";
+        public static string ModVersion;
+        public static bool CheckForInternetConnection()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (client.OpenRead("http://google.com/generate_204"))
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
@@ -68,10 +85,18 @@ namespace ExpiryMode.Mod_
                 Vector2 origin2 = fontMouseText.MeasureString(text5);
                 origin2.X *= 0.5f;
                 origin2.Y *= 0.5f;
-                spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
-                spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
-                Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 10), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
-                if (discordLink.Contains(MouseScreen.ToPoint()))
+                if (ModLoader.GetMod("HamstarHelpers") == null)
+                {
+                    spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                }
+                else if (ModLoader.GetMod("HamstarHelpers") != null)
+                {
+                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 450f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                }
+                Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                Rectangle discordLinkFurtherOut = new Rectangle((int)(screenWidth - origin2.X * 2 - 375), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                if (discordLink.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") == null)
                 {
                     if (textIndex == 4)
                     {
@@ -82,7 +107,25 @@ namespace ExpiryMode.Mod_
                         }
                     }
                 }
-                spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 105f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                if (discordLinkFurtherOut.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") != null)
+                {
+                    if (textIndex == 4)
+                    {
+                        color = new Color(255, 255, 0);
+                        if (mouseLeft && mouseLeftRelease)
+                        {
+                            Process.Start("https://discord.gg/nnjjqbn");
+                        }
+                    }
+                }
+                if (ModLoader.GetMod("HamstarHelpers") == null)
+                {
+                    spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 105f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                }
+                else if (ModLoader.GetMod("HamstarHelpers") != null)
+                {
+                    spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 375f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                }
             }
         }
         public override void Close()
@@ -113,11 +156,30 @@ namespace ExpiryMode.Mod_
         public static ModHotKey ShiftIsPressed;
         public ExpiryModeMod() { }
         public override void AddRecipes() { }
-        public override void PostUpdateEverything() { if (Main.myPlayer < 0) return; }
-        public override void Unload() { ShiftIsPressed = null; }
+        public override void PostUpdateEverything() { if (myPlayer < 0) return; }
+        public override void Unload() 
+        { 
+            ShiftIsPressed = null; 
+            ModVersion = null;
+        }
         public override void Load()
         {
-            IL.Terraria.Main.DrawMenu += ExpiryModeMod.HookMenuSplash;
+
+            /*ModVersion = "v" + Version.ToString().Trim();
+
+            //Goes out and grabs the version that the mod browser has
+            using (WebClient client = new WebClient())
+            {
+                if (CheckForInternetConnection())
+                {
+                    //Parsing the data we need from the api
+                    var json = client.DownloadString("http://javid.ddns.net/tModLoader/tools/modinfo.php?modname=ExpiryMode");
+                    json.ToString().Trim();
+                    ExpiryModeMod.CurrentVersion = json;
+                    client.Dispose();
+                }
+            }*/
+            IL.Terraria.Main.DrawMenu += HookMenuSplash;
             //Process.Start("https://discord.gg/pT2BzSG");
             string ScreenLoadChance = "tModLoader: This is getting repetitive";
 
@@ -147,7 +209,7 @@ namespace ExpiryMode.Mod_
                     break;
             }
             ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
-            ShiftIsPressed = RegisterHotKey("ALT to view details", "LeftAlt");
+            ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
             if (!Main.dedServ)
             {
                 Filters.Scene["InfniteSuffering:RadiatedBiomeSky"] = new Filter(new ScreenShaderData("FilterTower").UseColor(0.0f, 0.0f, 0.0f).UseOpacity(0.33f), EffectPriority.Medium);
@@ -156,10 +218,10 @@ namespace ExpiryMode.Mod_
         }
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            Player player = Main.player[Main.myPlayer];
-            if (Main.gameMenu)
-                Main.musicVolume = .5f;
-            if (Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            Player player = Main.player[myPlayer];
+            if (gameMenu)
+                musicVolume = .5f;
+            if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
@@ -172,16 +234,16 @@ namespace ExpiryMode.Mod_
         }
         public override void ModifyLightingBrightness(ref float scale)
         {
-            Player player = Main.LocalPlayer;
-            if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !Main.dayTime)
+            Player player = LocalPlayer;
+            if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
             {
                 scale = 0f;
             }
-            if (!Main.dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 scale = .75f;
             }
-            if (Main.raining && player.ZoneSnow)
+            if (raining && player.ZoneSnow)
             {
                 scale = .75f;
             }

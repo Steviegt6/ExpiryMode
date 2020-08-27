@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Equippables.Vanity.Rune;
+using ExpiryMode.Items.Ammo;
 
 namespace ExpiryMode.Global_
 {
@@ -128,6 +129,16 @@ namespace ExpiryMode.Global_
                     if (modLine1.mod == "Terraria" && modLine1.Name == "Tooltip0")
                     {
                         modLine1.text = $"'Built with only the finest of metals'\n[c/303030:'Clink, Clank']";
+                    }
+                }
+            }
+            if (Mod_.ExpiryModeMod.ShiftIsPressed.Current && item.type == ItemType<RadiantArrowItem>())
+            {
+                foreach (TooltipLine modLine2 in tooltips)
+                {
+                    if (modLine2.mod == "Terraria" && modLine2.Name == "Tooltip0")
+                    {
+                        modLine2.text = $"Stuns your enemies and gives them radiation poisoning!\n[c/303030:Dev Note: If you know why the projectile has a weird tilt to it, contact me on discord with the tag 'RighteousRyan#4321'.]";
                     }
                 }
             }

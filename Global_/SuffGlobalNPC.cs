@@ -49,17 +49,31 @@ namespace ExpiryMode.Global_
                 npc.lifeMax = (int)(npc.defense * 1.1f);
             }*/
             #endregion
+            #region BuffImmune
+            if (npc.boss)
+            {
+                npc.buffImmune[BuffType<Paralysis>()] = true;
+            }
+            #endregion
         }
         public override void PostAI(NPC npc)
         {
-        }
-        public override bool PreAI(NPC npc)
-        {
+            if (npc.boss)
+            {
+                npc.buffImmune[BuffType<Paralysis>()] = true;
+            }
             if (!npc.boss && !npc.CanBeChasedBy())
             {
                 npc.lifeRegen += 5;
             }
-            if (npc.HasBuff(BuffType<Paralysis>()))
+            if (!npc.boss)
+            {
+                npc.lifeRegen += 2;
+            }
+        }
+        public override bool PreAI(NPC npc)
+        {
+            if (!npc.boss && npc.HasBuff(BuffType<Paralysis>()))
             {
                 /*npc.velocity.X = 0;
                 npc.velocity.Y = 0;
