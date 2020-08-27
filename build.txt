@@ -3,4 +3,4 @@ author = Ryan and the Dev Team
 version = 0.2.1
 buildIgnore = *.csproj, *user, obj\*, bin\*
 ignorePDB = true
-homepage = https://discord.gg/pT2BzSG
+homepage = https://forums.terraria.org/index.php?threads/expiry-mode.97429/

@@ -18,6 +18,7 @@ namespace ExpiryMode.Mod_
         public bool RunePlateChest;
         public int DoomBlockCount = 0;
         public bool ZoneRadiated = false;
+        public bool ExpiryModeIsActive = false;
         public override void ProcessTriggers(TriggersSet triggersSet) { }
         public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff)
         {
@@ -29,9 +30,30 @@ namespace ExpiryMode.Mod_
         }
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
-            removeDebuffs = false;
-            
-        }
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+                if (!Main.expertMode && !Main.hardMode)
+                {
+                    price = (int)(price * 5f);
+                    removeDebuffs = true;
+                }
+                else if (Main.expertMode && !Main.hardMode)
+                {
+                    price = (int)(price * 10f);
+                    removeDebuffs = false;
+                }
+                else if (!Main.expertMode && Main.hardMode)
+                {
+                    price = (int)(price * 15f);
+                    removeDebuffs = true;
+                }
+                else if (Main.expertMode && Main.hardMode)
+                {
+                    price = (int)(price * 25f);
+                    removeDebuffs = false;
+                }
+            }
+        }   
         /*public override void OnEnterWorld(Player player)
         {
             if (!ExpiryModeMod.ModVersion.Equals(ExpiryModeMod.CurrentVersion))
@@ -64,156 +86,168 @@ namespace ExpiryMode.Mod_
                 Main.sunTexture = GetTexture("Terraria/Sun");
                 Main.rainTexture = GetTexture("Terraria/Rain");
             }
-            if (player.HasBuff(BuffType<AbsoluteDoom>()))
+            if (SuffWorld.ExpiryModeIsActive)
             {
-                player.statDefense = (int)(player.statDefense * 0.2f);
-                player.buffImmune[BuffType<DoomLess>()] = true;
-            }
-            if (player.HasBuff(BuffType<DoomLess>()))
-            {
-                player.buffImmune[BuffType<AbsoluteDoom>()] = true;
-                player.statDefense = (int)(player.statDefense * 0.6f);
+                if (player.HasBuff(BuffType<AbsoluteDoom>()))
+                {
+                    player.statDefense = (int)(player.statDefense * 0.2f);
+                    player.buffImmune[BuffType<DoomLess>()] = true;
+                }
+                if (player.HasBuff(BuffType<DoomLess>()))
+                {
+                    player.buffImmune[BuffType<AbsoluteDoom>()] = true;
+                    player.statDefense = (int)(player.statDefense * 0.6f);
+                }
             }
         }
         public override void PostUpdateEquips()
         {
-            #region AccessoryChecks
-            if (player.lavaRose)
+            if (SuffWorld.ExpiryModeIsActive)
             {
-                player.buffImmune[BuffType<AAAHHH>()] = true;
-            }
-            if (player.accDivingHelm || player.arcticDivingGear)
-                player.buffImmune[BuffType<WaterPain>()] = true;
-            if (player.waterWalk || player.waterWalk2)
-            {
-                player.waterWalk = false;
-                player.waterWalk2 = false;
-            }
-            if (player.noFallDmg)
-                player.noFallDmg = false;
-            if (player.nightVision)
-            {
-                player.buffImmune[BuffID.Darkness] = true;
-                player.buffImmune[BuffID.Blackout] = true;
-            }
-            if (player.longInvince && !Main.raining)
-            {
-                player.buffImmune[BuffType<AbsoluteDoom>()] = true;
-            }
-            if (!player.longInvince)
-            {
-                player.buffImmune[BuffType<DoomLess>()] = true;
-            }
-            if (player.longInvince && Main.raining && ZoneRadiated)
-            {
-                player.longInvince = false;
-                player.buffImmune[BuffType<DoomLess>()] = true;
+                #region AccessoryChecks
+                if (player.lavaRose)
+                {
+                    player.buffImmune[BuffType<AAAHHH>()] = true;
+                }
+                if (player.accDivingHelm || player.arcticDivingGear)
+                    player.buffImmune[BuffType<WaterPain>()] = true;
+                if (player.waterWalk || player.waterWalk2)
+                {
+                    player.waterWalk = false;
+                    player.waterWalk2 = false;
+                }
+                if (player.noFallDmg)
+                    player.noFallDmg = false;
+                if (player.nightVision)
+                {
+                    player.buffImmune[BuffID.Darkness] = true;
+                    player.buffImmune[BuffID.Blackout] = true;
+                }
+                if (player.longInvince && !Main.raining)
+                {
+                    player.buffImmune[BuffType<AbsoluteDoom>()] = true;
+                }
+                if (!player.longInvince)
+                {
+                    player.buffImmune[BuffType<DoomLess>()] = true;
+                }
+                if (player.longInvince && Main.raining && ZoneRadiated)
+                {
+                    player.longInvince = false;
+                    player.buffImmune[BuffType<DoomLess>()] = true;
+                }
             }
             #endregion
         }
         public override void PostUpdateMiscEffects()
         {
-            player.breathMax = 100;
-            #region WetChecks
-            if (player.breath < 1 && player.wet && player.Center.Y <= Main.rockLayer * 16)
+            if (SuffWorld.ExpiryModeIsActive)
             {
-                player.AddBuff(BuffType<WaterPain>(), 2);
-                player.noBuilding = true;
+                player.breathMax = 100;
+                #region WetChecks
+                if (player.breath < 1 && player.wet && player.Center.Y <= Main.rockLayer * 16)
+                {
+                    player.AddBuff(BuffType<WaterPain>(), 2);
+                    player.noBuilding = true;
+                }
             }
             #endregion
         }
         public override void PostUpdateBuffs()
         {
-            if (player.ZoneBeach)
+            if (SuffWorld.ExpiryModeIsActive)
             {
-                player.buffImmune[BuffType<HeatStroke>()] = true;
-                player.buffImmune[BuffType<LesserHeatStroke>()] = true;
-            }
-            #region underground checks
-            if (player.ZoneDirtLayerHeight && !player.ZoneUnderworldHeight && player.Center.Y <= Main.rockLayer * 16)
-            {
-                player.gravity = .5f;
-                player.AddBuff(BuffType<GravityPlus>(), 2);
-                // Rectangle _ = new Rectangle(100, 100, 100, 100);
-            }
-            #endregion
-            #region Cavern Gravity effects and more
-            if (player.Center.Y >= Main.rockLayer * 16 && player.breath < 1 && player.wet)
-            {
-                player.AddBuff(BuffType<WaterPainPlus>(), 2);
-            }
-            if (player.ZoneDirtLayerHeight)
-            {
-                player.AddBuff(BuffType<GravityPlus>(), 2);
-                player.gravity = .5f;
-            }
-            if (!player.ZoneOverworldHeight && player.ZoneRockLayerHeight && !player.ZoneUnderworldHeight && !player.ZoneDirtLayerHeight)
-            {
-                player.gravity = .65f;
-                player.AddBuff(BuffType<GravityPlusPlus>(), 2);
-            }
-            #endregion
-            #region other debuffs
-            if (player.ZoneUnderworldHeight)
-            {
-                player.gravity = .8f;
-                player.AddBuff(BuffType<GravityPlusPlusExtra>(), 2);
-                player.AddBuff(BuffType<AAAHHH>(), 2);
-            }
-            if (player.lavaWet)
-                player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} died to lava instantly."), 500, 0);
-            if (player.ZoneCorrupt)
-                player.AddBuff(BuffType<RottingAway>(), 2);
-            if (player.ZoneSnow)
-                player.AddBuff(BuffID.Chilled, 2);
-            if (player.ZoneHoly)
-                player.AddBuff(BuffType<PurityBuff>(), 7200);
-            if (player.ZoneDesert)
-                player.AddBuff(BuffType<HeatStroke>(), 2);
-            if (player.ZoneDesert && !Main.dayTime)
-            {
-                player.buffImmune[BuffType<HeatStroke>()] = true;
-                player.buffImmune[BuffType<LesserHeatStroke>()] = true;
-            }
-            if (player.ZoneDesert && player.wet)
-                player.AddBuff(BuffType<LesserHeatStroke>(), 600);
-            if (player.HasBuff(BuffType<LesserHeatStroke>()))
-                player.buffImmune[BuffType<HeatStroke>()] = true;
-            if (player.ZoneDesert && player.wet && !Main.dayTime)
-                player.AddBuff(BuffID.Chilled, 600);
-            #endregion
-            #region More Evil Debuffs
-            if (player.ZoneCrimson && player.ZoneBeach || player.ZoneCorrupt && player.ZoneBeach /* || player.ZoneCrimson && player.ZoneDesert || player.ZoneCorrupt && player.ZoneDesert*/)
-            {
-                player.buffImmune[BuffType<Refreshed>()] = true;
-                player.buffImmune[BuffType<HeatStroke>()] = true;
-                player.buffImmune[BuffType<LesserHeatStroke>()] = true;
-            }
-            if (player.ZoneCrimson)
-                player.AddBuff(BuffType<Fleshy>(), 2);
-            if (player.Center.Y <= 1600)
-                player.AddBuff(BuffType<CantBreathe>(), 2);
-            if (player.ZoneBeach)
-                player.AddBuff(BuffType<Refreshed>(), 1800);
-            if (player.ZoneJungle)
-                player.AddBuff(BuffType<Murky>(), 2);
-            #endregion
-            #region if this, dont do that thanks
-            if (player.ZoneDirtLayerHeight)
-                player.AddBuff(BuffID.Darkness, 2);
-            if (player.ZoneRockLayerHeight || player.ZoneUnderworldHeight)
-                player.AddBuff(BuffID.Blackout, 2);
-            #endregion
-            #region Custom Biome Effects
-            if (ZoneRadiated)
-            {
-                player.AddBuff(BuffType<AbsoluteDoom>(), 2);
-                player.AddBuff(BuffType<DoomLess>(), 2);
-            }
-            if (ZoneRadiated && player.wet)
-            {
-                player.AddBuff(BuffType<RadiatedWater>(), 2);
-                Main.PlaySound(SoundID.Item15);
+                if (player.ZoneBeach)
+                {
+                    player.buffImmune[BuffType<HeatStroke>()] = true;
+                    player.buffImmune[BuffType<LesserHeatStroke>()] = true;
+                }
+                #region underground checks
+                if (player.ZoneDirtLayerHeight && !player.ZoneUnderworldHeight && player.Center.Y <= Main.rockLayer * 16)
+                {
+                    player.gravity = .5f;
+                    player.AddBuff(BuffType<GravityPlus>(), 2);
+                    // Rectangle _ = new Rectangle(100, 100, 100, 100);
+                }
+                #endregion
+                #region Cavern Gravity effects and more
+                if (player.Center.Y >= Main.rockLayer * 16 && player.breath < 1 && player.wet)
+                {
+                    player.AddBuff(BuffType<WaterPainPlus>(), 2);
+                }
+                if (player.ZoneDirtLayerHeight)
+                {
+                    player.AddBuff(BuffType<GravityPlus>(), 2);
+                    player.gravity = .5f;
+                }
+                if (!player.ZoneOverworldHeight && player.ZoneRockLayerHeight && !player.ZoneUnderworldHeight && !player.ZoneDirtLayerHeight)
+                {
+                    player.gravity = .65f;
+                    player.AddBuff(BuffType<GravityPlusPlus>(), 2);
+                }
+                #endregion
+                #region other debuffs
+                if (player.ZoneUnderworldHeight)
+                {
+                    player.gravity = .8f;
+                    player.AddBuff(BuffType<GravityPlusPlusExtra>(), 2);
+                    player.AddBuff(BuffType<AAAHHH>(), 2);
+                }
+                if (player.lavaWet)
+                    player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} died to lava instantly."), 500, 0);
+                if (player.ZoneCorrupt)
+                    player.AddBuff(BuffType<RottingAway>(), 2);
+                if (player.ZoneSnow)
+                    player.AddBuff(BuffID.Chilled, 2);
+                if (player.ZoneHoly)
+                    player.AddBuff(BuffType<PurityBuff>(), 7200);
+                if (player.ZoneDesert)
+                    player.AddBuff(BuffType<HeatStroke>(), 2);
+                if (player.ZoneDesert && !Main.dayTime)
+                {
+                    player.buffImmune[BuffType<HeatStroke>()] = true;
+                    player.buffImmune[BuffType<LesserHeatStroke>()] = true;
+                }
+                if (player.ZoneDesert && player.wet)
+                    player.AddBuff(BuffType<LesserHeatStroke>(), 600);
+                if (player.HasBuff(BuffType<LesserHeatStroke>()))
+                    player.buffImmune[BuffType<HeatStroke>()] = true;
+                if (player.ZoneDesert && player.wet && !Main.dayTime)
+                    player.AddBuff(BuffID.Chilled, 600);
+                #endregion
+                #region More Evil Debuffs
+                if (player.ZoneCrimson && player.ZoneBeach || player.ZoneCorrupt && player.ZoneBeach /* || player.ZoneCrimson && player.ZoneDesert || player.ZoneCorrupt && player.ZoneDesert*/)
+                {
+                    player.buffImmune[BuffType<Refreshed>()] = true;
+                    player.buffImmune[BuffType<HeatStroke>()] = true;
+                    player.buffImmune[BuffType<LesserHeatStroke>()] = true;
+                }
+                if (player.ZoneCrimson)
+                    player.AddBuff(BuffType<Fleshy>(), 2);
+                if (player.Center.Y <= 1600)
+                    player.AddBuff(BuffType<CantBreathe>(), 2);
+                if (player.ZoneBeach)
+                    player.AddBuff(BuffType<Refreshed>(), 1800);
+                if (player.ZoneJungle)
+                    player.AddBuff(BuffType<Murky>(), 2);
+                #endregion
+                #region if this, dont do that thanks
+                if (player.ZoneDirtLayerHeight)
+                    player.AddBuff(BuffID.Darkness, 2);
+                if (player.ZoneRockLayerHeight || player.ZoneUnderworldHeight)
+                    player.AddBuff(BuffID.Blackout, 2);
+                #endregion
+                #region Custom Biome Effects
+                if (ZoneRadiated)
+                {
+                    player.AddBuff(BuffType<AbsoluteDoom>(), 2);
+                    player.AddBuff(BuffType<DoomLess>(), 2);
+                }
+                if (ZoneRadiated && player.wet)
+                {
+                    player.AddBuff(BuffType<RadiatedWater>(), 2);
+                    Main.PlaySound(SoundID.Item15);
+                }
             }
             #endregion
             /*if (player.HasBuff(BuffType<Refreshed>()))

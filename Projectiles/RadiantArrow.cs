@@ -17,13 +17,13 @@ namespace ExpiryMode.Projectiles
         {
             DisplayName.SetDefault("Radiant Arrow");
             Main.projFrames[projectile.type] = 9; // Define frames
-            Main.frameRate = 6;
         }
         public override void SetDefaults()
         {
             Player player = Main.player[Main.myPlayer];
             projectile.width = 18;
             projectile.height = 18;
+            projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
             projectile.friendly = true;
             projectile.melee = true;
             projectile.tileCollide = true;
@@ -41,7 +41,7 @@ namespace ExpiryMode.Projectiles
                 Main.PlaySound(SoundID.Item93, projectile.position);
                 projectile.Kill();
                 Dust dust;
-                Vector2 position = projectile.Center;
+                Vector2 position = projectile.position;
                 for (int i = 20; i >= 0; i--) // I do this because i am a rebel
                 {
                     dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
@@ -53,7 +53,7 @@ namespace ExpiryMode.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Dust dust;
-            Vector2 position = projectile.Center;
+            Vector2 position = projectile.position;
             for (int i = 20; i >= 0; i--) // I do this because i am a rebel
             {
                 dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
@@ -69,7 +69,7 @@ namespace ExpiryMode.Projectiles
             target.AddBuff(BuffType<RadiatedWater>(), 30, false);
             target.AddBuff(BuffType<Paralysis>(), 30, false);
             Dust dust;
-            Vector2 position = projectile.Center;
+            Vector2 position = projectile.position;
             for (int i = 20; i >= 0; i--) // I do this because i am a rebel
             {
                 dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
@@ -82,7 +82,7 @@ namespace ExpiryMode.Projectiles
             target.AddBuff(BuffType<RadiatedWater>(), 30, false);
             target.AddBuff(BuffType<Paralysis>(), 30, false);
             Dust dust;
-            Vector2 position = projectile.Center;
+            Vector2 position = projectile.position;
             for (int i = 20; i >= 0; i--) // I do this because i am a rebel
             {
                 dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
@@ -92,12 +92,12 @@ namespace ExpiryMode.Projectiles
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Rectangle frame = new Rectangle(0, projectile.frame * 36, 18, 32);
+            Rectangle frame = new Rectangle(0, projectile.frame * 36, 18, 36);
             spriteBatch.Draw(GetTexture("ExpiryMode/Projectiles/RadiantArrow"),
                 projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition,
                 frame, lightColor,
                 projectile.rotation + (float)0.1 * projectile.spriteDirection,
-                new Vector2(18, 32) / 2,
+                new Vector2(18, 36) / 2,
                 projectile.scale,
                 projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             return false; // Return false to stop drawing more 

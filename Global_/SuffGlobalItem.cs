@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Equippables.Vanity.Rune;
 using ExpiryMode.Items.Ammo;
+using ExpiryMode.Mod_;
+using ExpiryMode.Items.Useables;
 
 namespace ExpiryMode.Global_
 {
@@ -139,6 +141,16 @@ namespace ExpiryMode.Global_
                     if (modLine2.mod == "Terraria" && modLine2.Name == "Tooltip0")
                     {
                         modLine2.text = $"Stuns your enemies and gives them radiation poisoning!\n[c/303030:Dev Note: If you know why the projectile has a weird tilt to it, contact me on discord with the tag 'RighteousRyan#4321'.]";
+                    }
+                }
+            }
+            if (SuffWorld.ExpiryModeIsActive && item.type == ItemType<ChaliceofDeath>())
+            {
+                foreach (TooltipLine modLine3 in tooltips)
+                {
+                    if (modLine3.mod == "Terraria" && modLine3.Name == "Tooltip0")
+                    {
+                        modLine3.text = $"You cannot disable Expiry Mode in this world once it has already\nbeen enabled in this world. This item is now worthless.\n";
                     }
                 }
             }

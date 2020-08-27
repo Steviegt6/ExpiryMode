@@ -12,7 +12,21 @@ namespace ExpiryMode.Mod_
 {
     public class SuffWorld : ModWorld
     {
+        public static bool ExpiryModeIsActive = false;
         public static int DoomBlockCount = 0;
+        public override void Initialize()
+        {
+            ExpiryModeIsActive = false;
+        }
+        public override void Load(TagCompound tag)
+        {
+            ExpiryModeIsActive = tag.GetBool("ExpiryModeIsActive");
+        }
+        public override TagCompound Save()
+        {
+            return new TagCompound {
+                {  "ExpiryModeIsActive", ExpiryModeIsActive } };
+        }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
             int ShiniesIndex = tasks.FindIndex((GenPass genpass) => genpass.Name.Equals("Shinies"));
