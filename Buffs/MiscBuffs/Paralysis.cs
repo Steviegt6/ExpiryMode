@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace ExpiryMode.Buffs.NPCDebuffs
+namespace ExpiryMode.Buffs.MiscDebuffs
 {
     public class Paralysis : ModBuff
     {
@@ -13,11 +13,17 @@ namespace ExpiryMode.Buffs.NPCDebuffs
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
+            Main.pvpBuff[Type] = true;
         }
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.velocity.Y = 0;
             npc.velocity.X = 0;
+        }
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.velocity.X = 0;
+            player.velocity.Y = 0;
         }
     }
 }
