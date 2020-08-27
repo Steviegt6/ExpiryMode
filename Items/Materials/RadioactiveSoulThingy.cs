@@ -12,7 +12,7 @@ namespace ExpiryMode.Items.Materials
 			DisplayName.SetDefault("Calamitous Contagion");
             Tooltip.SetDefault("'Eminates an offsetting aura'");
             ItemID.Sets.ItemNoGravity[item.type] = true;
-			Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(8, 6)); // Note: TicksPerFrame, Frames
+			Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(8, 6)); // NOTE: TicksPerFrame, Frames
 		}
 
 		public override void SetDefaults() 

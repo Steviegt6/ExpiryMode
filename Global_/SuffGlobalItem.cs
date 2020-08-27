@@ -121,7 +121,7 @@ namespace ExpiryMode.Global_
             }
             #endregion
             #region Mod ItemTypes
-            if (Mod_.InfiniteSuffering.ShiftIsPressed.Current && item.type == ItemType<RunePlateBoots>())
+            if (Mod_.ExpiryModeMod.ShiftIsPressed.Current && item.type == ItemType<RunePlateBoots>())
             {
                 foreach (TooltipLine modLine1 in tooltips)
                 {

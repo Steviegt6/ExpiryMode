@@ -5,6 +5,7 @@ using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Materials;
 using Microsoft.Xna.Framework;
 using Terraria.Enums;
+using ExpiryMode.Buffs.NPCDebuffs;
 
 namespace ExpiryMode.Global_
 {
@@ -48,12 +49,28 @@ namespace ExpiryMode.Global_
                 npc.lifeMax = (int)(npc.defense * 1.1f);
             }*/
             #endregion
-            #region NPC Life Regen
-            if (npc.active && npc.lifeRegen == 0 && !npc.CanBeChasedBy())
+        }
+        public override void PostAI(NPC npc)
+        {
+        }
+        public override bool PreAI(NPC npc)
+        {
+            if (!npc.boss && !npc.CanBeChasedBy())
             {
                 npc.lifeRegen += 5;
             }
-            #endregion
+            if (npc.HasBuff(BuffType<Paralysis>()))
+            {
+                /*npc.velocity.X = 0;
+                npc.velocity.Y = 0;
+                npc.spriteDirection = 1;
+                npc.direction = 1;*/
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         public override void ModifyHitPlayer(NPC npc, Player target, ref int damage, ref bool crit)
         {

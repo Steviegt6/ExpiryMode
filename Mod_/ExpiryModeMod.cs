@@ -6,30 +6,94 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using static Terraria.Main;
 using System;
-using ReLogic.OS;
 using Terraria.Localization;
 using Terraria.ID;
 using ExpiryMode.Items.Blocks;
 using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Cil;
+using ReLogic.Graphics;
+using System.Diagnostics;
 
 namespace ExpiryMode.Mod_
 {
     //TODO: Rotting away debuff lasts forever (client side) after leaving. (until death)
-    //TODO: 
-    public class InfiniteSuffering : Mod
+    //TODO: MAKE DISCORD APPEAR AS UI IN THE MENU
+    public class ExpiryModeMod : Mod
     {
+        internal static void HookMenuSplash(ILContext il)
+        {
+            var c = new ILCursor(il).Goto(0);
+            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Main).GetField("dayTime"))))
+                return; // Patch unable to be applied
+                        //c.Index--;
+                        //c.Emit(Ldfld, typeof(Main).GetField("logoScale"));
+            c.Emit(Mono.Cecil.Cil.OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText")); // Use reflection to pass the method
+        }
+        public static void DrawSplashText()
+        {
+            for (int textIndex = 0; textIndex < 5; textIndex++)
+            {
+                Color color = Color.Black;
+                if (textIndex == 4)
+                {
+                    byte b = (byte)((byte.MaxValue + tileColor.R * 2) / 3);
+                    color = new Color(b, b, b, 255);
+                    color.R = (byte)((255 + color.R) / 2);
+                    color.G = (byte)((255 + color.R) / 2);
+                    color.B = (byte)((255 + color.R) / 2);
+                }
+                color.A = (byte)(color.A * 0.3f);
+                int xOffset = 0;
+                int yOffset = 0;
+                if (textIndex == 0)
+                {
+                    xOffset = -2;
+                }
+                if (textIndex == 1)
+                {
+                    xOffset = 2;
+                }
+                if (textIndex == 2)
+                {
+                    yOffset = -2;
+                }
+                if (textIndex == 3)
+                {
+                    yOffset = 2;
+                }
+                string text5 = $"Join the Expiry Mode discord server!";
+                string text6 = $"The discord server is a nice place to hang out and discuss\nthings about this mod. For now, there is no wiki, but in the\nnear future, there will be one! Click on the top line to join my\ndiscord server!";
+                string text7 = $"Expiry Mode v{ModLoader.GetMod("ExpiryMode").Version}";
+                Vector2 origin2 = fontMouseText.MeasureString(text5);
+                origin2.X *= 0.5f;
+                origin2.Y *= 0.5f;
+                spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 10), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                if (discordLink.Contains(MouseScreen.ToPoint()))
+                {
+                    if (textIndex == 4)
+                    {
+                        color = new Color(255, 255, 0);
+                        if (mouseLeft && mouseLeftRelease)
+                        {
+                            Process.Start("https://discord.gg/nnjjqbn");
+                        }
+                    }
+                }
+                spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 105f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+            }
+        }
         public override void Close()
         {
             // Fix a tModLoader bug.
-            var slots = new int[] {
-                GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic"),
-                GetSoundSlot(SoundType.Music, "Sounds/Custom/Pop")
-            };
+            var slots = new int[] { GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic"), GetSoundSlot(SoundType.Music, "Sounds/Custom/Pop") };
             foreach (var slot in slots) // Other mods crashing during loading can leave Main.music in a weird state.
             {
-                if (Main.music.IndexInRange(slot) && Main.music[slot]?.IsPlaying == true)
+                if (music.IndexInRange(slot) && music[slot]?.IsPlaying == true)
                 {
-                    Main.music[slot].Stop(Microsoft.Xna.Framework.Audio.AudioStopOptions.Immediate);
+                    music[slot].Stop(Microsoft.Xna.Framework.Audio.AudioStopOptions.AsAuthored);
                 }
             }
 
@@ -47,12 +111,14 @@ namespace ExpiryMode.Mod_
             }
         }
         public static ModHotKey ShiftIsPressed;
-        public InfiniteSuffering() { }
+        public ExpiryModeMod() { }
         public override void AddRecipes() { }
         public override void PostUpdateEverything() { if (Main.myPlayer < 0) return; }
         public override void Unload() { ShiftIsPressed = null; }
         public override void Load()
         {
+            IL.Terraria.Main.DrawMenu += ExpiryModeMod.HookMenuSplash;
+            //Process.Start("https://discord.gg/pT2BzSG");
             string ScreenLoadChance = "tModLoader: This is getting repetitive";
 
             switch (rand.Next(7))
@@ -77,10 +143,10 @@ namespace ExpiryMode.Mod_
                     break;
                 case 6:
                     if (ModLoader.GetMod("rterrariatod") != null)
-                       ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
+                        ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
                     break;
             }
-            Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
+            ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             ShiftIsPressed = RegisterHotKey("ALT to view details", "LeftAlt");
             if (!Main.dedServ)
             {
@@ -100,8 +166,8 @@ namespace ExpiryMode.Mod_
             }
             //if (player.statLife <= .1f)
             //{
-                //music = GetSoundSlot(SoundType.Music, "Sounds/Custom/Heartbeat");
-                //priority = MusicPriority.BossHigh;
+            //music = GetSoundSlot(SoundType.Music, "Sounds/Custom/Heartbeat");
+            //priority = MusicPriority.BossHigh;
             //}
         }
         public override void ModifyLightingBrightness(ref float scale)
@@ -157,5 +223,4 @@ namespace ExpiryMode.Mod_
         internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
         + "\n you are a good observer.";
     }
-
 }
