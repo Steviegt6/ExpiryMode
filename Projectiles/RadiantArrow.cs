@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using static Terraria.Dust;
-using ExpiryMode.Buffs.MiscDebuffs;
+using ExpiryMode.Buffs.MiscBuffs;
 using Terraria.Graphics.Shaders;
 using ExpiryMode.Buffs.BadBuffs;
 

@@ -23,7 +23,7 @@ namespace ExpiryMode.Mod_
             tasks.Insert(ShiniesIndex + 1, new PassLegacy("DoomGen", delegate (GenerationProgress progress)
             {
                 progress.Message = "Your doom is generating...";
-                for (int i = 0; i < Main.maxTilesX / 1700; i++)
+                for (int i = 0; i < Main.maxTilesX / 2400; i++)
                 {
                     int Xvalue = WorldGen.genRand.Next(50, Main.maxTilesX - 500);
                     int Yvalue = WorldGen.genRand.Next((int)WorldGen.worldSurfaceHigh, (int)WorldGen.worldSurfaceHigh /*Main.maxTilesY - 600*/ );
@@ -32,10 +32,10 @@ namespace ExpiryMode.Mod_
                     Tile tile = Framing.GetTileSafely(Xvalue, Yvalue);
                     if (tile.active() && tile.type == TileID.Grass)
                     {
-                        WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(500, 1000), 1, TileType<RottenGrass>(), false, 0f, 0f, true, true);
+                        WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(300, 700), 1, TileType<RottenGrass>(), false, 0f, 0f, true, true);
                     }
                     {
-                        WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(500, 1000), 1, TileType<DoomGravel>(), false, 0f, 0f, true, true);
+                        WorldGen.TileRunner(XvalueMid, YvalueMid, WorldGen.genRand.Next(300, 700), 1, TileType<DoomGravel>(), false, 0f, 0f, true, true);
                         WorldGen.digTunnel(Xvalue + 400, Yvalue + 400, 0f, 0f, WorldGen.genRand.Next(15, 18), WorldGen.genRand.Next(14, 17), false);
                     }
                 }

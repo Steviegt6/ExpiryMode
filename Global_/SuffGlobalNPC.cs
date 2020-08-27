@@ -5,7 +5,8 @@ using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Materials;
 using Microsoft.Xna.Framework;
 using Terraria.Enums;
-using ExpiryMode.Buffs.NPCDebuffs;
+using ExpiryMode.Buffs.MiscBuffs;
+using ExpiryMode.Mod_;
 
 namespace ExpiryMode.Global_
 {
@@ -189,17 +190,28 @@ namespace ExpiryMode.Global_
             }
             return true;
         }
+        public override void NPCLoot(NPC npc)
+        {
+            Player player = Main.player[Main.myPlayer];
+            if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            {
+                if (!npc.friendly && Main.rand.NextFloat() <= 0.075f)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<RadioactiveSoulThingy>(), 1);
+                }
+            }
+        }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {
             if (player.ZoneDungeon)
             {
-                spawnRate = (int)(spawnRate / 3);
-                maxSpawns = (int)(maxSpawns / 3);
+                spawnRate = (spawnRate / 3);
+                maxSpawns = (maxSpawns / 3);
             }
             else
             {
-                spawnRate = (int)(spawnRate * 1);
-                maxSpawns = (int)(maxSpawns * 1);
+                spawnRate = spawnRate * 1;
+                maxSpawns = maxSpawns * 1;
             }
         }
         public override bool Autoload(ref string name)
