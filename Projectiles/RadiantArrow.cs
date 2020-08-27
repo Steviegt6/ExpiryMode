@@ -66,7 +66,7 @@ namespace ExpiryMode.Projectiles
         }
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            target.AddBuff(BuffType<RadiatedWater>(), 30);
+            target.AddBuff(BuffType<RadiatedWater>(), 30, false);
             Dust dust;
             Vector2 position = projectile.Center;
             for (int i = 20; i >= 0; i--) // I do this because i am a rebel
@@ -78,7 +78,7 @@ namespace ExpiryMode.Projectiles
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            target.AddBuff(BuffType<RadiatedWater>(), 30);
+            target.AddBuff(BuffType<RadiatedWater>(), 30, false);
             Dust dust;
             Vector2 position = projectile.Center;
             for (int i = 20; i >= 0; i--) // I do this because i am a rebel

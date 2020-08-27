@@ -23,7 +23,7 @@ namespace ExpiryMode.Mod_
             tasks.Insert(ShiniesIndex + 1, new PassLegacy("DoomGen", delegate (GenerationProgress progress)
             {
                 progress.Message = "Your doom is generating...";
-                for (int i = 0; i < Main.maxTilesX / 2400; i++)
+                for (int i = 0; i < Main.maxTilesX / 1700; i++)
                 {
                     int Xvalue = WorldGen.genRand.Next(50, Main.maxTilesX - 500);
                     int Yvalue = WorldGen.genRand.Next((int)WorldGen.worldSurfaceHigh, (int)WorldGen.worldSurfaceHigh /*Main.maxTilesY - 600*/ );
