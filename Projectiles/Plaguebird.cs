@@ -6,7 +6,6 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Graphics.Shaders;
 using ExpiryMode.Buffs.BadBuffs;
-using ExpiryMode.Projectiles;
 
 namespace ExpiryMode.Projectiles
 {

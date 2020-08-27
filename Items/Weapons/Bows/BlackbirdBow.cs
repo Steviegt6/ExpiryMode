@@ -1,5 +1,4 @@
 using Terraria.ID;
-using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using ExpiryMode.Items.Materials;

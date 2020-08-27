@@ -2,6 +2,8 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using ExpiryMode.Items.Blocks;
 
 namespace ExpiryMode.Tiles
 {
@@ -13,7 +15,7 @@ namespace ExpiryMode.Tiles
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            drop = mod.ItemType("RadianiteOreItem");
+            drop = ItemType<RadianiteOreItem>();
             AddMapEntry(new Color(0, 255, 0));
             soundType = SoundID.Tink;
             minPick = 100;

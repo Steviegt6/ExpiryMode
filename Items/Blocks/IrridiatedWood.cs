@@ -1,5 +1,6 @@
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Blocks
 {
@@ -21,7 +22,7 @@ namespace ExpiryMode.Items.Blocks
             item.useStyle = ItemUseStyleID.SwingThrow;
 			item.value = 200;
 			item.consumable = true;
-            item.createTile = mod.TileType("IrridiatedWood");
+			item.createTile = TileType<Tiles.IrridiatedWood>();
 		}
 	}
 }

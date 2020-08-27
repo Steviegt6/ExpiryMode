@@ -9,13 +9,11 @@ using System;
 using Terraria.Localization;
 using Terraria.ID;
 using ExpiryMode.Items.Blocks;
-using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 using ReLogic.Graphics;
 using System.Diagnostics;
 using System.Net;
-using Newtonsoft.Json;
 
 namespace ExpiryMode.Mod_
 {

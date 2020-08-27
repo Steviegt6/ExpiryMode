@@ -1,9 +1,4 @@
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Projectiles;
-using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Items.Weapons.Swords
 {

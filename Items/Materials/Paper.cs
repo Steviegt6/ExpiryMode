@@ -1,6 +1,6 @@
-using IL.Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Materials
 {
@@ -23,7 +23,7 @@ namespace ExpiryMode.Items.Materials
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Wood, 1);
-            recipe.SetResult(null, "Paper", 3);
+            recipe.SetResult(ItemType<Paper>(), 3);
             recipe.AddRecipe();
         }
     }

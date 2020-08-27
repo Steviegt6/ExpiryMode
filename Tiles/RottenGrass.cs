@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using ExpiryMode.Items.Blocks;
 
 namespace ExpiryMode.Tiles
 {
@@ -16,7 +17,7 @@ namespace ExpiryMode.Tiles
             Main.tileLighted[Type] = true;
 			Main.tileMerge[Type][TileType<DoomGravel>()] = true;
 			Main.tileMerge[TileType<DoomGravel>()   ][Type] = true;
-            drop = mod.ItemType("RadiantDirtItem");
+            drop = ItemType<RadiantDirtItem>();
             AddMapEntry(new Color(40, 150, 40));
             soundType = SoundID.Dig;
             minPick = 100;

@@ -1,5 +1,3 @@
-using System;
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -29,8 +27,8 @@ namespace ExpiryMode.Items.Tools
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemType<Items.Materials.RadianiteBarItem>(), 12);
-			recipe.AddIngredient(ItemType<Items.Materials.RadioactiveSoulThingy>(), 3);
+            recipe.AddIngredient(ItemType<Materials.RadianiteBarItem>(), 12);
+			recipe.AddIngredient(ItemType<Materials.RadioactiveSoulThingy>(), 3);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

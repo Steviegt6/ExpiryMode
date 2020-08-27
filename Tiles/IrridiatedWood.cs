@@ -2,6 +2,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Tiles
 {
@@ -13,7 +14,7 @@ namespace ExpiryMode.Tiles
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            drop = mod.ItemType("IrridiatedWood");
+            drop = ItemType<Items.Blocks.IrridiatedWood>();
             AddMapEntry(new Color(50, 50, 50));
             soundType = SoundID.Dig ;
             minPick = 100;

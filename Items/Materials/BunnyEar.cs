@@ -8,7 +8,7 @@ namespace ExpiryMode.Items.Materials
 		public override void SetStaticDefaults() 
 		{
 			DisplayName.SetDefault("Bunny Ear");
-			Tooltip.SetDefault("Pure as the forest itself");
+			Tooltip.SetDefault("The blood is a little offsetting");
 		}
 
 		public override void SetDefaults() 

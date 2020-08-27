@@ -1,7 +1,5 @@
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using ExpiryMode.Tiles;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Blocks;
