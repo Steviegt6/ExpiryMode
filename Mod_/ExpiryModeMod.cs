@@ -13,12 +13,9 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 using ReLogic.Graphics;
 using System.Diagnostics;
-using System.Net;
 using static Terraria.ModLoader.ModContent;
-using System.ComponentModel.Design;
 using ExpiryMode.Items.Misc;
 using Mono.Cecil.Cil;
-using IL.Terraria;
 
 namespace ExpiryMode.Mod_
 {
@@ -29,19 +26,6 @@ namespace ExpiryMode.Mod_
         public static string CurrentVersion = "";
         public static string ModVersion;
         public ExpiryModeMod() { }
-        public static bool CheckForInternetConnection()
-        {
-            try
-            {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://google.com/generate_204"))
-                    return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
@@ -49,7 +33,7 @@ namespace ExpiryMode.Mod_
                 return; // Patch unable to be applied
                         //c.Index--;
                         //c.Emit(Ldfld, typeof(Main).GetField("logoScale"));
-            c.Emit(Mono.Cecil.Cil.OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText")); // Use reflection to pass the method
+            c.Emit(OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText")); // Use reflection to pass the method
         }
         public static void DrawSplashText()
         {
@@ -94,12 +78,12 @@ namespace ExpiryMode.Mod_
                     spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                     spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
-                else if (ModLoader.GetMod("HamstarHelpers") != null)
+                else
                 {
                     spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 450f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
-                Rectangle gitHub = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 50, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                //Rectangle gitHub = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 50, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 Rectangle discordLinkFurtherOut = new Rectangle((int)(screenWidth - origin2.X * 2 - 375), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 if (discordLink.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") == null)
                 {
@@ -109,17 +93,6 @@ namespace ExpiryMode.Mod_
                         if (mouseLeft && mouseLeftRelease)
                         {
                             Process.Start("https://discord.gg/nnjjqbn");
-                        }
-                    }
-                }
-                if (gitHub.Contains(MouseScreen.ToPoint()))
-                {
-                    if (textIndex == 4)
-                    {
-                        color = new Color(255, 255, 0);
-                        if (mouseLeft && mouseLeftRelease)
-                        {
-                            Process.Start("https://github.com/RyanMakesMods/ExpiryMode");
                         }
                     }
                 }
@@ -138,7 +111,7 @@ namespace ExpiryMode.Mod_
                 {
                     spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 105f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
-                else if (ModLoader.GetMod("HamstarHelpers") != null)
+                else
                 {
                     spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 375f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
@@ -149,12 +122,12 @@ namespace ExpiryMode.Mod_
         }
         public override void AddRecipeGroups()
         {
-            Terraria.RecipeGroup group = new Terraria.RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
-            Terraria.RecipeGroup.RegisterGroup("ExpiryMode:BiomeSouls", group);
-            if (Terraria.RecipeGroup.recipeGroupIDs.ContainsKey("Wood"))
+            RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
+            RecipeGroup.RegisterGroup("ExpiryMode:BiomeSouls", group);
+            if (RecipeGroup.recipeGroupIDs.ContainsKey("Wood"))
             {
-                int num1 = Terraria.RecipeGroup.recipeGroupIDs["Wood"];
-                group = Terraria.RecipeGroup.recipeGroups[num1];
+                int num1 = RecipeGroup.recipeGroupIDs["Wood"];
+                group = RecipeGroup.recipeGroups[num1];
                 group.ValidItems.Add(ModContent.ItemType<IrridiatedWood>());
             }
         }
@@ -214,7 +187,10 @@ namespace ExpiryMode.Mod_
                             ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
                         break;
                 }
-                ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
+                if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>() != null)
+                {
+                    ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
+                }
             }
             ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
             if (!dedServ)
@@ -225,10 +201,15 @@ namespace ExpiryMode.Mod_
         }
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            Terraria.Player player = Terraria.Main.player[myPlayer];
+            if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>() == null)
+            {
+                return;
+            }
+
+            Player player = Main.player[myPlayer];
             if (gameMenu)
                 musicVolume = .5f;
-            if (Terraria.Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
@@ -241,12 +222,12 @@ namespace ExpiryMode.Mod_
         }
         public override void ModifyLightingBrightness(ref float scale)
         {
-            Terraria.Player player = LocalPlayer;
-            if (Terraria.Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
+            Player player = LocalPlayer;
+            if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
             {
                 scale = 0f;
             }
-            if (!dayTime && !Terraria.Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 scale = .75f;
             }
@@ -275,9 +256,9 @@ namespace ExpiryMode.Mod_
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.ResetColor();
-            Terraria.Player player = Terraria.Main.player[myPlayer];
+            Player player = Main.player[myPlayer];
             if (!player.HasItem(ItemType<CommandItem>()))
-                Terraria.Main.NewText("This command can only be used while debugging!", Color.Red);
+                NewText("This command can only be used while debugging!", Color.Red);
             if (player.HasItem(ItemType<CommandItem>()))
             {
                 if (Terraria.Main.rand.Next(8) == 0)
@@ -308,9 +289,9 @@ namespace ExpiryMode.Mod_
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.ResetColor();
-                Terraria.Player player = Terraria.Main.player[myPlayer];
+                Player player = Terraria.Main.player[myPlayer];
                 if (!player.HasItem(ItemType<CommandItem>()))
-                    Terraria.Main.NewText("This command can only be used while debugging!", Color.Red);
+                    NewText("This command can only be used while debugging!", Color.Red);
                 if (player.HasItem(ItemType<CommandItem>()))
                 {
                     SuffWorld.ExpiryModeIsActive = false;
