@@ -7,11 +7,30 @@ using Microsoft.Xna.Framework;
 using Terraria.Enums;
 using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader.Config;
 
 namespace ExpiryMode.Global_
 {
 	public class SuffGlobalNPC : GlobalNPC
     {
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        {
+            if (GetInstance<ExpiryConfig>().PogIsTrue)
+            {
+                if (npc.type == NPCID.SkeletronHead)
+                {
+                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/SkeletronPog"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                    return false;
+                }
+                /*if (npc.type == NPCID.SkeletronHand)
+                {
+                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/PogFist"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2, npc.scale, SpriteEffects.None, 0);
+                    return false;
+                }*/
+            }
+            return true;
+        }
         public override void SetDefaults(NPC npc)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -38,22 +57,22 @@ namespace ExpiryMode.Global_
             #region NPC Defense Scaling (Not Much)
             if (SuffWorld.ExpiryModeIsActive)
             {
-                /*if (Main.hardMode && !Main.expertMode && !npc.friendly)
+                if (Main.hardMode && !Main.expertMode && !npc.friendly)
                 {
-                    npc.lifeMax = (int)(npc.defense * 1.2f);
+                    npc.defense = (int)(npc.defense * 1.2f);
                 }
                 else if (!Main.hardMode && !Main.expertMode && !npc.friendly)
                 {
-                    npc.lifeMax = (int)(npc.defense * 1.075f);
+                    npc.defense = (int)(npc.defense * 1.075f);
                 }
                 if (Main.hardMode && Main.expertMode && !npc.friendly)
                 {
-                    npc.lifeMax = (int)(npc.defense * 1.3f);
+                    npc.defense = (int)(npc.defense * 1.35f);
                 }
                 else if (!Main.hardMode && Main.expertMode && !npc.friendly)
                 {
-                    npc.lifeMax = (int)(npc.defense * 1.1f);
-                }*/
+                    npc.defense = (int)(npc.defense * 1.1f);
+                }
                 #endregion
             }
             #region BuffImmune
@@ -170,6 +189,10 @@ namespace ExpiryMode.Global_
                 }
                 if (npc.type == NPCID.SkeletronHead)
                 {
+                    if (GetInstance<ExpiryConfig>().PogIsTrue)
+                    {
+                        CombatText.NewText(npc.Hitbox, Color.White, "Thank you SkuttleBaka", false, false);
+                    }
                     if (!NPC.downedBoss3)
                     {
                         Main.NewText($"A spooky scary skeleton sends shivers down your spine.", Color.SlateGray, true);
@@ -181,7 +204,7 @@ namespace ExpiryMode.Global_
                     {
                         Main.NewTextMultiline($"Well, you somehow managed to get here. I assure you, you are not getting much further.", false, Color.DarkRed);
                     }
-                    if (npc.boss && npc.type <= NPCID.Spazmatism && npc.type >= NPCID.Retinazer)
+                    if (npc.boss /*&& npc.type <= NPCID.Spazmatism && npc.type >= NPCID.Retinazer*/)
                     {
                         // downedMechBoss1 == destroyer
                         // 2 = twins

@@ -14,6 +14,11 @@ using MonoMod.Cil;
 using ReLogic.Graphics;
 using System.Diagnostics;
 using System.Net;
+using static Terraria.ModLoader.ModContent;
+using System.ComponentModel.Design;
+using ExpiryMode.Items.Misc;
+using Mono.Cecil.Cil;
+using IL.Terraria;
 
 namespace ExpiryMode.Mod_
 {
@@ -23,6 +28,7 @@ namespace ExpiryMode.Mod_
     {
         public static string CurrentVersion = "";
         public static string ModVersion;
+        public ExpiryModeMod() { }
         public static bool CheckForInternetConnection()
         {
             try
@@ -39,7 +45,7 @@ namespace ExpiryMode.Mod_
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
-            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Main).GetField("dayTime"))))
+            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Terraria.Main).GetField("dayTime"))))
                 return; // Patch unable to be applied
                         //c.Index--;
                         //c.Emit(Ldfld, typeof(Main).GetField("logoScale"));
@@ -93,6 +99,7 @@ namespace ExpiryMode.Mod_
                     spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 450f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                Rectangle gitHub = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 50, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 Rectangle discordLinkFurtherOut = new Rectangle((int)(screenWidth - origin2.X * 2 - 375), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 if (discordLink.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") == null)
                 {
@@ -102,6 +109,17 @@ namespace ExpiryMode.Mod_
                         if (mouseLeft && mouseLeftRelease)
                         {
                             Process.Start("https://discord.gg/nnjjqbn");
+                        }
+                    }
+                }
+                if (gitHub.Contains(MouseScreen.ToPoint()))
+                {
+                    if (textIndex == 4)
+                    {
+                        color = new Color(255, 255, 0);
+                        if (mouseLeft && mouseLeftRelease)
+                        {
+                            Process.Start("https://github.com/RyanMakesMods/ExpiryMode");
                         }
                     }
                 }
@@ -128,36 +146,24 @@ namespace ExpiryMode.Mod_
         }
         public override void Close()
         {
-            // Fix a tModLoader bug.
-            var slots = new int[] { GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic"), GetSoundSlot(SoundType.Music, "Sounds/Custom/Pop") };
-            foreach (var slot in slots) // Other mods crashing during loading can leave Main.music in a weird state.
-            {
-                if (music.IndexInRange(slot) && music[slot]?.IsPlaying == true)
-                {
-                    music[slot].Stop(Microsoft.Xna.Framework.Audio.AudioStopOptions.AsAuthored);
-                }
-            }
-
-            base.Close();
         }
         public override void AddRecipeGroups()
         {
-            RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
-            RecipeGroup.RegisterGroup("ExpiryMode:BiomeSouls", group);
-            if (RecipeGroup.recipeGroupIDs.ContainsKey("Wood"))
+            Terraria.RecipeGroup group = new Terraria.RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
+            Terraria.RecipeGroup.RegisterGroup("ExpiryMode:BiomeSouls", group);
+            if (Terraria.RecipeGroup.recipeGroupIDs.ContainsKey("Wood"))
             {
-                int num1 = RecipeGroup.recipeGroupIDs["Wood"];
-                group = RecipeGroup.recipeGroups[num1];
+                int num1 = Terraria.RecipeGroup.recipeGroupIDs["Wood"];
+                group = Terraria.RecipeGroup.recipeGroups[num1];
                 group.ValidItems.Add(ModContent.ItemType<IrridiatedWood>());
             }
         }
         public static ModHotKey ShiftIsPressed;
-        public ExpiryModeMod() { }
         public override void AddRecipes() { }
         public override void PostUpdateEverything() { if (myPlayer < 0) return; }
-        public override void Unload() 
-        { 
-            ShiftIsPressed = null; 
+        public override void Unload()
+        {
+            ShiftIsPressed = null;
             ModVersion = null;
         }
         public override void Load()
@@ -179,7 +185,7 @@ namespace ExpiryMode.Mod_
             }*/
             IL.Terraria.Main.DrawMenu += HookMenuSplash;
             //Process.Start("https://discord.gg/pT2BzSG");
-            if (!Main.dedServ)
+            if (!dedServ)
             {
                 string ScreenLoadChance = "tModLoader: Terraria";
 
@@ -211,36 +217,36 @@ namespace ExpiryMode.Mod_
                 ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             }
             ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
-            if (!Main.dedServ)
+            if (!dedServ)
             {
-                Filters.Scene["InfniteSuffering:RadiatedBiomeSky"] = new Filter(new ScreenShaderData("FilterTower").UseColor(0.0f, 0.0f, 0.0f).UseOpacity(0.33f), EffectPriority.Medium);
+                Filters.Scene["InfniteSuffering:RadiatedBiomeSky"] = new Filter(new ScreenShaderData("FilterTower").UseColor(0.0f, 0.0f, 0.0f).UseOpacity(0.66f), EffectPriority.Low);
                 SkyManager.Instance["InfniteSuffering:RadiatedBiomeSky"] = new RadiatedSky();
             }
         }
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            Player player = Main.player[myPlayer];
+            Terraria.Player player = Terraria.Main.player[myPlayer];
             if (gameMenu)
                 musicVolume = .5f;
-            if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (Terraria.Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
             }
-            //if (player.statLife <= .1f)
-            //{
-            //music = GetSoundSlot(SoundType.Music, "Sounds/Custom/Heartbeat");
-            //priority = MusicPriority.BossHigh;
-            //}
+            if (gameMenu)
+            {
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/CreepyMusic");
+                priority = (MusicPriority)51;
+            }
         }
         public override void ModifyLightingBrightness(ref float scale)
         {
-            Player player = LocalPlayer;
-            if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
+            Terraria.Player player = LocalPlayer;
+            if (Terraria.Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
             {
                 scale = 0f;
             }
-            if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (!dayTime && !Terraria.Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 scale = .75f;
             }
@@ -250,6 +256,7 @@ namespace ExpiryMode.Mod_
             }
         }
     }
+
     public class KillCommand : ModCommand
     {
         public override CommandType Type
@@ -268,12 +275,12 @@ namespace ExpiryMode.Mod_
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.ResetColor();
-            Player player = Main.player[Main.myPlayer];
-            if (player.name != "Light Yagami")
-                Main.NewText("You don't wield the necessary power to perform this command...", Color.Red);
-            if (player.name == "Light Yagami")
+            Terraria.Player player = Terraria.Main.player[myPlayer];
+            if (!player.HasItem(ItemType<CommandItem>()))
+                Terraria.Main.NewText("This command can only be used while debugging!", Color.Red);
+            if (player.HasItem(ItemType<CommandItem>()))
             {
-                if (Main.rand.Next(8) == 0)
+                if (Terraria.Main.rand.Next(8) == 0)
                 {
                     player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} couldn't take it anymore."), player.statLife, 1);
                 }
@@ -283,7 +290,35 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
-        internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
+        public class DisableExpiryCommand : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "em_disable";
+
+            public override string Usage
+                => "/em_disable";
+
+            public override string Description
+                => "Disables Expiry Mode";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ResetColor();
+                Terraria.Player player = Terraria.Main.player[myPlayer];
+                if (!player.HasItem(ItemType<CommandItem>()))
+                    Terraria.Main.NewText("This command can only be used while debugging!", Color.Red);
+                if (player.HasItem(ItemType<CommandItem>()))
+                {
+                    SuffWorld.ExpiryModeIsActive = false;
+                    NewText("Expiry Mode has successfully been disabled.", Color.Orange);
+                }
+            }
+            internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
         + "\n you are a good observer.";
+        }
     }
 }

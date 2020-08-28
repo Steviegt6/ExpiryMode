@@ -25,7 +25,7 @@ namespace ExpiryMode.Projectiles
             projectile.height = 18;
             projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
             projectile.friendly = true;
-            projectile.melee = true;
+            projectile.ranged = true;
             projectile.tileCollide = true;
             projectile.timeLeft = 400;
             projectile.light = 0f;

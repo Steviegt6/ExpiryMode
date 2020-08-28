@@ -22,7 +22,6 @@ namespace ExpiryMode.Projectiles
             projectile.width = 22;
             projectile.height = 22;
             projectile.friendly = true;
-            projectile.melee = true;
             projectile.tileCollide = true;
             projectile.timeLeft = 500;
             projectile.light = 0f;
@@ -32,6 +31,7 @@ namespace ExpiryMode.Projectiles
             drawOffsetX = -15;
             drawOriginOffsetX = -15;
             drawOriginOffsetY = -20;
+            projectile.ranged = true;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

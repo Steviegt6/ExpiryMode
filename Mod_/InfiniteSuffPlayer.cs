@@ -8,6 +8,7 @@ using ExpiryMode.Buffs.GoodBuffs;
 using System.Collections.Generic;
 using ExpiryMode.Items.Materials;
 using Terraria.GameInput;
+using ExpiryMode.Items.Useables;
 
 namespace ExpiryMode.Mod_
 // TODO: Make custom sky not apply to all players
@@ -20,10 +21,7 @@ namespace ExpiryMode.Mod_
         public bool ZoneRadiated = false;
         public bool ExpiryModeIsActive = false;
         public override void ProcessTriggers(TriggersSet triggersSet) { }
-        public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff)
-        {
-            
-        }
+        public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff) { }
         public override void UpdateBiomeVisuals()
         {
             player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
@@ -66,9 +64,12 @@ namespace ExpiryMode.Mod_
         }*/
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            Item item5 = new Item();
-            item5.SetDefaults(ItemType<PendantPiece>(), false);
-            items.Add(item5);
+            Item item1 = new Item();
+            item1.SetDefaults(ItemType<PendantPiece>(), false);
+            items.Add(item1);
+            Item item2 = new Item();
+            item2.SetDefaults(ItemType<ChaliceofDeath>(), false);
+            items.Add(item2);
         }
         public override void UpdateBiomes()
         {
