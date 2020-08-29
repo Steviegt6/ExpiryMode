@@ -32,7 +32,7 @@ namespace ExpiryMode.Mod_
             if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Terraria.Main).GetField("dayTime"))))
                 return; // Patch unable to be applied
                         //c.Index--;
-                        //c.Emit(Ldfld, typeof(Main).GetField("logoScale"));
+                        //c.Emit(OperandType.InlineArg, typeof(Main).GetField("logoScale"));
             c.Emit(OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText")); // Use reflection to pass the method
         }
         public static void DrawSplashText()
@@ -183,14 +183,11 @@ namespace ExpiryMode.Mod_
                         ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
                         break;
                     case 6:
-                        if (ModLoader.GetMod("rterrariatod") != null)
+                        if (ModLoader.GetMod("CalamityMod") != null)
                             ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
                         break;
                 }
-                if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>() != null)
-                {
-                    ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
-                }
+                ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
             }
             ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
             if (!dedServ)

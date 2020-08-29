@@ -1,6 +1,6 @@
 displayName = Expiry Mode (Pre-Release)
 author = Ryan and the Dev Team
 version = 0.2.1.2
-buildIgnore = *.csproj, *user, obj\*, bin\*
+buildIgnore = *.csproj, *user, obj\*, bin\* .vs\*
 ignorePDB = true
 homepage = https://forums.terraria.org/index.php?threads/expiry-mode.97429/
