@@ -23,11 +23,11 @@ namespace ExpiryMode.Global_
                     spriteBatch.Draw(GetTexture("ExpiryMode/Assets/SkeletronPog"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
                     return false;
                 }
-                if (npc.type == NPCID.SkeletronHand)
+                /*if (npc.type == NPCID.SkeletronHand)
                 {
                     spriteBatch.Draw(GetTexture("ExpiryMode/Assets/PogFist"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2, npc.scale, SpriteEffects.None, 0);
                     return false;
-                }
+                }*/
             }
             return true;
         }

@@ -16,9 +16,11 @@ namespace ExpiryMode.Items.Useables
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Chalice of Demise");
-			Tooltip.SetDefault("Enables Expiry Mode\nBe aware. You can only use this item once. If you enable the mode, you cannot disable it ever again in this world.\nBefore you use it, you must be absolutely sure that you want to enable the mode.");
+			Tooltip.SetDefault("HahaFunny");
 		}
-
+        /// <summary>
+        /// Where the gayass properties are set.
+        /// </summary>
         public override void SetDefaults()
         {
             item.width = 40;

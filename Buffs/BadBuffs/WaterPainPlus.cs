@@ -1,6 +1,4 @@
-using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ExpiryMode.Buffs.BadBuffs
@@ -11,9 +9,9 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             DisplayName.SetDefault("Breath Vortex Tier II");
             Description.SetDefault("The water is sapping your life as we speak");
-            Main.debuff[this.Type] = true;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = true;
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
         public override void Update(Player player, ref int buffIndex)

@@ -1,3 +1,4 @@
+using ExpiryMode.Mod_;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Terraria;
@@ -13,15 +14,19 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             DisplayName.SetDefault("Radiation Poisioning");
             Description.SetDefault("Your sense of reality is slipping from your mind");
-            Main.debuff[this.Type] = true;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = true;
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            Main.BlackFadeIn = 190;
-            Lighting.Brightness(25, 25);
+
+            if (GetInstance<ExpiryConfig>().MakeBiomeDark)
+            {
+                Main.BlackFadeIn = 190;
+                Lighting.Brightness(25, 25);
+            }
             player.lifeRegenTime = 0;
             if (!Main.hardMode)
             {
@@ -36,7 +41,10 @@ namespace ExpiryMode.Buffs.BadBuffs
             player.manaRegen = 1;
             player.manaRegenDelay = 120;
             player.meleeDamageMult = .75f;
-            player.blackout = true;
+            if (GetInstance<ExpiryConfig>().MakeBiomeDark)
+            {
+                player.blackout = true;
+            }
             player.breathMax = 0;
             if (player.lifeRegen > 0)
             {

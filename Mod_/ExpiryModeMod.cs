@@ -16,12 +16,65 @@ using System.Diagnostics;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Misc;
 using Mono.Cecil.Cil;
+using static ExpiryMode.Mod_.SuffWorld;
+using Terraria.ModLoader.Audio;
+using System.Threading;
+using System.Reflection;
+using Terraria.ModLoader.Config;
 
 namespace ExpiryMode.Mod_
 {
     public class ExpiryModeMod : Mod
     {
-        public ExpiryModeMod() { }
+        private bool stopTitleMusic;
+        private ManualResetEvent titleMusicStopped;
+        private int customTitleMusicSlot;
+        public ExpiryModeMod() { GetInstance<ExpiryModeMod>(); }
+        private void TitleMusicIL(ILContext il)
+        {
+            ILCursor ilcursor = new ILCursor(il);
+            ILCursor ilcursor2 = ilcursor;
+            MoveType moveType = (MoveType)2;
+            Func<Instruction, bool>[] array = new Func<Instruction, bool>[1];
+            array[0] = ((Instruction i) => ILPatternMatchingExt.MatchLdfld<Main>(i, "newMusic"));
+            ilcursor2.GotoNext(moveType, array);
+            ilcursor.EmitDelegate<Func<int, int>>(delegate (int newMusic)
+            {
+                if (newMusic != 6)
+                {
+                    return newMusic;
+                }
+                return customTitleMusicSlot;
+            });
+        }
+        private void MenuMusicSet()
+        {
+            if (GetInstance<ExpiryConfig>().MusicChange)
+            {
+                customTitleMusicSlot = GetSoundSlot((SoundType)51, "Sounds/Music/CreepyMusic");
+                IL.Terraria.Main.UpdateAudio += new ILContext.Manipulator(TitleMusicIL);
+            }
+        }
+        public override void PostSetupContent()
+        {
+            if (ModLoader.GetMod("TerrariaOverhaul") == null)
+            {
+                MenuMusicSet();
+            }
+        }
+        public override void Close()
+        {
+            int soundSlot = GetSoundSlot((SoundType)51, "Sounds/Music/CreepyMusic");
+            if (Utils.IndexInRange(music, soundSlot))
+            {
+                Music music = Main.music[soundSlot];
+                if (music != null && music.IsPlaying)
+                {
+                    Main.music[soundSlot].Stop((Microsoft.Xna.Framework.Audio.AudioStopOptions)1);
+                }
+            }
+            base.Close();
+        }
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
@@ -127,6 +180,15 @@ namespace ExpiryMode.Mod_
         public override void Unload()
         {
             ShiftIsPressed = null;
+            IL.Terraria.Main.UpdateAudio -= new ILContext.Manipulator(TitleMusicIL);
+            customTitleMusicSlot = 6;
+            Close();
+            ManualResetEvent manualResetEvent = titleMusicStopped;
+            if (manualResetEvent != null)
+            {
+                manualResetEvent.Set();
+            }
+            titleMusicStopped = null;
         }
         public override void Load()
         {
@@ -189,25 +251,93 @@ namespace ExpiryMode.Mod_
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
             }
+            if (stopTitleMusic || (!gameMenu && customTitleMusicSlot != 6 && ActivePlayerFileData != null && ActiveWorldFileData != null))
+            {
+                if (!stopTitleMusic || !GetInstance<ExpiryConfig>().MusicChange)
+                {
+                    music = 6;
+                }
+                else
+                {
+                    stopTitleMusic = true;
+                }
+                if (GetInstance<ExpiryConfig>().MusicChange)
+                {
+
+                }
+                customTitleMusicSlot = 6;
+                Music music2 = GetMusic("Sounds/Music/CreepyMusic");
+                if (music2.IsPlaying)
+                {
+                    music2.Stop((Microsoft.Xna.Framework.Audio.AudioStopOptions)1);
+                }
+                titleMusicStopped.Set();
+                stopTitleMusic = false;
+            }
+        }
+        /// <summary>
+        /// Saves the config of the said mod config file.
+        /// </summary>
+        /// <param name="expiryConfig"></param>
+        internal static void SaveConfig(ExpiryConfig expiryConfig)
+        {
+            MethodInfo method = typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic);
+            if (method != null)
+            {
+                method.Invoke(null, new object[]
+                {
+                    GetInstance<ExpiryConfig>()
+                });
+                return;
+            }
+        }
+        public override void PreSaveAndQuit()
+        {
+            if (ModLoader.GetMod("TerrariaOverhaul") == null || ModLoader.GetMod("CalamityModMusic") == null)
+            {
+                MenuMusicSet(); // Mirsario, you suck ass. Your mod takes all priority. So do you, Fabsol.
+            }
+            else
+            {
+                return;
+            }
         }
         public override void ModifyLightingBrightness(ref float scale)
         {
-            Player player = LocalPlayer;
-            if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
+            Player player = Main.player[myPlayer];
+            if (GetInstance<ExpiryConfig>().MakeBiomeDark)
             {
-                scale = 0f;
-            }
-            if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
-            {
-                scale = .75f;
-            }
-            if (raining && player.ZoneSnow)
-            {
-                scale = .75f;
+                if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
+                {
+                    scale = .75f;
+                }
+                if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                {
+                    scale = .75f;
+                }
+                if (dayTime && Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                {
+                    scale = .85f;
+                }
+                if (raining && player.ZoneSnow)
+                {
+                    scale = .75f;
+                }
             }
         }
+        /// <summary>
+        /// This caused me too much pain (please use base.Close() next time)
+        /// </summary>
+        //public sealed override void Close()
+        //{
+            // You know, I spent 7 hours trying to fix an issue with my mod... https://cdn.discordapp.com/attachments/296056831514509312/738246557367009391/f0531c90ebb76dfe36d1dfee5b46852d.gif?comment=@everyone / https://cdn.discordapp.com/attachments/701182443537039390/749117222584189088/afoeeee.png
+            //base.Close();
+            // As you know, I'm Kind of a gamer
+        //}
     }
-
+    /// <summary>
+    /// Use this command ingame to kill yourself if you have the debugging item in your inventory.
+    /// </summary>
     public class KillCommand : ModCommand
     {
         public override CommandType Type
@@ -241,19 +371,63 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
-        public class DisableExpiryCommand : ModCommand
+        public class ItemCommand : ModCommand
         {
             public override CommandType Type
                 => CommandType.Chat;
 
             public override string Command
-                => "em_disable";
+                => "hurt";
 
             public override string Usage
-                => "/em_disable";
+                => "/hurt <damage>";
 
             public override string Description
-                => "Disables Expiry Mode";
+                => "Hurt yourself for any amount of damage";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                Player player = Main.player[myPlayer];
+                var damageAmount = args[0];
+                if (!int.TryParse(args[0], out int type))
+                {
+                    if (type == 0)
+                    {
+                        throw new UsageException($"{damageAmount} is not a valid integer.");
+                    }
+                }
+
+                int damage = 1;
+                if (args.Length >= 2)
+                {
+                    damage = int.Parse(args[1]);
+                }
+                if (!player.HasItem(ItemType<CommandItem>()))
+                {
+                    NewText("This command can only be used while debugging!", Color.Red);
+                }
+                if (player.HasItem(ItemType<CommandItem>()))
+                {
+                    caller.Player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} hurt themself a bit too much."), type, 0, false, false, false, -1);
+                }
+            }
+        }
+        /// <summary>
+        /// Enables and disables Expiry Mode upon use with the debugging item in your inventory.
+        /// </summary>
+        public class ToggleExpiry : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "em_toggle";
+
+            public override string Usage
+                => "/em_toggle";
+
+            public override string Description
+                => "Toggles Expiry Mode (Debug Command)";
 
             public override void Action(CommandCaller caller, string input, string[] args)
             {
@@ -262,10 +436,15 @@ namespace ExpiryMode.Mod_
                 Player player = Main.player[myPlayer];
                 if (!player.HasItem(ItemType<CommandItem>()))
                     NewText("This command can only be used while debugging!", Color.Red);
-                if (player.HasItem(ItemType<CommandItem>()))
+                if (player.HasItem(ItemType<CommandItem>()) && ExpiryModeIsActive)
                 {
-                    SuffWorld.ExpiryModeIsActive = false;
+                    ExpiryModeIsActive = false;
                     NewText("Expiry Mode has successfully been disabled.", Color.Orange);
+                }
+                else if (player.HasItem(ItemType<CommandItem>()) && !ExpiryModeIsActive)
+                {
+                    ExpiryModeIsActive = true;
+                    NewText("Expiry Mode has successfully been enabled.", Color.Orange);
                 }
             }
             internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"

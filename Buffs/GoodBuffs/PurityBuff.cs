@@ -13,9 +13,9 @@ namespace ExpiryMode.Buffs.GoodBuffs
         {
             DisplayName.SetDefault("Purified");
             Description.SetDefault("The evil air no longer affects you");
-            Main.debuff[this.Type] = false;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = false;
+            Main.debuff[Type] = false;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
             canBeCleared = true;
         }
         public override void Update(Player player, ref int buffIndex)

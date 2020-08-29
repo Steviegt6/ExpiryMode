@@ -11,9 +11,9 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             DisplayName.SetDefault("Heat Stroke");
             Description.SetDefault("It's too hot!\nReduced melee speed");
-            Main.debuff[this.Type] = true;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = true;
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
         public override void Update(Player player, ref int buffIndex)

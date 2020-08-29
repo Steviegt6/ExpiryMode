@@ -144,13 +144,23 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
+            if (!SuffWorld.ExpiryModeIsActive && item.type == ItemType<ChaliceofDeath>())
+            {
+                foreach (TooltipLine modLine3 in tooltips)
+                {
+                    if (modLine3.mod == "Terraria" && modLine3.Name == "Tooltip0")
+                    {
+                        modLine3.text = $"Enables Expiry Mode\nBe aware. You can only use this item once. If you enable the mode, you cannot disable it ever again in this world.\nBefore you use it, you must be absolutely sure that you want to enable the mode.";
+                    }
+                }
+            }
             if (SuffWorld.ExpiryModeIsActive && item.type == ItemType<ChaliceofDeath>())
             {
                 foreach (TooltipLine modLine3 in tooltips)
                 {
                     if (modLine3.mod == "Terraria" && modLine3.Name == "Tooltip0")
                     {
-                        modLine3.text = $"You cannot disable Expiry Mode in this world once it has already\nbeen enabled in this world. This item is now worthless.\n";
+                        modLine3.text = $"You cannot disable Expiry Mode in this world once it has already\nbeen enabled in this world. This item is now worthless.\nIf you want to disable the mode, please debug\nto disable it, as you cannot legitimately disable it.";
                     }
                 }
             }

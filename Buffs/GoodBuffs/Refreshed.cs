@@ -11,9 +11,9 @@ namespace ExpiryMode.Buffs.GoodBuffs
         {
             DisplayName.SetDefault("Refreshed");
             Description.SetDefault("You feel nice");
-            Main.debuff[this.Type] = false;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = false;
+            Main.debuff[Type] = false;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
             canBeCleared = true;
         }
         public override void Update(Player player, ref int buffIndex)

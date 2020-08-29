@@ -11,9 +11,9 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             DisplayName.SetDefault("Gravity Tier II");
             Description.SetDefault("Gravity Pulls on you more then before");
-            Main.debuff[this.Type] = true;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = true;
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
         public override void Update(Player player, ref int buffIndex)

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using ExpiryMode.Items.Materials;
 using Terraria.GameInput;
 using ExpiryMode.Items.Useables;
+using ExpiryMode.Items.Fish.Quest;
 
 namespace ExpiryMode.Mod_
 // TODO: Make custom sky not apply to all players
@@ -22,7 +23,7 @@ namespace ExpiryMode.Mod_
         public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff) { }
         public override void UpdateBiomeVisuals()
         {
-            player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
+             player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
         }
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
@@ -200,6 +201,22 @@ namespace ExpiryMode.Mod_
                     player.AddBuff(BuffID.Chilled, 2);
                 if (player.ZoneHoly)
                     player.AddBuff(BuffType<PurityBuff>(), 7200);
+                if (ZoneRadiated)
+                {
+                    player.AddBuff(BuffType<AbsoluteDoom>(), 2);
+                    player.AddBuff(BuffType<DoomLess>(), 2);
+                }
+                if (ZoneRadiated && player.ZoneDesert && !player.longInvince)
+                {
+                    player.buffImmune[BuffType<DoomLess>()] = true;
+                    player.buffImmune[BuffType<HeatStroke>()] = true;
+                    player.buffImmune[BuffType<LesserHeatStroke>()] = true;
+                }
+                if (ZoneRadiated && player.wet)
+                {
+                    player.AddBuff(BuffType<RadiatedWater>(), 2);
+                    Main.PlaySound(SoundID.Item15);
+                }
                 if (player.ZoneDesert)
                     player.AddBuff(BuffType<HeatStroke>(), 2);
                 if (player.ZoneDesert && !Main.dayTime)
@@ -236,19 +253,7 @@ namespace ExpiryMode.Mod_
                 if (player.ZoneRockLayerHeight || player.ZoneUnderworldHeight)
                     player.AddBuff(BuffID.Blackout, 2);
                 #endregion
-                #region Custom Biome Effects
-                if (ZoneRadiated)
-                {
-                    player.AddBuff(BuffType<AbsoluteDoom>(), 2);
-                    player.AddBuff(BuffType<DoomLess>(), 2);
-                }
-                if (ZoneRadiated && player.wet)
-                {
-                    player.AddBuff(BuffType<RadiatedWater>(), 2);
-                    Main.PlaySound(SoundID.Item15);
-                }
             }
-            #endregion
             /*if (player.HasBuff(BuffType<Refreshed>()))
             {
                 player.accRunSpeed = player.maxRunSpeed;
@@ -279,7 +284,7 @@ namespace ExpiryMode.Mod_
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-			bool notKilledByNPC = damageSource.SourceNPCIndex <= 0;
+            bool notKilledByNPC = damageSource.SourceNPCIndex <= 0;
             {
                 if (player.HasBuff(ModContent.BuffType<AbsoluteDoom>()) && notKilledByNPC)
                 {
@@ -341,6 +346,37 @@ namespace ExpiryMode.Mod_
                     }
                 }
                 return true;
+            }
+        }
+        public override bool ModifyNurseHeal(NPC nurse, ref int health, ref bool removeDebuffs, ref string chatText)
+        {
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+                if (nurse.life != nurse.lifeMax)
+                {
+                    chatText = "Are you really asking a hurt woman to heal you? Give me a break.";
+                    return false;
+                }
+                if ((float)player.statLife / player.statLifeMax2 >= 0.5f)
+                {
+                    chatText = "You aren't hurt enough. Come back when you are more hurt.";
+                    return false;
+                }
+            }
+            return base.ModifyNurseHeal(nurse, ref health, ref removeDebuffs, ref chatText);
+        }
+        public override void CatchFish(Item fishingRod, Item bait, int power, int liquidType, int poolSize, int worldLayer, int questFish, ref int caughtType, ref bool junk)
+        {
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+                if (junk)
+                {
+                    return;
+                }
+                if (questFish == ItemType<GlowingCatfish>() && liquidType == 0 && Main.rand.NextBool(3) && Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                {
+                    caughtType = ItemType<GlowingCatfish>();
+                }
             }
         }
     }

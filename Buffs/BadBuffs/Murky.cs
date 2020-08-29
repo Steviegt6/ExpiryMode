@@ -11,9 +11,9 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             DisplayName.SetDefault("Murky");
             Description.SetDefault("The murky environment doesn't make your skin pores feel good");
-            Main.debuff[this.Type] = true;
-            Main.buffNoSave[this.Type] = true;
-            Main.buffNoTimeDisplay[this.Type] = false;
+            Main.debuff[Type] = true;
+            Main.buffNoSave[Type] = true;
+            Main.buffNoTimeDisplay[Type] = false;
             canBeCleared = false;
         }
         public override void Update(Player player, ref int buffIndex)
