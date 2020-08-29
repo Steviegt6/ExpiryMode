@@ -19,21 +19,15 @@ using Mono.Cecil.Cil;
 
 namespace ExpiryMode.Mod_
 {
-    //TODO: Rotting away debuff lasts forever (client side) after leaving. (until death)
-    //TODO: MAKE DISCORD APPEAR AS UI IN THE MENU
     public class ExpiryModeMod : Mod
     {
-        public static string CurrentVersion = "";
-        public static string ModVersion;
         public ExpiryModeMod() { }
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
-            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Terraria.Main).GetField("dayTime"))))
-                return; // Patch unable to be applied
-                        //c.Index--;
-                        //c.Emit(OperandType.InlineArg, typeof(Main).GetField("logoScale"));
-            c.Emit(OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText")); // Use reflection to pass the method
+            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Main).GetField("dayTime"))))
+                return;
+            c.Emit(OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText"));
         }
         public static void DrawSplashText()
         {
@@ -73,9 +67,9 @@ namespace ExpiryMode.Mod_
                 Vector2 origin2 = fontMouseText.MeasureString(text5);
                 origin2.X *= 0.5f;
                 origin2.Y *= 0.5f;
+                spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 if (ModLoader.GetMod("HamstarHelpers") == null)
                 {
-                    spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                     spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 else
@@ -83,7 +77,6 @@ namespace ExpiryMode.Mod_
                     spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 450f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
-                //Rectangle gitHub = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 50, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 Rectangle discordLinkFurtherOut = new Rectangle((int)(screenWidth - origin2.X * 2 - 375), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 if (discordLink.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") == null)
                 {
@@ -117,9 +110,6 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
-        public override void Close()
-        {
-        }
         public override void AddRecipeGroups()
         {
             RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
@@ -133,61 +123,18 @@ namespace ExpiryMode.Mod_
         }
         public static ModHotKey ShiftIsPressed;
         public override void AddRecipes() { }
-        public override void PostUpdateEverything() { if (myPlayer < 0) return; }
+        public override void PostUpdateEverything() { }
         public override void Unload()
         {
             ShiftIsPressed = null;
-            ModVersion = null;
         }
         public override void Load()
         {
-
-            /*ModVersion = "v" + Version.ToString().Trim();
-
-            //Goes out and grabs the version that the mod browser has
-            using (WebClient client = new WebClient())
-            {
-                if (CheckForInternetConnection())
-                {
-                    //Parsing the data we need from the api
-                    var json = client.DownloadString("http://javid.ddns.net/tModLoader/tools/modinfo.php?modname=ExpiryMode");
-                    json.ToString().Trim();
-                    ExpiryModeMod.CurrentVersion = json;
-                    client.Dispose();
-                }
-            }*/
             IL.Terraria.Main.DrawMenu += HookMenuSplash;
-            //Process.Start("https://discord.gg/pT2BzSG");
             if (!dedServ)
             {
-                string ScreenLoadChance = "tModLoader: Terraria";
-
-                switch (rand.Next(7))
-                {
-                    default:
-                        ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
-                        break;
-                    case 1:
-                        ScreenLoadChance = "tModLoader: You've Been Distracted!";
-                        break;
-                    case 2:
-                        ScreenLoadChance = "tModLoader: Close the application";
-                        break;
-                    case 3:
-                        ScreenLoadChance = "tStandalone: Wait, wrong mod";
-                        break;
-                    case 4:
-                        ScreenLoadChance = "tModLoader: what.ogg is the best song";
-                        break;
-                    case 5:
-                        ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
-                        break;
-                    case 6:
-                        if (ModLoader.GetMod("CalamityMod") != null)
-                            ScreenLoadChance = "tModLoader: r/Terraria Mod is not that cool";
-                        break;
-                }
-                ReLogic.OS.Platform.Current.SetWindowUnicodeTitle(instance.Window, ScreenLoadChance);
+                On.Terraria.Lang.GetRandomGameTitle += Lang_GetRandomGameTitle;
+                chTitle = true;
             }
             ShiftIsPressed = RegisterHotKey("View Extra Tooltip Details", "LeftAlt");
             if (!dedServ)
@@ -196,25 +143,51 @@ namespace ExpiryMode.Mod_
                 SkyManager.Instance["InfniteSuffering:RadiatedBiomeSky"] = new RadiatedSky();
             }
         }
+
+        private string Lang_GetRandomGameTitle(On.Terraria.Lang.orig_GetRandomGameTitle orig)
+        {
+            string ScreenLoadChance = "tModLoader: Terraria";
+
+            switch (rand.Next(7))
+            {
+                default:
+                    ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
+                    break;
+                case 1:
+                    ScreenLoadChance = "tModLoader: You've Been Distracted!";
+                    break;
+                case 2:
+                    ScreenLoadChance = "tModLoader: Close the application";
+                    break;
+                case 3:
+                    ScreenLoadChance = "tStandalone: Wait, wrong app";
+                    break;
+                case 4:
+                    ScreenLoadChance = "tModLoader: what.ogg is the best song";
+                    break;
+                case 5:
+                    ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
+                    break;
+                case 6:
+                    if (ModLoader.GetMod("CalamityMod") != null)
+                        ScreenLoadChance = "tModLoader: Calamity isn't really that good";
+                    break;
+            }
+            return ScreenLoadChance;
+        }
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>() == null)
-            {
-                return;
-            }
-
             Player player = Main.player[myPlayer];
             if (gameMenu)
                 musicVolume = .5f;
+            if (gameMenu)
+            {
+                return;
+            }
             if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
-            }
-            if (gameMenu)
-            {
-                music = GetSoundSlot(SoundType.Music, "Sounds/Music/CreepyMusic");
-                priority = (MusicPriority)51;
             }
         }
         public override void ModifyLightingBrightness(ref float scale)
@@ -258,7 +231,7 @@ namespace ExpiryMode.Mod_
                 NewText("This command can only be used while debugging!", Color.Red);
             if (player.HasItem(ItemType<CommandItem>()))
             {
-                if (Terraria.Main.rand.Next(8) == 0)
+                if (rand.Next(8) == 0)
                 {
                     player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} couldn't take it anymore."), player.statLife, 1);
                 }
@@ -286,7 +259,7 @@ namespace ExpiryMode.Mod_
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.ResetColor();
-                Player player = Terraria.Main.player[myPlayer];
+                Player player = Main.player[myPlayer];
                 if (!player.HasItem(ItemType<CommandItem>()))
                     NewText("This command can only be used while debugging!", Color.Red);
                 if (player.HasItem(ItemType<CommandItem>()))

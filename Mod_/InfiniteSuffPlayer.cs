@@ -15,8 +15,6 @@ namespace ExpiryMode.Mod_
 {
     public class InfiniteSuffPlayer : ModPlayer
     {
-        public bool RavenousChest;
-        public bool RunePlateChest;
         public int DoomBlockCount = 0;
         public bool ZoneRadiated = false;
         public bool ExpiryModeIsActive = false;

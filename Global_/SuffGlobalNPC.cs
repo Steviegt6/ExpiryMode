@@ -14,7 +14,7 @@ namespace ExpiryMode.Global_
 {
 	public class SuffGlobalNPC : GlobalNPC
     {
-        /*public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
             if (GetInstance<ExpiryConfig>().PogIsTrue)
             {
@@ -30,7 +30,7 @@ namespace ExpiryMode.Global_
                 }
             }
             return true;
-        }*/
+        }
         public override void SetDefaults(NPC npc)
         {
             if (SuffWorld.ExpiryModeIsActive)

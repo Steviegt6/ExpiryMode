@@ -24,8 +24,8 @@ namespace ExpiryMode.Mod_
         }
         public override TagCompound Save()
         {
-            return new TagCompound {
-                {  "ExpiryModeIsActive", ExpiryModeIsActive } };
+            return new TagCompound 
+            { {  "ExpiryModeIsActive", ExpiryModeIsActive } };
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
@@ -57,7 +57,7 @@ namespace ExpiryMode.Mod_
         }
         public override void TileCountsAvailable(int[] tileCounts)
         {
-            DoomBlockCount = tileCounts[mod.TileType("DoomGravel")];
+            DoomBlockCount = tileCounts[TileType<DoomGravel>()];
         }
     }
     public class RadiantDirt : ModWorld
