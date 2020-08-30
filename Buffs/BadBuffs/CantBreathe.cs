@@ -1,3 +1,4 @@
+using ExpiryMode.Mod_;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -20,8 +21,13 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             if (Main.GameUpdateCount % 20 == 0)
             {
-                if (Main.rand.NextFloat() <= 0.2f)
-                Main.PlaySound(SoundID.PlayerHit, player.Center);
+                if (ModContent.GetInstance<ExpiryConfig>().noCough)
+                {
+                    if (Main.rand.NextFloat() <= 0.2f)
+                    {
+                        Main.PlaySound(SoundID.PlayerHit, player.Center);
+                    }
+                }
             }
             if (player.lifeRegen > 0)
 				{

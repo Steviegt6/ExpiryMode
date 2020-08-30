@@ -76,6 +76,10 @@ namespace ExpiryMode.Mod_
         }
         public override void PostUpdate()
         {
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+                player.extraAccessorySlots += 1;
+            }
             if (ZoneRadiated && player.whoAmI == Main.myPlayer)
             {
                 Main.sunTexture = GetTexture("ExpiryMode/Assets/RottenSun");
@@ -198,9 +202,18 @@ namespace ExpiryMode.Mod_
                 if (player.ZoneCorrupt)
                     player.AddBuff(BuffType<RottingAway>(), 2);
                 if (player.ZoneSnow)
+                {
                     player.AddBuff(BuffID.Chilled, 2);
+                }
+
                 if (player.ZoneHoly)
-                    player.AddBuff(BuffType<PurityBuff>(), 7200);
+                {
+                    if (GetInstance<ExpiryConfig>().noGoodBuffs)
+                    {
+                        player.AddBuff(BuffType<PurityBuff>(), 7200);
+                    }
+                }
+
                 if (ZoneRadiated)
                 {
                     player.AddBuff(BuffType<AbsoluteDoom>(), 2);
@@ -218,18 +231,29 @@ namespace ExpiryMode.Mod_
                     Main.PlaySound(SoundID.Item15);
                 }
                 if (player.ZoneDesert)
+                {
                     player.AddBuff(BuffType<HeatStroke>(), 2);
+                }
+
                 if (player.ZoneDesert && !Main.dayTime)
                 {
                     player.buffImmune[BuffType<HeatStroke>()] = true;
                     player.buffImmune[BuffType<LesserHeatStroke>()] = true;
                 }
                 if (player.ZoneDesert && player.wet)
+                {
                     player.AddBuff(BuffType<LesserHeatStroke>(), 600);
+                }
+
                 if (player.HasBuff(BuffType<LesserHeatStroke>()))
+                {
                     player.buffImmune[BuffType<HeatStroke>()] = true;
+                }
+
                 if (player.ZoneDesert && player.wet && !Main.dayTime)
+                {
                     player.AddBuff(BuffID.Chilled, 600);
+                }
                 #endregion
                 #region More Evil Debuffs
                 if (player.ZoneCrimson && player.ZoneBeach || player.ZoneCorrupt && player.ZoneBeach /* || player.ZoneCrimson && player.ZoneDesert || player.ZoneCorrupt && player.ZoneDesert*/)
@@ -239,19 +263,38 @@ namespace ExpiryMode.Mod_
                     player.buffImmune[BuffType<LesserHeatStroke>()] = true;
                 }
                 if (player.ZoneCrimson)
+                {
                     player.AddBuff(BuffType<Fleshy>(), 2);
+                }
+
                 if (player.Center.Y <= 1600)
+                {
                     player.AddBuff(BuffType<CantBreathe>(), 2);
+                }
+
                 if (player.ZoneBeach)
-                    player.AddBuff(BuffType<Refreshed>(), 1800);
+                {
+                    if (GetInstance<ExpiryConfig>().noGoodBuffs)
+                    {
+                        player.AddBuff(BuffType<Refreshed>(), 1800);
+                    }
+                }
+
                 if (player.ZoneJungle)
+                {
                     player.AddBuff(BuffType<Murky>(), 2);
+                }
                 #endregion
                 #region if this, dont do that thanks
                 if (player.ZoneDirtLayerHeight)
+                {
                     player.AddBuff(BuffID.Darkness, 2);
+                }
+
                 if (player.ZoneRockLayerHeight || player.ZoneUnderworldHeight)
+                {
                     player.AddBuff(BuffID.Blackout, 2);
+                }
                 #endregion
             }
             /*if (player.HasBuff(BuffType<Refreshed>()))
