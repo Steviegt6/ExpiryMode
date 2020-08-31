@@ -9,14 +9,42 @@ using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Audio;
 
 namespace ExpiryMode.Global_
 {
 	public class SuffGlobalNPC : GlobalNPC
     {
+        public override void BuffTownNPC(ref float damageMult, ref int defense)
+        {
+            defense += 10;
+            damageMult = 1.3f;
+        }
+        public override void GetChat(NPC npc, ref string chat)
+        {
+            Player player = Main.player[Main.myPlayer];
+            if (npc.type == NPCID.ArmsDealer)
+            {
+                switch (Main.rand.Next(7))
+                {
+                    default:
+                        chat = "Ay, brother. Get out of my sight.";
+                        break;
+                    case 1:
+                        chat = "Dude. That minishark is mine. Get out.";
+                        break;
+                    case 2:
+                        if (!player.HasItem(ItemID.PlatinumCoin))
+                        {
+                            chat = "These guns ain't that cheap, so get some money!";
+                        }
+                        break;
+                }
+            }
+        }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
-            if (GetInstance<ExpiryConfig>().PogIsTrue)
+            if (GetInstance<ExpiryConfigClientSide>().PogIsTrue)
             {
                 if (npc.type == NPCID.SkeletronHead)
                 {
@@ -35,7 +63,7 @@ namespace ExpiryMode.Global_
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
-                #region NPC Life Scaling
+            #region NPC Life Scaling
                 if (Main.hardMode && !Main.expertMode && !npc.friendly)
                 {
                     npc.lifeMax = (int)(npc.lifeMax * 1.8f);
@@ -189,7 +217,7 @@ namespace ExpiryMode.Global_
                 }
                 if (npc.type == NPCID.SkeletronHead)
                 {
-                    if (GetInstance<ExpiryConfig>().PogIsTrue)
+                    if (GetInstance<ExpiryConfigClientSide>().PogIsTrue)
                     {
                         CombatText.NewText(npc.Hitbox, Color.White, "Thank you SkuttleBaka", false, false);
                     }

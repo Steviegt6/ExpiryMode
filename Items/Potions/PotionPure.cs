@@ -13,21 +13,21 @@ namespace ExpiryMode.Items.Potions
 			Tooltip.SetDefault("Makes you immune to pure evil");
 		}
         public override void SetDefaults()
-		{
-		item.UseSound = SoundID.Item3;
-		item.useStyle = ItemUseStyleID.EatingUsing;
-		item.useTurn = true;
-		item.useAnimation = 16;
-		item.useTime = 16;
-		item.maxStack = 30;
-		item.consumable = true;
-		item.width = 20;
-		item.height = 28;
-		item.value = 3213;
-		item.rare = ItemRarityID.LightRed;
-		item.buffType = BuffType<PurityBuff>();
-        item.buffTime = 28800;
-		}
+        {
+            item.UseSound = SoundID.Item3;
+            item.useStyle = ItemUseStyleID.EatingUsing;
+            item.useTurn = true;
+            item.useAnimation = 16;
+            item.useTime = 16;
+            item.maxStack = 30;
+            item.consumable = true;
+            item.width = 20;
+            item.height = 28;
+            item.value = 3213;
+            item.rare = ItemRarityID.LightRed;
+            item.buffType = BuffType<PurityBuff>();
+            item.buffTime = 28800;
+        }
 		public override void AddRecipes() 
 		{
 			ModRecipe recipe = new ModRecipe(mod);

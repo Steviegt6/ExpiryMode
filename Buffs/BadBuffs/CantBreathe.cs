@@ -21,7 +21,7 @@ namespace ExpiryMode.Buffs.BadBuffs
         {
             if (Main.GameUpdateCount % 20 == 0)
             {
-                if (ModContent.GetInstance<ExpiryConfig>().noCough)
+                if (ModContent.GetInstance<ExpiryConfigClientSide>().noCough)
                 {
                     if (Main.rand.NextFloat() <= 0.2f)
                     {
@@ -30,9 +30,9 @@ namespace ExpiryMode.Buffs.BadBuffs
                 }
             }
             if (player.lifeRegen > 0)
-				{
-					player.lifeRegen = 0;
-				}
+			{
+				player.lifeRegen = 0;
+			}
 			player.lifeRegenTime = 0;
 			player.lifeRegen = -20;
         }

@@ -4,20 +4,19 @@ using Terraria;
 using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using ExpiryMode.Mod_;
-using System.Linq;
-using System;
-using System.Net.NetworkInformation;
-using IL.Terraria.Localization;
+using Terraria.DataStructures;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExpiryMode.Items.Useables
 {
 	public class ChaliceofDeath : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Chalice of Demise");
-			Tooltip.SetDefault("HahaFunny");
-		}
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Chalice of Demise");
+            Tooltip.SetDefault("HahaFunny");
+            //Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(4, 7)); // Note: TicksPerFrame, Frames
+        }
         /// <summary>
         /// Where the gayass properties are set.
         /// </summary>
@@ -31,10 +30,20 @@ namespace ExpiryMode.Items.Useables
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item119;
             item.autoReuse = false;
+            //item.noUseGraphic = true;
+            //item.shoot = ProjectileType<Projectiles.ChaliceOfDeath>();  
         }
-        public override void HoldItem(Player player)
+        /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-        }
+            //return spriteBatch.Draw(GetTexture("ExpiryMode/Items/Useables/ChaliceofDeathAnim"), )
+            Texture2D texture = Main.itemTexture[item.type];
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 offsetPositon = Vector2.UnitY.RotatedBy(MathHelper.PiOver2 * i) * 2;
+                spriteBatch.Draw(GetTexture("ExpiryMode/Items/Useables/ChaliceofDeathAnim"), position, frame, drawColor, 0, origin, scale, SpriteEffects.None, 0f);
+            }
+            return true;
+        }*/
         public override bool UseItem(Player player)
         {
 			if (!SuffWorld.ExpiryModeIsActive)

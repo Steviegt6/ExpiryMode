@@ -10,6 +10,8 @@ Hell is even more hellish! Cool!
 Some items contradict debuffs around the world. Find em.
 Good luck.
 
+NOTE: Added Death Counter per session. Does not go well with dedicated servers.
+
 { DEVELOPERS }
 
 Ryan - Head Director

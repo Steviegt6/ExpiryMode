@@ -112,14 +112,23 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+        // TODO: This stupid ass shit won't save. Get this thing's gay ass to work.
+        public override void Load(TagCompound tag)
+        {
+            Main.player[Main.myPlayer].GetModPlayer<DeathCountPlayer>().playerDeathCount = tag.GetInt("playerDeathCount");
+        }
         public override TagCompound Save()
         {
             if (Main.gameMenu)
             {
-                Main.sunTexture = ModContent.GetTexture("Terraria/Sun");
-                Main.rainTexture = ModContent.GetTexture("Terraria/Rain");
+                Main.sunTexture = GetTexture("Terraria/Sun");
+                Main.rainTexture = GetTexture("Terraria/Rain");
+                return null;
             }
-            return null;
+            return new TagCompound
+            {
+                {"playerDeathCount", Main.player[Main.myPlayer].GetModPlayer<DeathCountPlayer>().playerDeathCount}
+            };
         }
     }
 }

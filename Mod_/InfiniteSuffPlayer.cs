@@ -10,6 +10,9 @@ using ExpiryMode.Items.Materials;
 using Terraria.GameInput;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Items.Fish.Quest;
+using System.Linq;
+using Terraria.ModLoader.Default;
+using IL.Terraria.Chat;
 
 namespace ExpiryMode.Mod_
 // TODO: Make custom sky not apply to all players
@@ -17,8 +20,38 @@ namespace ExpiryMode.Mod_
     public class InfiniteSuffPlayer : ModPlayer
     {
         public int DoomBlockCount = 0;
+
         public bool ZoneRadiated = false;
+
         public bool ExpiryModeIsActive = false;
+        /*public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            NetMessage.SendPlayerDeath(Main.myPlayer, damageSource, (int)damage, hitDirection, pvp);
+            deathCount++;
+            Main.NewText($"{player.name} is now at {deathCount} deaths in {Main.worldName}!");
+        }*/
+        public static long GetSavings(Player player)
+        {
+            long inv = Utils.CoinsCount(out _, player.inventory, new int[]
+            {
+        58, //Mouse item
+        57, //Ammo slots
+        56,
+        55,
+        54
+            });
+            int[] empty = new int[0];
+            long piggy = Utils.CoinsCount(out _, player.bank.item, empty);
+            long safe = Utils.CoinsCount(out _, player.bank2.item, empty);
+            long forge = Utils.CoinsCount(out _, player.bank3.item, empty);
+            return Utils.CoinsCombineStacks(out _, new long[]
+            {
+        inv,
+        piggy,
+        safe,
+        forge
+            });
+        }
         public override void ProcessTriggers(TriggersSet triggersSet) { }
         public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff) { }
         public override void UpdateBiomeVisuals()
@@ -208,7 +241,7 @@ namespace ExpiryMode.Mod_
 
                 if (player.ZoneHoly)
                 {
-                    if (GetInstance<ExpiryConfig>().noGoodBuffs)
+                    if (GetInstance<ExpiryConfigServerSide>().noGoodBuffs)
                     {
                         player.AddBuff(BuffType<PurityBuff>(), 7200);
                     }
@@ -271,10 +304,9 @@ namespace ExpiryMode.Mod_
                 {
                     player.AddBuff(BuffType<CantBreathe>(), 2);
                 }
-
                 if (player.ZoneBeach)
                 {
-                    if (GetInstance<ExpiryConfig>().noGoodBuffs)
+                    if (GetInstance<ExpiryConfigServerSide>().noGoodBuffs)
                     {
                         player.AddBuff(BuffType<Refreshed>(), 1800);
                     }
@@ -395,6 +427,11 @@ namespace ExpiryMode.Mod_
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
+                if(Main.npc.Any(n => n.active && n.boss))
+                {
+                    chatText = "I'm too frightened by that boss to heal you!";
+                    return false;
+                }
                 if (nurse.life != nurse.lifeMax)
                 {
                     chatText = "Are you really asking a hurt woman to heal you? Give me a break.";

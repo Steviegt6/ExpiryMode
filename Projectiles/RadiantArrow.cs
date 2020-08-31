@@ -8,11 +8,13 @@ using static Terraria.Dust;
 using ExpiryMode.Buffs.MiscBuffs;
 using Terraria.Graphics.Shaders;
 using ExpiryMode.Buffs.BadBuffs;
+using System;
 
 namespace ExpiryMode.Projectiles
 {
     public class RadiantArrow : ModProjectile
     {
+        int fadeAway = ProjectileType<RadiantArrow  >();
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Radiant Arrow");
@@ -38,16 +40,16 @@ namespace ExpiryMode.Projectiles
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate--;
-                Main.PlaySound(SoundID.Item93, projectile.position);
-                projectile.Kill();
-                Dust dust;
-                Vector2 position = projectile.position;
-                for (int i = 20; i >= 0; i--) // I do this because i am a rebel
-                {
-                    dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
-                    dust.noGravity = true;
-                    dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
-                }
+            Main.PlaySound(SoundID.Item93, projectile.position);
+            Dust dust;
+            Vector2 position = projectile.position;
+            for (int i = 20; i >= 0; i--) // I do this because i am a rebel
+            {
+                dust = Main.dust[NewDust(position, 30, 30, 91, projectile.velocity.X, projectile.velocity.Y, 0, new Color(0, 255, 17), 1f)];
+                dust.noGravity = true;
+                dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
+            }
+            projectile.Kill();  
             return false;
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -96,7 +98,7 @@ namespace ExpiryMode.Projectiles
             spriteBatch.Draw(GetTexture("ExpiryMode/Projectiles/RadiantArrow"),
                 projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition,
                 frame, lightColor,
-                projectile.rotation + (float)0.1 * projectile.spriteDirection,
+                projectile.rotation,
                 new Vector2(18, 36) / 2,
                 projectile.scale,
                 projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);

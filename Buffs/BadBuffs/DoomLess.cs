@@ -21,17 +21,11 @@ namespace ExpiryMode.Buffs.BadBuffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            if (GetInstance<ExpiryConfig>().MakeBiomeDark)
-            {
-                Main.BlackFadeIn = 135;
-                Lighting.Brightness(55, 55);
-            }
             player.lifeRegenTime = 0;
             player.statLifeMax2 = (int)(player.statLifeMax2 * 0.6f);
             player.manaCost += 0.35f;
             player.manaRegen = 1;
             player.meleeDamageMult = .85f;
-            player.blackout = true;
             player.breathMax = 0;
             if (player.lifeRegen > 0)
             {

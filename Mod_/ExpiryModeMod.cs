@@ -21,6 +21,7 @@ using Terraria.ModLoader.Audio;
 using System.Threading;
 using System.Reflection;
 using Terraria.ModLoader.Config;
+using System.IO;
 
 namespace ExpiryMode.Mod_
 {
@@ -49,7 +50,7 @@ namespace ExpiryMode.Mod_
         }
         private void MenuMusicSet()
         {
-            if (GetInstance<ExpiryConfig>().MusicChange)
+            if (GetInstance<ExpiryConfigClientSide>().MusicChange)
             {
                 customTitleMusicSlot = GetSoundSlot((SoundType)51, "Sounds/Music/CreepyMusic");
                 IL.Terraria.Main.UpdateAudio += new ILContext.Manipulator(TitleMusicIL);
@@ -251,9 +252,18 @@ namespace ExpiryMode.Mod_
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
                 priority = MusicPriority.BiomeHigh;
             }
+            if (GetInstance<ExpiryConfigClientSide>().distractionDanceMusic)
+            {
+                if (NPC.AnyNPCs(NPCID.EyeofCthulhu))
+                {
+                    // GetDistractedFool
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/GetDistractedFool");
+                    priority = MusicPriority.BossHigh;
+                }
+            }
             if (stopTitleMusic || (!gameMenu && customTitleMusicSlot != 6 && ActivePlayerFileData != null && ActiveWorldFileData != null))
             {
-                if (!stopTitleMusic || !GetInstance<ExpiryConfig>().MusicChange)
+                if (!stopTitleMusic || !GetInstance<ExpiryConfigClientSide>().MusicChange)
                 {
                     music = 6;
                 }
@@ -261,7 +271,7 @@ namespace ExpiryMode.Mod_
                 {
                     stopTitleMusic = true;
                 }
-                if (GetInstance<ExpiryConfig>().MusicChange)
+                if (GetInstance<ExpiryConfigClientSide>().MusicChange)
                 {
 
                 }
@@ -279,14 +289,14 @@ namespace ExpiryMode.Mod_
         /// Saves the config of the said mod config file.
         /// </summary>
         /// <param name="expiryConfig"></param>
-        internal static void SaveConfig(ExpiryConfig expiryConfig)
+        internal static void SaveConfig(ExpiryConfigClientSide expiryConfigClientSide)
         {
             MethodInfo method = typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic);
             if (method != null)
             {
                 method.Invoke(null, new object[]
                 {
-                    GetInstance<ExpiryConfig>()
+                    GetInstance<ExpiryConfigClientSide>()
                 });
                 return;
             }
@@ -305,13 +315,9 @@ namespace ExpiryMode.Mod_
         public override void ModifyLightingBrightness(ref float scale)
         {
             Player player = Main.player[myPlayer];
-            if (GetInstance<ExpiryConfig>().MakeBiomeDark)
+            if (GetInstance<ExpiryConfigClientSide>().MakeBiomeDark)
             {
                 if (Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && !dayTime)
-                {
-                    scale = .75f;
-                }
-                if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
                 {
                     scale = .75f;
                 }
@@ -319,25 +325,49 @@ namespace ExpiryMode.Mod_
                 {
                     scale = .85f;
                 }
-                if (raining && player.ZoneSnow)
+                if (ExpiryModeIsActive)
                 {
-                    scale = .75f;
+                    if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                    {
+                        scale = .75f;
+                    }
+                    if (raining && player.ZoneSnow)
+                    {
+                        scale = .75f;
+                    }
                 }
             }
+
         }
-        /// <summary>
-        /// This caused me too much pain (please use base.Close() next time)
-        /// </summary>
-        //public sealed override void Close()
-        //{
-            // You know, I spent 7 hours trying to fix an issue with my mod... https://cdn.discordapp.com/attachments/296056831514509312/738246557367009391/f0531c90ebb76dfe36d1dfee5b46852d.gif?comment=@everyone / https://cdn.discordapp.com/attachments/701182443537039390/749117222584189088/afoeeee.png
-            //base.Close();
-            // As you know, I'm Kind of a gamer
-        //}
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            DeathCountMessageType packetID = (DeathCountMessageType)reader.ReadByte();
+            int playerID = reader.ReadInt32();
+            switch (packetID)
+            {
+                case DeathCountMessageType.PlayerSync:
+                    player[playerID].GetModPlayer<DeathCountPlayer>().playerDeathCount = reader.ReadInt32();
+                    break;
+                case DeathCountMessageType.PlayerValueChange:
+                    int deathCount = reader.ReadInt32();
+                    player[playerID].GetModPlayer<DeathCountPlayer>().playerDeathCount = deathCount;
+                    if (netMode == NetmodeID.Server)
+                    {
+                        ModPacket pack = GetPacket();
+                        pack.Write((byte)DeathCountMessageType.PlayerValueChange);
+                        pack.Write(playerID);
+                        pack.Write(deathCount);
+                        pack.Send(-1, playerID);
+                    }
+                break;
+            }
+        }
     }
-    /// <summary>
-    /// Use this command ingame to kill yourself if you have the debugging item in your inventory.
-    /// </summary>
+    internal enum DeathCountMessageType : byte
+    {
+        PlayerSync,
+        PlayerValueChange,
+    }
     public class KillCommand : ModCommand
     {
         public override CommandType Type
@@ -371,7 +401,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
-        public class ItemCommand : ModCommand
+        public class HurtSelf : ModCommand
         {
             public override CommandType Type
                 => CommandType.Chat;
@@ -412,6 +442,47 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+        public class SetMaxLife : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "lifeSet";
+
+            public override string Usage
+                => "/lifeSet <life>";
+
+            public override string Description
+                => "Set your max life";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                Player player = Main.player[myPlayer];
+                var lifeAmt = args[0];
+                if (!int.TryParse(args[0], out int type))
+                {
+                    if (type == 0)
+                    {
+                        throw new UsageException($"{lifeAmt} is not a valid integer.");
+                    }
+                }
+
+                int lifeInt = 1;
+                if (args.Length >= 2)
+                {
+                    lifeInt = int.Parse(args[1]);
+                }
+                if (!player.HasItem(ItemType<CommandItem>()))
+                {
+                    NewText("This command can only be used while debugging!", Color.Red);
+                }
+                if (player.HasItem(ItemType<CommandItem>()))
+                {
+                    player.statLifeMax = type;
+                }
+            }
+        }
         /// <summary>
         /// Enables and disables Expiry Mode upon use with the debugging item in your inventory.
         /// </summary>
@@ -447,8 +518,100 @@ namespace ExpiryMode.Mod_
                     NewText("Expiry Mode has successfully been enabled.", Color.Orange);
                 }
             }
-            internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
-        + "\n you are a good observer.";
         }
+        public class Heal : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "heal";
+
+            public override string Usage
+                => "/heal";
+
+            public override string Description
+                => "Heals you back to full health";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                Player player = Main.player[myPlayer];
+                if (!player.HasItem(ItemType<CommandItem>()))
+                    NewText("This command can only be used while debugging!", Color.Red);
+                if (player.HasItem(ItemType<CommandItem>()))
+                {
+                    caller.Player.statLife = player.statLifeMax2;
+                    NewText("You have been healed.", Color.Coral);
+                }
+            }
+        }
+        public class DeathCount : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "deaths";
+
+            public override string Usage
+                => "/deaths";
+
+            public override string Description
+                => "How many deaths for each player in the server";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                if (player[0].active)
+                {
+                    NewText($"{player[0].name} has died {player[0].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[1].active)
+                {
+                    NewText($"{player[1].name} has died {player[1].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[2].active)
+                {
+                    NewText($"{player[2].name} has died {player[2].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[3].active)
+                {
+                    NewText($"{player[3].name} has died {player[3].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[4].active)
+                {
+                    NewText($"{player[4].name} has died {player[4].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[5].active)
+                {
+                    NewText($"{player[5].name} has died {player[5].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (player[6].active)
+                {
+                    NewText($"{player[6].name} has died {player[6].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                if (Main.player[7].active)
+                {
+                    NewText($"{player[7].name} has died {player[7].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                }
+                //foreach (Player pl in Main.player)
+                //{
+                //if (pl.active)
+                //{
+                //int deaths = pl.GetModPlayer<DeathCountPlayer>().playerDeathCount;
+
+                //string playerName = pl.name;
+                //if(playerName.Length > 15)
+                //{
+                //    playerName = playerName.Substring(0, 12);
+                //    playerName += "...";
+                //}
+                //NewText($"You have died {player.GetModPlayer<DeathCountPlayer>().playerDeathCount} times.", Color.Gainsboro);
+                //}
+                //}
+            }
+        }
+
+        internal const string noteForPeopleWhoSeeThisCode = "This mod definitely does not have the greatest code, but it seems to have a TON of 'if' statements. If you see this then"
+        + "\n you are a good observer.";
     }
 }
