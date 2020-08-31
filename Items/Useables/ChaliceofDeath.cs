@@ -62,6 +62,7 @@ namespace ExpiryMode.Items.Useables
                 if (Main.netMode == NetmodeID.Server)
                 {
                     NetMessage.SendData(MessageID.WorldData);
+                    NetMessage.SendData(MessageID.RequestWorldInfo);
                     SuffWorld.ExpiryModeIsActive = false;
                 }
                 Main.NewText("Expiry Mode has been disabled. Not that much of a man, I see.", Color.Orange, true);

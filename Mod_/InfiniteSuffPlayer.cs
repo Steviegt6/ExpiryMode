@@ -30,6 +30,17 @@ namespace ExpiryMode.Mod_
             deathCount++;
             Main.NewText($"{player.name} is now at {deathCount} deaths in {Main.worldName}!");
         }*/
+        /*public override void ResetEffects()
+        {
+            if (player.buffImmune[BuffID.Chilled])
+            {
+                player.buffImmune[BuffID.Chilled] = true;
+            }
+            else
+            {
+                player.buffImmune[BuffID.Chilled] = false;
+            }
+        }*/
         public static long GetSavings(Player player)
         {
             long inv = Utils.CoinsCount(out _, player.inventory, new int[]

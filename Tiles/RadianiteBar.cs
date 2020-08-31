@@ -22,7 +22,7 @@ namespace ExpiryMode.Tiles
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile(Type);
-            base.AddMapEntry(new Color(0, 255, 0), Language.GetText("MapObject.RadianiteBar"));
+            AddMapEntry(new Color(0, 255, 0), Language.GetText("Radianite Bar"));
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             //TileObjectData.addTile(Type);
         }

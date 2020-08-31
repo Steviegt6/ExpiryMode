@@ -16,7 +16,7 @@ namespace ExpiryMode.Mod_
         {
             DelayedSync(toWho, fromWho, newPlayer);
         }
-        private async void DelayedSync(int toWho, int fromWho, bool newPlayer)
+        private void DelayedSync(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket pack = mod.GetPacket();
             pack.Write((byte)DeathCountMessageType.PlayerSync);

@@ -19,8 +19,20 @@ namespace ExpiryMode.Global_
                 item.SetNameOverride("Holy Pendant");
             }
         }
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
+        {
+            if (item.prefix == PrefixType<Warm>())
+            {
+                player.buffImmune[BuffID.Chilled] = true;
+            }
+            else
+            {
+                player.buffImmune[BuffID.Chilled] = false;
+            }
+        }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
+            string tooltip = "";
             #region Vanilla ItemTypes
             if (item.type == ItemID.ObsidianRose)
             {
@@ -163,6 +175,16 @@ namespace ExpiryMode.Global_
                         modLine3.text = $"You cannot disable Expiry Mode in this world once it has already\nbeen enabled in this world. This item is now worthless.\nIf you want to disable the mode, please debug\nto disable it, as you cannot legitimately disable it.";
                     }
                 }
+            }
+            #endregion
+            #region All Items
+            if (item.prefix == PrefixType<Warm>())
+            {
+                TooltipLine toolLine = new TooltipLine(mod, "Warm", "Immune to chills")
+                {
+                    isModifier = true
+                };
+                tooltips.Add(toolLine);
             }
             #endregion
         }

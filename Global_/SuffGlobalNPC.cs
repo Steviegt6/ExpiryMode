@@ -4,12 +4,9 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Materials;
 using Microsoft.Xna.Framework;
-using Terraria.Enums;
 using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Audio;
 
 namespace ExpiryMode.Global_
 {
@@ -23,22 +20,26 @@ namespace ExpiryMode.Global_
         public override void GetChat(NPC npc, ref string chat)
         {
             Player player = Main.player[Main.myPlayer];
-            if (npc.type == NPCID.ArmsDealer)
+            if (SuffWorld.ExpiryModeIsActive)
             {
-                switch (Main.rand.Next(7))
+                if (npc.type == NPCID.ArmsDealer)
                 {
-                    default:
-                        chat = "Ay, brother. Get out of my sight.";
-                        break;
-                    case 1:
-                        chat = "Dude. That minishark is mine. Get out.";
-                        break;
-                    case 2:
-                        if (!player.HasItem(ItemID.PlatinumCoin))
-                        {
-                            chat = "These guns ain't that cheap, so get some money!";
-                        }
-                        break;
+                    switch (Main.rand.Next(7))
+                    {
+                        default:
+                            chat = "Ay, brother. Get out of my sight.";
+                            break;
+                        case 1:
+                            chat = "Dude. That minishark is mine. Get out.";
+                            break;
+                        case 2:
+                            if (!player.HasItem(ItemID.PlatinumCoin))
+                            {
+                                chat = "These guns ain't that cheap, so get some money!";
+                            }
+                            break;
+                    }
+                    chat.Clone();
                 }
             }
         }
@@ -51,11 +52,19 @@ namespace ExpiryMode.Global_
                     spriteBatch.Draw(GetTexture("ExpiryMode/Assets/SkeletronPog"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
                     return false;
                 }
-                /*if (npc.type == NPCID.SkeletronHand)
+            }
+            if (GetInstance<ExpiryConfigClientSide>().distractionDanceMusic)
+            {
+                if (npc.type == NPCID.EyeofCthulhu)
                 {
-                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/PogFist"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2, npc.scale, SpriteEffects.None, 0);
+                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/HenryHead"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
                     return false;
-                }*/
+                }
+                if (npc.type == NPCID.ServantofCthulhu)
+                {
+                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/HenryHead"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                    return false;
+                }
             }
             return true;
         }

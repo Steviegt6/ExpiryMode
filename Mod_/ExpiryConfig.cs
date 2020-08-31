@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace ExpiryMode.Mod_
 {
+	[Label("Expiry Mode Client Changes")]
     public class ExpiryConfigClientSide : ModConfig
     {
         #region Meme Settings
@@ -13,7 +14,7 @@ namespace ExpiryMode.Mod_
         [Tooltip("Makes Skeletron Pog.\n\nCredit: ScuttleBaka A-Press#0248 on discord.")]
         public bool PogIsTrue;
 
-        [Label("Override Eye of Cthulhu Music")]
+        [Label("Change EoC Appearance")]
         [DefaultValue(false)]
         [Tooltip("I... Wh... I just..\nWhaat.")]
         public bool distractionDanceMusic;
@@ -47,6 +48,7 @@ namespace ExpiryMode.Mod_
         public bool noCough;
         #endregion
     }
+	[Label("Expiry Mode Server Changes")]
     public class ExpiryConfigServerSide : ModConfig
     {
         #region Difficulty Enhancers

@@ -12,11 +12,13 @@ namespace ExpiryMode.Mod_
 {
     public class SuffWorld : ModWorld
     {
+        public static int playerDeathCount;
         public static bool ExpiryModeIsActive = false;
         public static int DoomBlockCount = 0;
         public override void Initialize()
         {
             ExpiryModeIsActive = false;
+            playerDeathCount = 0;
         }
         public override void Load(TagCompound tag)
         {
