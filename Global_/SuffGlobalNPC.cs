@@ -324,3 +324,7 @@ namespace ExpiryMode.Global_
         }
     }
 }
+/* Ideas for drops:
+Duke Fishron: Sharknado Staff
+Eye of Cthulhu: 
+*/

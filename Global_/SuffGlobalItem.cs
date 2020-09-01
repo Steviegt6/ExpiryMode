@@ -189,10 +189,16 @@ namespace ExpiryMode.Global_
                 };
                 tooltips.Add(toolLine);
             }
+            if (item.rare == ExpiryRarity.Expiry)
+            {
+                TooltipLine expiryAdd = new TooltipLine(mod, "Expiry", "Expiry");
+                tooltips.Add(expiryAdd);
+            }
             #endregion
         }
     }
     public class ExpiryRarity : GlobalItem
     {
+        public static int Expiry = 20;
     }
 }

@@ -25,6 +25,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.UI.Chat;
+using ExpiryMode.Global_;
 
 namespace ExpiryMode.Mod_
 {
@@ -341,7 +342,7 @@ namespace ExpiryMode.Mod_
                 }
                 if (ExpiryModeIsActive)
                 {
-                    if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                    if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated) // TODO: Change this 'scale' value
                     {
                         scale = .75f;
                     }
@@ -536,9 +537,9 @@ namespace ExpiryMode.Mod_
             {
                 Main.itemText[num4].color = new Color(180, 40, 255);
             }
-            else if (newItem.rare == 20)
-            {
-                Main.itemText[num4].color = Color.Lerp(Color.Maroon, Color.Red, (float)(Math.Sin(Main.GameUpdateCount / 25f) + 1f) / 2f);
+            else if (newItem.rare == ExpiryRarity.Expiry)
+            {                                                                                                                // Timer between color swaps
+                Main.itemText[num4].color = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
             }
             rarityText[num4].rare = newItem.rare;
             Main.itemText[num4].expert = newItem.expert;
@@ -604,9 +605,9 @@ namespace ExpiryMode.Mod_
 
             if (rare > ItemRarityID.Purple)
             {
-                if (rare == 20)
+                if (rare == ExpiryRarity.Expiry)
                 {
-                    Color baseColor = Color.Lerp(Color.Maroon, Color.Red, (float)(Math.Sin(Main.GameUpdateCount / 25f) + 1f) / 2f) * num;
+                    Color baseColor = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f) * num;
                     ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, Main.fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
                 }
             }
@@ -633,9 +634,9 @@ namespace ExpiryMode.Mod_
             {
                 Main.itemText[whoAmI].color = new Color((byte)Main.DiscoR, (byte)Main.DiscoG, (byte)Main.DiscoB, Main.mouseTextColor);
             }
-            if (rarityText[whoAmI].rare == 20)
+            if (rarityText[whoAmI].rare == ExpiryRarity.Expiry)
             {
-                Main.itemText[whoAmI].color = Color.Lerp(Color.Maroon, Color.Red, (float)(Math.Sin(Main.GameUpdateCount / 25f) + 1f) / 2f);
+                Main.itemText[whoAmI].color = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
             }
             bool flag = false;
             string text3 = Main.itemText[whoAmI].name;
@@ -968,9 +969,9 @@ namespace ExpiryMode.Mod_
         {
             TooltipLine name = tooltips.FirstOrDefault((TooltipLine t) => t.Name == "ItemName" && t.mod == "Terraria");
 
-            if (item.rare == 20)
+            if (item.rare == ExpiryRarity.Expiry)
             {
-                name.overrideColor = Color.Lerp(Color.Maroon, Color.Red, (float)(Math.Sin(Main.GameUpdateCount / 25f) + 1f) / 2f);
+                name.overrideColor = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
             }
         }
     }

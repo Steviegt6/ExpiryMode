@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Global_;
+using ExpiryMode.Mod_;
 
 namespace ExpiryMode.Items.Equippables.Accessories
 {
@@ -20,7 +21,7 @@ namespace ExpiryMode.Items.Equippables.Accessories
 			item.height = 18;
             item.value = 12317;
 			item.accessory = true;
-			item.rare = 20; // Maroon
+			item.rare = ExpiryRarity.Expiry; // Maroon
 		}
 		public override void UpdateEquip(Player player) 
 		{

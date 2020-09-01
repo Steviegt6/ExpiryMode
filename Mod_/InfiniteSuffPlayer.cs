@@ -15,7 +15,6 @@ using Terraria.ModLoader.Default;
 using IL.Terraria.Chat;
 
 namespace ExpiryMode.Mod_
-// TODO: Make custom sky not apply to all players
 {
     public class InfiniteSuffPlayer : ModPlayer
     {
