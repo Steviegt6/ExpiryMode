@@ -8,6 +8,7 @@ using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework.Graphics;
 using ExpiryMode.Items.Equippables.Accessories;
+using System.Configuration;
 
 namespace ExpiryMode.Global_
 {
@@ -93,6 +94,15 @@ namespace ExpiryMode.Global_
                 if (npc.type == NPCID.SkeletronHead)
                 {
                     spriteBatch.Draw(GetTexture("ExpiryMode/Assets/SkeletronPog"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+                    return false;
+                }
+            }
+            if (GetInstance<ExpiryConfigClientSide>().pinkySlimeKing)
+            {
+                //spriteBatch.Draw(GetTexture("ExpiryMode/Assets/PinkySlimeCrown"), Main.npc[NPC.FindFirstNPC(NPCID.KingSlime)].Center- Main.screenPosition + new Vector2(0, 30), npc.frame, drawColor, npc.rotation, npc.Size / 1.6f, npc.scale, SpriteEffects.None, 0);
+                if (npc.type == NPCID.KingSlime)
+                {
+                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/PinkySlimeKing"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 1.6f, npc.scale, SpriteEffects.None, 0);
                     return false;
                 }
             }
@@ -296,9 +306,12 @@ namespace ExpiryMode.Global_
             }
             if (npc.type == NPCID.SkeletronHead && SuffWorld.ExpiryModeIsActive)
             {
-                if (Main.rand.NextFloat() <= 1f)
+                foreach (Player pl in Main.player)
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<SkeletronArm>(), 1);
+                    if (pl.active)
+                    {
+                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<SkeletronArm>(), 1);
+                    }
                 }
             }
         }

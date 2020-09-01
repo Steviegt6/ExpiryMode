@@ -18,6 +18,16 @@ namespace ExpiryMode.Mod_
         [DefaultValue(false)]
         [Tooltip("I... Wh... I just..\nWhaat.")]
         public bool distractionDanceMusic;
+
+        [Label("Change Hurt Sound")]
+        [DefaultValue(false)]
+        [Tooltip("Minecraft OOF > Terraria OOF")]
+        public bool oofHurt;
+
+        [Label("Pinky King Slime ([c/57f4ff:Experimental/Buggy])")]
+        [DefaultValue(false)]
+        [Tooltip("Turn King Slime into pinky")]
+        public bool pinkySlimeKing;
         #endregion
 
         #region Overrides

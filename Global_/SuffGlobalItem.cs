@@ -7,10 +7,7 @@ using ExpiryMode.Items.Equippables.Vanity.Rune;
 using ExpiryMode.Items.Ammo;
 using ExpiryMode.Mod_;
 using ExpiryMode.Items.Useables;
-using ExpiryMode.Items.Equippables.Vanity.Ravenous;
-using ExpiryMode.Items.Equippables.Accessories;
-using System.Drawing;
-using System;
+using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Global_
 {
@@ -23,16 +20,31 @@ namespace ExpiryMode.Global_
                 item.SetNameOverride("Holy Pendant");
             }
         }
+        public override bool UseItem(Item item, Player player)
+        {
+            if (item.healMana > 0)
+            {
+                player.AddBuff(BuffType<ManaDeficiency>(), Main.rand.Next(240, 480), false);
+            }
+            return true;
+        }
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             if (item.prefix == PrefixType<Warm>())
             {
                 player.buffImmune[BuffID.Chilled] = true;
             }
-            else
+        }
+        public override bool CanUseItem(Item item, Player player)
+        {
+            if (item.healMana > 0)
             {
-                player.buffImmune[BuffID.Chilled] = false;
+                if (player.HasBuff(BuffType<ManaDeficiency>()))
+                {
+                    return false;
+                }
             }
+            return true;
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {

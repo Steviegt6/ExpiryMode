@@ -119,10 +119,6 @@ namespace ExpiryMode.Mod_
         }
         public override void PostUpdate()
         {
-            if (SuffWorld.ExpiryModeIsActive)
-            {
-                player.extraAccessorySlots += 1;
-            }
             if (ZoneRadiated && player.whoAmI == Main.myPlayer)
             {
                 Main.sunTexture = GetTexture("ExpiryMode/Assets/RottenSun");
@@ -152,7 +148,7 @@ namespace ExpiryMode.Mod_
             if (SuffWorld.ExpiryModeIsActive)
             {
                 #region AccessoryChecks
-                if (player.lavaRose)
+                if (player.lavaRose || player.lavaCD > 0 || player.fireWalk)
                 {
                     player.buffImmune[BuffType<AAAHHH>()] = true;
                 }
@@ -164,7 +160,9 @@ namespace ExpiryMode.Mod_
                     player.waterWalk2 = false;
                 }
                 if (player.noFallDmg)
+                {
                     player.noFallDmg = false;
+                }
                 if (player.nightVision)
                 {
                     player.buffImmune[BuffID.Darkness] = true;
@@ -186,6 +184,20 @@ namespace ExpiryMode.Mod_
             }
             #endregion
         }
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            if (GetInstance<ExpiryConfigClientSide>().oofHurt)
+            {
+                playSound = false;
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/MinecraftOof"), player.Center);
+
+            }
+            else
+            {
+                playSound = true;
+            }
+            return true;
+        }
         public override void PostUpdateMiscEffects()
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -195,7 +207,7 @@ namespace ExpiryMode.Mod_
                 if (player.breath < 1 && player.wet && player.Center.Y <= Main.rockLayer * 16)
                 {
                     player.AddBuff(BuffType<WaterPain>(), 2);
-                    player.noBuilding = true;
+                    // player.noBuilding = true; too evil
                 }
             }
             #endregion
@@ -204,6 +216,10 @@ namespace ExpiryMode.Mod_
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
+                if (player.lavaImmune)
+                {
+                    player.buffImmune[BuffType<AAAHHH>()] = true;
+                }
                 if (player.ZoneBeach)
                 {
                     player.buffImmune[BuffType<HeatStroke>()] = true;

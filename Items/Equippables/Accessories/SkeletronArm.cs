@@ -12,16 +12,15 @@ namespace ExpiryMode.Items.Equippables.Accessories
 		public override void SetStaticDefaults() 
 		{
 			DisplayName.SetDefault("Skeletron's Arm");
-			Tooltip.SetDefault("Makes skeletons not want to attack you\n'You are superior to them'");
+			Tooltip.SetDefault("Makes weak skeletons not want to attack you\n'You are superior to them'");
 		}
-
 		public override void SetDefaults() 
 		{
 			item.width = 18;
 			item.height = 18;
             item.value = 12317;
 			item.accessory = true;
-			item.rare = ExpiryRarity.Expiry; // Maroon
+			item.rare = ExpiryRarity.Expiry;
 		}
 		public override void UpdateEquip(Player player) 
 		{
@@ -38,7 +37,8 @@ namespace ExpiryMode.Items.Equippables.Accessories
 			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton] = true;
 			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton2] = true;
 			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton3] = true;
-			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton4] = true;
+            player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton4] = true;
+			player.npcTypeNoAggro[NPCID.DarkCaster] = true;
 		}
 	}
 }
