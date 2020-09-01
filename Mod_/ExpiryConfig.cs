@@ -14,7 +14,7 @@ namespace ExpiryMode.Mod_
         [Tooltip("Makes Skeletron Pog.\n\nCredit: ScuttleBaka A-Press#0248 on discord.")]
         public bool PogIsTrue;
 
-        [Label("Change EoC Appearance")]
+        [Label("Change EoC Music")]
         [DefaultValue(false)]
         [Tooltip("I... Wh... I just..\nWhaat.")]
         public bool distractionDanceMusic;

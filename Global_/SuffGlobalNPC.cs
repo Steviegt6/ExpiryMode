@@ -7,11 +7,54 @@ using Microsoft.Xna.Framework;
 using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework.Graphics;
+using ExpiryMode.Items.Equippables.Accessories;
 
 namespace ExpiryMode.Global_
 {
 	public class SuffGlobalNPC : GlobalNPC
     {
+        public override void UpdateLifeRegen(NPC npc, ref int damage)
+        {
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+                #region !Boss regen
+                if (!npc.boss && !npc.friendly && !Main.hardMode && !Main.expertMode)
+                {
+                    npc.lifeRegen += 8;
+                }
+                else if (!npc.boss && !npc.friendly && Main.hardMode && !Main.expertMode)
+                {
+                    npc.lifeRegen += 16;
+                }
+                else if (!npc.boss && !npc.friendly && !Main.hardMode && Main.expertMode)
+                {
+                    npc.lifeRegen += 12;
+                }
+                else if (!npc.boss && !npc.friendly && Main.hardMode && Main.expertMode)
+                {
+                    npc.lifeRegen += 24;
+                }
+                #endregion
+                #region Boss Regen
+                if (npc.boss && !Main.hardMode && !Main.expertMode)
+                {
+                    npc.lifeRegen += 6;
+                }
+                else if (npc.boss && Main.hardMode && !Main.expertMode)
+                {
+                    npc.lifeRegen += 12;
+                }
+                else if (npc.boss && !Main.hardMode && Main.expertMode)
+                {
+                    npc.lifeRegen += 9;
+                }
+                else if (npc.boss && Main.hardMode && Main.expertMode)
+                {
+                    npc.lifeRegen += 18;
+                }
+                #endregion
+            }
+        }
         public override void BuffTownNPC(ref float damageMult, ref int defense)
         {
             defense += 10;
@@ -50,19 +93,6 @@ namespace ExpiryMode.Global_
                 if (npc.type == NPCID.SkeletronHead)
                 {
                     spriteBatch.Draw(GetTexture("ExpiryMode/Assets/SkeletronPog"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-                    return false;
-                }
-            }
-            if (GetInstance<ExpiryConfigClientSide>().distractionDanceMusic)
-            {
-                if (npc.type == NPCID.EyeofCthulhu)
-                {
-                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/HenryHead"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-                    return false;
-                }
-                if (npc.type == NPCID.ServantofCthulhu)
-                {
-                    spriteBatch.Draw(GetTexture("ExpiryMode/Assets/HenryHead"), npc.Center - Main.screenPosition, npc.frame, drawColor, npc.rotation, npc.Size / 2f, npc.scale, npc.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
                     return false;
                 }
             }
@@ -124,17 +154,6 @@ namespace ExpiryMode.Global_
             if (npc.boss)
             {
                 npc.buffImmune[BuffType<Paralysis>()] = true;
-            }
-            if (SuffWorld.ExpiryModeIsActive)
-            {
-                if (!npc.boss && !npc.CanBeChasedBy())
-                {
-                    npc.lifeRegen += 5;
-                }
-                if (!npc.boss)
-                {
-                    npc.lifeRegen += 2;
-                }
             }
         }
         public override bool PreAI(NPC npc)
@@ -273,6 +292,13 @@ namespace ExpiryMode.Global_
                 if (!npc.friendly && Main.rand.NextFloat() <= 0.075f)
                 {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<RadioactiveSoulThingy>(), 1);
+                }
+            }
+            if (npc.type == NPCID.SkeletronHead && SuffWorld.ExpiryModeIsActive)
+            {
+                if (Main.rand.NextFloat() <= 1f)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<SkeletronArm>(), 1);
                 }
             }
         }

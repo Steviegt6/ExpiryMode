@@ -7,6 +7,10 @@ using ExpiryMode.Items.Equippables.Vanity.Rune;
 using ExpiryMode.Items.Ammo;
 using ExpiryMode.Mod_;
 using ExpiryMode.Items.Useables;
+using ExpiryMode.Items.Equippables.Vanity.Ravenous;
+using ExpiryMode.Items.Equippables.Accessories;
+using System.Drawing;
+using System;
 
 namespace ExpiryMode.Global_
 {
@@ -32,7 +36,6 @@ namespace ExpiryMode.Global_
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            string tooltip = "";
             #region Vanilla ItemTypes
             if (item.type == ItemID.ObsidianRose)
             {
@@ -188,5 +191,8 @@ namespace ExpiryMode.Global_
             }
             #endregion
         }
+    }
+    public class ExpiryRarity : GlobalItem
+    {
     }
 }
