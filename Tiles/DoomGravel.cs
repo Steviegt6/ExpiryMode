@@ -38,7 +38,7 @@ namespace ExpiryMode.Tiles
         public override int SaplingGrowthType(ref int style) // This method is not necessarily helping me, as my trees do NOT work yet.
         {
             style = 0;
-            return ModContent.TileType<RottenSapling>();
+            return TileType<RottenSapling>();
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) // Modify the light that this tile produces, if any at all
 		{

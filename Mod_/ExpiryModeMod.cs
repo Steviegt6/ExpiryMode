@@ -406,49 +406,49 @@ namespace ExpiryMode.Mod_
                 return;
             }
 
-            if (!Main.showItemText || newItem.Name == null || !newItem.active || Main.netMode == NetmodeID.Server)
+            if (!showItemText || newItem.Name == null || !newItem.active || netMode == NetmodeID.Server)
             {
                 return;
             }
             for (int k = 0; k < 20; k++)
             {
-                if ((!Main.itemText[k].active || (!(Main.itemText[k].name == newItem.AffixName())) || Main.itemText[k].NoStack) | noStack)
+                if ((!itemText[k].active || (!(itemText[k].name == newItem.AffixName())) || itemText[k].NoStack) | noStack)
                 {
                     continue;
                 }
-                string text3 = newItem.Name + " (" + (Main.itemText[k].stack + stack).ToString() + ")";
+                string text3 = newItem.Name + " (" + (itemText[k].stack + stack).ToString() + ")";
                 string text2 = newItem.Name;
                 if (Main.itemText[k].stack > 1)
                 {
-                    text2 = text2 + " (" + Main.itemText[k].stack.ToString() + ")";
+                    text2 = text2 + " (" + itemText[k].stack.ToString() + ")";
                 }
 
-                _ = Main.fontMouseText.MeasureString(text2);
-                Vector2 vector2 = Main.fontMouseText.MeasureString(text3);
-                if (Main.itemText[k].lifeTime < 0)
+                _ = fontMouseText.MeasureString(text2);
+                Vector2 vector2 = fontMouseText.MeasureString(text3);
+                if (itemText[k].lifeTime < 0)
                 {
-                    Main.itemText[k].scale = 1f;
+                    itemText[k].scale = 1f;
                 }
-                if (Main.itemText[k].lifeTime < 60)
+                if (itemText[k].lifeTime < 60)
                 {
-                    Main.itemText[k].lifeTime = 60;
+                    itemText[k].lifeTime = 60;
                 }
-                Main.itemText[k].stack += stack;
-                Main.itemText[k].scale = 0f;
-                Main.itemText[k].rotation = 0f;
-                Main.itemText[k].position.X = newItem.position.X + newItem.width * 0.5f - vector2.X * 0.5f;
-                Main.itemText[k].position.Y = newItem.position.Y + newItem.height * 0.25f - vector2.Y * 0.5f;
-                Main.itemText[k].velocity.Y = -7f;
-                if (Main.itemText[k].coinText)
+                itemText[k].stack += stack;
+                itemText[k].scale = 0f;
+                itemText[k].rotation = 0f;
+                itemText[k].position.X = newItem.position.X + newItem.width * 0.5f - vector2.X * 0.5f;
+                itemText[k].position.Y = newItem.position.Y + newItem.height * 0.25f - vector2.Y * 0.5f;
+                itemText[k].velocity.Y = -7f;
+                if (itemText[k].coinText)
                 {
-                    Main.itemText[k].stack = 1;
+                    itemText[k].stack = 1;
                 }
                 return;
             }
             int num4 = -1;
             for (int j = 0; j < 20; j++)
             {
-                if (!Main.itemText[j].active)
+                if (!itemText[j].active)
                 {
                     num4 = j;
                     break;
@@ -456,13 +456,13 @@ namespace ExpiryMode.Mod_
             }
             if (num4 == -1)
             {
-                double num3 = Main.bottomWorld;
+                double num3 = bottomWorld;
                 for (int i = 0; i < 20; i++)
                 {
-                    if (num3 > Main.itemText[i].position.Y)
+                    if (num3 > itemText[i].position.Y)
                     {
                         num4 = i;
-                        num3 = Main.itemText[i].position.Y;
+                        num3 = itemText[i].position.Y;
                     }
                 }
             }
@@ -475,84 +475,84 @@ namespace ExpiryMode.Mod_
             {
                 text4 = text4 + " (" + stack.ToString() + ")";
             }
-            Vector2 vector3 = Main.fontMouseText.MeasureString(text4);
-            Main.itemText[num4].alpha = 1f;
-            Main.itemText[num4].alphaDir = -1;
-            Main.itemText[num4].active = true;
-            Main.itemText[num4].scale = 0f;
-            Main.itemText[num4].NoStack = noStack;
-            Main.itemText[num4].rotation = 0f;
-            Main.itemText[num4].position.X = newItem.position.X + newItem.width * 0.5f - vector3.X * 0.5f;
-            Main.itemText[num4].position.Y = newItem.position.Y + newItem.height * 0.25f - vector3.Y * 0.5f;
-            Main.itemText[num4].color = Color.White;
+            Vector2 vector3 = fontMouseText.MeasureString(text4);
+            itemText[num4].alpha = 1f;
+            itemText[num4].alphaDir = -1;
+            itemText[num4].active = true;
+            itemText[num4].scale = 0f;
+            itemText[num4].NoStack = noStack;
+            itemText[num4].rotation = 0f;
+            itemText[num4].position.X = newItem.position.X + newItem.width * 0.5f - vector3.X * 0.5f;
+            itemText[num4].position.Y = newItem.position.Y + newItem.height * 0.25f - vector3.Y * 0.5f;
+            itemText[num4].color = Color.White;
             if (newItem.rare == ItemRarityID.Blue)
             {
-                Main.itemText[num4].color = new Color(150, 150, 255);
+                itemText[num4].color = new Color(150, 150, 255);
             }
             else if (newItem.rare == ItemRarityID.Green)
             {
-                Main.itemText[num4].color = new Color(150, 255, 150);
+                itemText[num4].color = new Color(150, 255, 150);
             }
             else if (newItem.rare == ItemRarityID.Orange)
             {
-                Main.itemText[num4].color = new Color(255, 200, 150);
+                itemText[num4].color = new Color(255, 200, 150);
             }
             else if (newItem.rare == ItemRarityID.LightRed)
             {
-                Main.itemText[num4].color = new Color(255, 150, 150);
+                itemText[num4].color = new Color(255, 150, 150);
             }
             else if (newItem.rare == ItemRarityID.Pink)
             {
-                Main.itemText[num4].color = new Color(255, 150, 255);
+                itemText[num4].color = new Color(255, 150, 255);
             }
             else if (newItem.rare == -11)
             {
-                Main.itemText[num4].color = new Color(255, 175, 0);
+                itemText[num4].color = new Color(255, 175, 0);
             }
             else if (newItem.rare == -1)
             {
-                Main.itemText[num4].color = new Color(130, 130, 130);
+                itemText[num4].color = new Color(130, 130, 130);
             }
             else if (newItem.rare == ItemRarityID.LightPurple)
             {
-                Main.itemText[num4].color = new Color(210, 160, 255);
+                itemText[num4].color = new Color(210, 160, 255);
             }
             else if (newItem.rare == ItemRarityID.Lime)
             {
-                Main.itemText[num4].color = new Color(150, 255, 10);
+                itemText[num4].color = new Color(150, 255, 10);
             }
             else if (newItem.rare == ItemRarityID.Yellow)
             {
-                Main.itemText[num4].color = new Color(255, 255, 10);
+                itemText[num4].color = new Color(255, 255, 10);
             }
             else if (newItem.rare == ItemRarityID.Cyan)
             {
-                Main.itemText[num4].color = new Color(5, 200, 255);
+                itemText[num4].color = new Color(5, 200, 255);
             }
             else if (newItem.rare == ItemRarityID.Red)
             {
-                Main.itemText[num4].color = new Color(255, 40, 100);
+                itemText[num4].color = new Color(255, 40, 100);
             }
             else if (newItem.rare == ItemRarityID.Purple)
             {
-                Main.itemText[num4].color = new Color(180, 40, 255);
+                itemText[num4].color = new Color(180, 40, 255);
             }
             else if (newItem.rare == ExpiryRarity.Expiry)
             {                                                                                                                // Timer between color swaps
-                Main.itemText[num4].color = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
+                itemText[num4].color = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
             }
             rarityText[num4].rare = newItem.rare;
-            Main.itemText[num4].expert = newItem.expert;
-            Main.itemText[num4].name = newItem.AffixName();
-            Main.itemText[num4].stack = stack;
-            Main.itemText[num4].velocity.Y = -7f;
-            Main.itemText[num4].lifeTime = 60;
+            itemText[num4].expert = newItem.expert;
+            itemText[num4].name = newItem.AffixName();
+            itemText[num4].stack = stack;
+            itemText[num4].velocity.Y = -7f;
+            itemText[num4].lifeTime = 60;
             if (longText)
             {
-                Main.itemText[num4].lifeTime *= 5;
+                itemText[num4].lifeTime *= 5;
             }
-            Main.itemText[num4].coinValue = 0;
-            Main.itemText[num4].coinText = (newItem.type >= ItemID.CopperCoin && newItem.type <= ItemID.PlatinumCoin);
+            itemText[num4].coinValue = 0;
+            itemText[num4].coinText = (newItem.type >= ItemID.CopperCoin && newItem.type <= ItemID.PlatinumCoin);
         }
 
         //Method Swap that adds support for modded rarities with mouse text.
@@ -561,8 +561,8 @@ namespace ExpiryMode.Mod_
             orig(self, cursorText, rare, diff, hackedMouseX, hackedMouseY, hackedScreenWidth, hackedScreenHeight);
             _ = Color.White;
 
-            int X = Main.mouseX + 10;
-            int Y = Main.mouseY + 10;
+            int X = mouseX + 10;
+            int Y = mouseY + 10;
 
             if (hackedMouseX != -1 && hackedMouseY != -1)
             {
@@ -570,13 +570,13 @@ namespace ExpiryMode.Mod_
                 Y = hackedMouseY + 10;
             }
 
-            if (Main.ThickMouse)
+            if (ThickMouse)
             {
                 X += 6;
                 Y += 6;
             }
 
-            Vector2 vector = Main.fontMouseText.MeasureString(cursorText);
+            Vector2 vector = fontMouseText.MeasureString(cursorText);
 
             if (hackedScreenHeight != -1 && hackedScreenWidth != -1)
             {
@@ -591,79 +591,79 @@ namespace ExpiryMode.Mod_
             }
             else
             {
-                if (X + vector.X + 4f > Main.screenWidth)
+                if (X + vector.X + 4f > screenWidth)
                 {
-                    X = (int)(Main.screenWidth - vector.X - 4f);
+                    X = (int)(screenWidth - vector.X - 4f);
                 }
                 if (Y + vector.Y + 4f > Main.screenHeight)
                 {
-                    Y = (int)(Main.screenHeight - vector.Y - 4f);
+                    Y = (int)(screenHeight - vector.Y - 4f);
                 }
             }
 
-            float num = Main.mouseTextColor / 255f;
+            float num = mouseTextColor / 255f;
 
             if (rare > ItemRarityID.Purple)
             {
                 if (rare == ExpiryRarity.Expiry)
                 {
-                    Color baseColor = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f) * num;
-                    ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, Main.fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
+                    Color baseColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(GameUpdateCount / 20f) + 1f) / 2f) * num;
+                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
                 }
             }
         }
         private void ItemText_Update(On.Terraria.ItemText.orig_Update orig, ItemText self, int whoAmI)
         {
-            if (!Main.itemText[whoAmI].active)
+            if (!itemText[whoAmI].active)
             {
                 return;
             }
             float targetScale = ItemText.TargetScale;
-            Main.itemText[whoAmI].alpha += (float)Main.itemText[whoAmI].alphaDir * 0.01f;
-            if ((double)Main.itemText[whoAmI].alpha <= 0.7)
+            itemText[whoAmI].alpha += itemText[whoAmI].alphaDir * 0.01f;
+            if (itemText[whoAmI].alpha <= 0.7)
             {
-                Main.itemText[whoAmI].alpha = 0.7f;
-                Main.itemText[whoAmI].alphaDir = 1;
+                itemText[whoAmI].alpha = 0.7f;
+                itemText[whoAmI].alphaDir = 1;
             }
-            if (Main.itemText[whoAmI].alpha >= 1f)
+            if (itemText[whoAmI].alpha >= 1f)
             {
-                Main.itemText[whoAmI].alpha = 1f;
-                Main.itemText[whoAmI].alphaDir = -1;
+                itemText[whoAmI].alpha = 1f;
+                itemText[whoAmI].alphaDir = -1;
             }
-            if (Main.itemText[whoAmI].expert && Main.itemText[whoAmI].expert)
+            if (itemText[whoAmI].expert && itemText[whoAmI].expert)
             {
-                Main.itemText[whoAmI].color = new Color((byte)Main.DiscoR, (byte)Main.DiscoG, (byte)Main.DiscoB, Main.mouseTextColor);
+                itemText[whoAmI].color = new Color((byte)DiscoR, (byte)DiscoG, (byte)DiscoB, mouseTextColor);
             }
             if (rarityText[whoAmI].rare == ExpiryRarity.Expiry)
             {
-                Main.itemText[whoAmI].color = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
+                itemText[whoAmI].color = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(GameUpdateCount / 10f) + 1f) / 2f);
             }
             bool flag = false;
-            string text3 = Main.itemText[whoAmI].name;
+            string text3 = itemText[whoAmI].name;
             if (Main.itemText[whoAmI].stack > 1)
             {
-                text3 = text3 + " (" + Main.itemText[whoAmI].stack.ToString() + ")";
+                text3 = text3 + " (" + itemText[whoAmI].stack.ToString() + ")";
             }
-            Vector2 vector = Main.fontMouseText.MeasureString(text3);
-            vector *= Main.itemText[whoAmI].scale;
+            Vector2 vector = fontMouseText.MeasureString(text3);
+            vector *= itemText[whoAmI].scale;
             vector.Y *= 0.8f;
-            Rectangle rectangle = new Rectangle((int)(Main.itemText[whoAmI].position.X - vector.X / 2f), (int)(Main.itemText[whoAmI].position.Y - vector.Y / 2f), (int)vector.X, (int)vector.Y);
+            Rectangle rectangle = new Rectangle((int)(itemText[whoAmI].position.X - vector.X / 2f), (int)(itemText[whoAmI].position.Y - vector.Y / 2f), (int)vector.X, (int)vector.Y);
             for (int i = 0; i < 20; i++)
             {
-                if (!Main.itemText[i].active || i == whoAmI)
+                if (!itemText[i].active || i == whoAmI)
                 {
                     continue;
                 }
-                string text2 = Main.itemText[i].name;
-                if (Main.itemText[i].stack > 1)
+                string text2 = itemText[i].name;
+                if (itemText[i].stack > 1)
                 {
-                    text2 = text2 + " (" + Main.itemText[i].stack.ToString() + ")";
+                    text2 = text2 + " (" + itemText[i].stack.ToString() + ")";
                 }
-                Vector2 vector2 = Main.fontMouseText.MeasureString(text2);
-                vector2 *= Main.itemText[i].scale;
+                Vector2 vector2 = fontMouseText.MeasureString(text2);
+                vector2 *= itemText[i].scale;
                 vector2.Y *= 0.8f;
-                Rectangle value = new Rectangle((int)(Main.itemText[i].position.X - vector2.X / 2f), (int)(Main.itemText[i].position.Y - vector2.Y / 2f), (int)vector2.X, (int)vector2.Y);
-                if (rectangle.Intersects(value) && (Main.itemText[whoAmI].position.Y < Main.itemText[i].position.Y || (Main.itemText[whoAmI].position.Y == Main.itemText[i].position.Y && whoAmI < i)))
+                Rectangle value = new Rectangle((int)(itemText[i].position.X - vector2.X / 2f), (int)(itemText[i].position.Y - vector2.Y / 2f), (int)vector2.X, (int)vector2.Y);
+                if (rectangle.Intersects(value) && (itemText[whoAmI].position.Y < itemText[i].position.Y || (itemText[whoAmI].position.Y == itemText[i].position.Y && whoAmI < i)))
                 {
                     flag = true;
                     int num = ItemText.numActive;
@@ -671,46 +671,46 @@ namespace ExpiryMode.Mod_
                     {
                         num = 3;
                     }
-                    Main.itemText[i].lifeTime = ItemText.activeTime + 15 * num;
-                    Main.itemText[whoAmI].lifeTime = ItemText.activeTime + 15 * num;
+                    itemText[i].lifeTime = ItemText.activeTime + 15 * num;
+                    itemText[whoAmI].lifeTime = ItemText.activeTime + 15 * num;
                 }
             }
             if (!flag)
             {
-                Main.itemText[whoAmI].velocity.Y *= 0.86f;
-                if (Main.itemText[whoAmI].scale == targetScale)
+                itemText[whoAmI].velocity.Y *= 0.86f;
+                if (itemText[whoAmI].scale == targetScale)
                 {
-                    Main.itemText[whoAmI].velocity.Y *= 0.4f;
+                    itemText[whoAmI].velocity.Y *= 0.4f;
                 }
             }
-            else if (Main.itemText[whoAmI].velocity.Y > -6f)
+            else if (itemText[whoAmI].velocity.Y > -6f)
             {
-                Main.itemText[whoAmI].velocity.Y -= 0.2f;
+                itemText[whoAmI].velocity.Y -= 0.2f;
             }
             else
             {
-                Main.itemText[whoAmI].velocity.Y *= 0.86f;
+                itemText[whoAmI].velocity.Y *= 0.86f;
             }
-            Main.itemText[whoAmI].velocity.X *= 0.93f;
-            Main.itemText[whoAmI].position += Main.itemText[whoAmI].velocity;
-            Main.itemText[whoAmI].lifeTime--;
-            if (Main.itemText[whoAmI].lifeTime <= 0)
+            itemText[whoAmI].velocity.X *= 0.93f;
+            itemText[whoAmI].position += itemText[whoAmI].velocity;
+            itemText[whoAmI].lifeTime--;
+            if (itemText[whoAmI].lifeTime <= 0)
             {
-                Main.itemText[whoAmI].scale -= 0.03f * targetScale;
-                if ((double)Main.itemText[whoAmI].scale < 0.1 * (double)targetScale)
+                itemText[whoAmI].scale -= 0.03f * targetScale;
+                if (itemText[whoAmI].scale < 0.1 * targetScale)
                 {
-                    Main.itemText[whoAmI].active = false;
+                    itemText[whoAmI].active = false;
                 }
-                Main.itemText[whoAmI].lifeTime = 0;
+                itemText[whoAmI].lifeTime = 0;
                 return;
             }
-            if (Main.itemText[whoAmI].scale < targetScale)
+            if (itemText[whoAmI].scale < targetScale)
             {
-                Main.itemText[whoAmI].scale += 0.1f * targetScale;
+                itemText[whoAmI].scale += 0.1f * targetScale;
             }
-            if (Main.itemText[whoAmI].scale > targetScale)
+            if (itemText[whoAmI].scale > targetScale)
             {
-                Main.itemText[whoAmI].scale = targetScale;
+                itemText[whoAmI].scale = targetScale;
             }
         }
     }
@@ -971,7 +971,7 @@ namespace ExpiryMode.Mod_
 
             if (item.rare == ExpiryRarity.Expiry)
             {
-                name.overrideColor = Color.Lerp(Color.Aquamarine, Color.Coral, (float)(Math.Sin(Main.GameUpdateCount / 60f) + 1f) / 2f);
+                name.overrideColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
             }
         }
     }
