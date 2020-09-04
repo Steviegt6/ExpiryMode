@@ -212,17 +212,17 @@ namespace ExpiryMode.Global_
             }
             #endregion
         }
-		public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
-		{
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
             if (item.rare == ExpiryRarity.ShaderRarityExample)
-			{
+            {
                 // If the tooltip is the item's name...
                 if (line.Name == "ItemName")
                 {
                     // End the current spriteBatch...
-				    Main.spriteBatch.End();
+                    Main.spriteBatch.End();
                     // ...and begin it again with SpriteSortMode.Immediate, which is needed for shaders to be applied.
-				    Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
                     // Now, we can apply shaders... Let's just get a shader from an existing dye.
                     ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
                     // ArmorShaderData.Apply() passes parameters to the shader based on drawData.
@@ -232,15 +232,15 @@ namespace ExpiryMode.Global_
                     Vector2 nameStringDimensions = Terraria.UI.Chat.ChatManager.GetStringSize(line.font, item.Name, line.baseScale);
                     armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
                     armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
-				    armorShaderDye.Apply(null);
+                    armorShaderDye.Apply(null);
                     // If there's going to be a lot of rarity shaders, these should probably be moved to a separate method.
-			    }
-			}
+                }
+            }
             // We want all the lines to draw, so we're returning true.
             return true;
-		}
-		public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
-		{
+        }
+        public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
+        {
             if (item.rare == ExpiryRarity.ShaderRarityExample)
             {
                 if (line.Name == "ItemName")
@@ -253,7 +253,7 @@ namespace ExpiryMode.Global_
                 }
             }
         }
-	}
+    }
     public class ExpiryRarity : GlobalItem
     {
         public static int Expiry = 20;
