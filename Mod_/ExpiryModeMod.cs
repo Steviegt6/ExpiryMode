@@ -40,7 +40,7 @@ namespace ExpiryMode.Mod_
         {
             ILCursor ilcursor = new ILCursor(il);
             ILCursor ilcursor2 = ilcursor;
-            MoveType moveType = (MoveType)2;
+            MoveType moveType = MoveType.After;
             Func<Instruction, bool>[] array = new Func<Instruction, bool>[1];
             array[0] = ((Instruction i) => ILPatternMatchingExt.MatchLdfld<Main>(i, "newMusic"));
             ilcursor2.GotoNext(moveType, array);
@@ -57,7 +57,7 @@ namespace ExpiryMode.Mod_
         {
             if (GetInstance<ExpiryConfigClientSide>().MusicChange)
             {
-                customTitleMusicSlot = GetSoundSlot((SoundType)51, "Sounds/Music/CreepyMusic");
+                customTitleMusicSlot = GetSoundSlot(SoundType.Music, "Sounds/Music/CreepyMusic");
                 IL.Terraria.Main.UpdateAudio += new ILContext.Manipulator(TitleMusicIL);
             }
         }
@@ -76,7 +76,7 @@ namespace ExpiryMode.Mod_
                 Music music = Main.music[soundSlot];
                 if (music != null && music.IsPlaying)
                 {
-                    Main.music[soundSlot].Stop((Microsoft.Xna.Framework.Audio.AudioStopOptions)1);
+                    Main.music[soundSlot].Stop(Microsoft.Xna.Framework.Audio.AudioStopOptions.Immediate);
                 }
             }
             base.Close();
@@ -116,7 +116,7 @@ namespace ExpiryMode.Mod_
                 {
                     yOffset = -2;
                 }
-                if (textIndex == 3)
+                if (textIndex == 3) 
                 {
                     yOffset = 2;
                 }
@@ -199,6 +199,7 @@ namespace ExpiryMode.Mod_
         public override void Load()
         {
             IL.Terraria.Main.DrawMenu += HookMenuSplash;
+            IL.Terraria.Main.DoDraw += HookItemTextDraw;
             if (!dedServ)
             {
                 On.Terraria.Lang.GetRandomGameTitle += Lang_GetRandomGameTitle;
@@ -220,6 +221,67 @@ namespace ExpiryMode.Mod_
             On.Terraria.ItemText.NewText += ItemText_NewText;
             On.Terraria.Main.MouseText += Main_MouseText;
             On.Terraria.ItemText.Update += ItemText_Update;
+        }
+
+        private void HookItemTextDraw(ILContext il)
+        {
+            // Apparently, Terraria draws item pickup texts in the DoDraw() method... so let's use IL editing to inject our code! That's fun, isn't it?
+            ILCursor cursor = new ILCursor(il);
+            // In the whole method, there are four IL instructions that call DrawString; the third one is the one that draws the item pickup text
+            int matches = 0; // Make a variable that keeps track of how many IL instructions that call DrawString we've been through
+            bool success = cursor.TryGotoNext(MoveType.Before, (i) => 
+            {
+                // Oh no!!! There are multiple overloads for DrawString!!! Now we have to put all the arguments' types to specify specifically which overload we want to look for :/
+                // Optional arguments also count. If you miss one argument, the method returns null!
+                bool match = i.MatchCall(typeof(DynamicSpriteFontExtensionMethods).GetMethod("DrawString", new Type[] { typeof(SpriteBatch), typeof(DynamicSpriteFont), typeof(string), typeof(Vector2), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float) }));
+                if (match)
+                {
+                    matches++;
+                    if (matches == 3)
+                    {
+                        return true; // This is the third call of DrawString from top to bottom, AKA the one we're looking for
+                                     // Return true because we found the instruction we're looking for!
+                    }
+                }
+                return false;
+            });
+            if (!success)
+            {
+                // If we hit this, the patch can't be applied because the code changed somehow, so abort everything basically
+                return;
+            }
+            cursor.Emit(OpCodes.Ldloc, 124); // 124 is the index of local variable num64 (item index); you can find this in dnSpy all the way at the top
+            // Now that we're before the DrawString method, we can basically do what we did for the other items
+            cursor.EmitDelegate<Action<int>>( // We're taking in that int32 that we just put in stack
+                (itemTextIndex) => 
+                {
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
+                    {
+                        string itemName = itemText[itemTextIndex].name;
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, UIScaleMatrix);
+                        ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                        Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, itemName, Vector2.One);
+                        armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Apply(null);
+                    }
+                }
+            );
+            // Now we can skip over the DrawString method and restart the spriteBatch method
+            cursor.Index++; // Skip over the DrawString... now we're emitting after it
+            cursor.Emit(OpCodes.Ldloc, 124); // Load that item index back in the stack
+            cursor.EmitDelegate<Action<int>>(
+                (itemTextIndex) =>
+                {
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
+                    }
+                }
+            );
+            // ...Ok uh, maybe this wasn't very fun... but at least it works!!! https://www.youtube.com/watch?v=2h_omaXYtMI
         }
 
         private string Lang_GetRandomGameTitle(On.Terraria.Lang.orig_GetRandomGameTitle orig)
@@ -256,8 +318,6 @@ namespace ExpiryMode.Mod_
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
             Player player = Main.player[myPlayer];
-            if (gameMenu)
-                musicVolume = .5f;
             if (gameMenu)
             {
                 return;
@@ -296,7 +356,7 @@ namespace ExpiryMode.Mod_
                 {
                     music2.Stop((Microsoft.Xna.Framework.Audio.AudioStopOptions)1);
                 }
-                titleMusicStopped.Set();
+                titleMusicStopped?.Set();
                 stopTitleMusic = false;
             }
         }
@@ -609,6 +669,23 @@ namespace ExpiryMode.Mod_
                 {
                     Color baseColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(GameUpdateCount / 20f) + 1f) / 2f) * num;
                     ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
+                }
+                if (rare == ExpiryRarity.ShaderRarityExample)
+                {
+                    // Its shader is already animated by Main.GlobalTime
+                    Color baseColor = Color.White;
+                    // Do the same thing we did with spriteBatch in SuffGlobalItem
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, cursorText, Vector2.One);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Apply(null);
+                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
+                    // Make sure to end the spriteBatch to prevent drawing other things with the shader
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
                 }
             }
         }
@@ -972,6 +1049,10 @@ namespace ExpiryMode.Mod_
             if (item.rare == ExpiryRarity.Expiry)
             {
                 name.overrideColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
+            }
+            else if (item.rare == ExpiryRarity.ShaderRarityExample)
+            {
+                name.overrideColor = Color.White;
             }
         }
     }
