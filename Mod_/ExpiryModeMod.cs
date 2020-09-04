@@ -265,7 +265,7 @@ namespace ExpiryMode.Mod_
             if (Main.player[myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/DoomMusic");
-                priority = MusicPriority.BiomeHigh;
+                priority = MusicPriority.BossLow;
             }
             if (GetInstance<ExpiryConfigClientSide>().distractionDanceMusic)
             {
@@ -276,6 +276,7 @@ namespace ExpiryMode.Mod_
                     priority = MusicPriority.BossHigh;
                 }
             }
+
             if (stopTitleMusic || (!gameMenu && customTitleMusicSlot != 6 && ActivePlayerFileData != null && ActiveWorldFileData != null))
             {
                 if (!stopTitleMusic || !GetInstance<ExpiryConfigClientSide>().MusicChange)
@@ -344,11 +345,11 @@ namespace ExpiryMode.Mod_
                 {
                     if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated) // TODO: Change this 'scale' value
                     {
-                        scale = .75f;
+                        scale = .90f;
                     }
                     if (raining && player.ZoneSnow)
                     {
-                        scale = .75f;
+                        scale = .80f;
                     }
                 }
             }

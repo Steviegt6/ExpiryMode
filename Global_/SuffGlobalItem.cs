@@ -13,6 +13,13 @@ namespace ExpiryMode.Global_
 {
     public class SuffGlobalItem : GlobalItem
     {
+        public override void OpenVanillaBag(string context, Player player, int arg)
+        {
+            if (SuffWorld.ExpiryModeIsActive)
+            {
+
+            }
+        }
         public override void SetDefaults(Item item)
         {
             if (item.type == ItemID.CrossNecklace)
@@ -26,7 +33,7 @@ namespace ExpiryMode.Global_
             {
                 player.AddBuff(BuffType<ManaDeficiency>(), Main.rand.Next(240, 480), false);
             }
-            return true;
+            return false;
         }
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {

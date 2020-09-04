@@ -23,23 +23,6 @@ namespace ExpiryMode.Mod_
         public bool ZoneRadiated = false;
 
         public bool ExpiryModeIsActive = false;
-        /*public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
-        {
-            NetMessage.SendPlayerDeath(Main.myPlayer, damageSource, (int)damage, hitDirection, pvp);
-            deathCount++;
-            Main.NewText($"{player.name} is now at {deathCount} deaths in {Main.worldName}!");
-        }*/
-        /*public override void ResetEffects()
-        {
-            if (player.buffImmune[BuffID.Chilled])
-            {
-                player.buffImmune[BuffID.Chilled] = true;
-            }
-            else
-            {
-                player.buffImmune[BuffID.Chilled] = false;
-            }
-        }*/
         public static long GetSavings(Player player)
         {
             long inv = Utils.CoinsCount(out _, player.inventory, new int[]
@@ -94,16 +77,6 @@ namespace ExpiryMode.Mod_
                 }
             }
         }   
-        /*public override void OnEnterWorld(Player player)
-        {
-            if (!ExpiryModeMod.ModVersion.Equals(ExpiryModeMod.CurrentVersion))
-            {
-                Main.NewText($"[c/AB40FF:The Extra Explosives Mod had an update available.]");
-                Main.NewText($"[c/AB40FF:Current Version Installed: {ExpiryModeMod.ModVersion}]");
-                Main.NewText($"[c/AB40FF:Mod Browser Version: {ExpiryModeMod.CurrentVersion}]");
-                Main.NewText($"[c/AB40FF:You can find the latests version in the tML mod browser.]");
-            }
-        }*/
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
             Item item1 = new Item();
@@ -153,7 +126,10 @@ namespace ExpiryMode.Mod_
                     player.buffImmune[BuffType<AAAHHH>()] = true;
                 }
                 if (player.accDivingHelm || player.arcticDivingGear)
+                {
                     player.buffImmune[BuffType<WaterPain>()] = true;
+                    player.buffImmune[BuffType<WaterPainPlus>()] = true;
+                }
                 if (player.waterWalk || player.waterWalk2)
                 {
                     player.waterWalk = false;
@@ -355,33 +331,6 @@ namespace ExpiryMode.Mod_
                 }
                 #endregion
             }
-            /*if (player.HasBuff(BuffType<Refreshed>()))
-            {
-                player.accRunSpeed = player.maxRunSpeed;
-            }
-            bool flag = (player.itemAnimation == 0 || player.inventory[player.selectedItem].useTurn) && player.mount.AllowDirectionChange;
-            bool flag2 = player.controlLeft || player.controlRight;
-            float num = (player.accRunSpeed + player.maxRunSpeed) / 2f;
-            float num2 = 0f;
-            bool flag3 = false;
-            num2 = (float)Math.Sign(Main.windSpeed) * 0.07f;
-            if (Math.Abs(Main.windSpeed) > 0.5f)
-            {
-                num2 *= 1.37f;
-            }
-            if (player.velocity.Y != 0f)
-            {
-                num2 *= 1.2f;
-            }
-            if (flag2)
-            {
-                num2 *= 0.5f;
-            }
-            flag3 = true;
-            if (Math.Sign(player.direction) != Math.Sign(num2))
-            {
-                num -= Math.Abs(num2) * 30f;
-            }*/
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {

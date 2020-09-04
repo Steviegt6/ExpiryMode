@@ -38,7 +38,8 @@ namespace ExpiryMode.Items.Equippables.Accessories
 			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton2] = true;
 			player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton3] = true;
             player.npcTypeNoAggro[NPCID.BoneThrowingSkeleton4] = true;
-			player.npcTypeNoAggro[NPCID.DarkCaster] = true;
+            player.npcTypeNoAggro[NPCID.DarkCaster] = true;
+			// TODO: Make Dark Caster Bolts Not hurt you/Cast at you
 		}
 	}
 }

@@ -8,12 +8,17 @@ using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework.Graphics;
 using ExpiryMode.Items.Equippables.Accessories;
-using System.Configuration;
+using static Terraria.NPC;
+using System;
 
 namespace ExpiryMode.Global_
 {
 	public class SuffGlobalNPC : GlobalNPC
     {
+        public override bool CheckDead(NPC npc)
+        {
+            return true;
+        }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -170,10 +175,6 @@ namespace ExpiryMode.Global_
         {
             if (!npc.boss && npc.HasBuff(BuffType<Paralysis>()))
             {
-                /*npc.velocity.X = 0;
-                npc.velocity.Y = 0;
-                npc.spriteDirection = 1;
-                npc.direction = 1;*/
                 return false;
             }
             else
@@ -297,9 +298,9 @@ namespace ExpiryMode.Global_
         public override void NPCLoot(NPC npc)
         {
             Player player = Main.player[Main.myPlayer];
-            if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+            if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && Main.hardMode)
             {
-                if (!npc.friendly && Main.rand.NextFloat() <= 0.075f)
+                if (Main.rand.NextFloat(10) == 0)
                 {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<RadioactiveSoulThingy>(), 1);
                 }
@@ -314,6 +315,7 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
+            return;
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {
