@@ -8,6 +8,10 @@ using ExpiryMode.Items.Ammo;
 using ExpiryMode.Mod_;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Buffs.BadBuffs;
+using Terraria.Graphics.Shaders;
+using Microsoft.Xna.Framework;
+using ReLogic.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ExpiryMode.Global_
 {
@@ -208,9 +212,51 @@ namespace ExpiryMode.Global_
             }
             #endregion
         }
-    }
+		public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+		{
+            if (item.rare == ExpiryRarity.ShaderRarityExample)
+			{
+                // If the tooltip is the item's name...
+                if (line.Name == "ItemName")
+                {
+                    // End the current spriteBatch...
+				    Main.spriteBatch.End();
+                    // ...and begin it again with SpriteSortMode.Immediate, which is needed for shaders to be applied.
+				    Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    // Now, we can apply shaders... Let's just get a shader from an existing dye.
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    // ArmorShaderData.Apply() passes parameters to the shader based on drawData.
+                    // uSourceRect would usually be set to the sourceRect of given drawData, and
+                    // uImageSize0 would usually be set to the width and height of the texture of the drawData
+                    // However, we didn't pass any drawData, so let's just set these values manually...
+                    Vector2 nameStringDimensions = Terraria.UI.Chat.ChatManager.GetStringSize(line.font, item.Name, line.baseScale);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+				    armorShaderDye.Apply(null);
+                    // If there's going to be a lot of rarity shaders, these should probably be moved to a separate method.
+			    }
+			}
+            // We want all the lines to draw, so we're returning true.
+            return true;
+		}
+		public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
+		{
+            if (item.rare == ExpiryRarity.ShaderRarityExample)
+            {
+                if (line.Name == "ItemName")
+                {
+                    // We don't want the shader to apply to the rest of the tooltips, so we end the spriteBatch here.
+                    Main.spriteBatch.End();
+                    // Begin the spriteBatch again so the rest of the tooltips can be drawn.
+                    // These begin parameters can be found in Main.MouseTextHackZoom() before the tooltips are drawn.
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+                }
+            }
+        }
+	}
     public class ExpiryRarity : GlobalItem
     {
         public static int Expiry = 20;
+        public static int ShaderRarityExample = 21;
     }
 }
