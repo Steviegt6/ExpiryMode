@@ -255,7 +255,7 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>( // We're taking in that int32 that we just put in stack
                 (itemTextIndex) => 
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample)
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
                     {
                         string itemName = itemText[itemTextIndex].name;
                         spriteBatch.End();
@@ -274,7 +274,7 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>(
                 (itemTextIndex) =>
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample)
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
