@@ -1,19 +1,18 @@
-using Terraria.ID;
+using ExpiryMode.Buffs.MiscBuffs;
+using ExpiryMode.Items.Equippables.Accessories;
+using ExpiryMode.Items.Materials;
+using ExpiryMode.Mod_;
+using ExpiryMode.NPCs;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Items.Materials;
-using Microsoft.Xna.Framework;
-using ExpiryMode.Buffs.MiscBuffs;
-using ExpiryMode.Mod_;
-using Microsoft.Xna.Framework.Graphics;
-using ExpiryMode.Items.Equippables.Accessories;
-using static Terraria.NPC;
-using System;
 
 namespace ExpiryMode.Global_
 {
-	public class SuffGlobalNPC : GlobalNPC
+    public class SuffGlobalNPC : GlobalNPC
     {
         public override bool CheckDead(NPC npc)
         {
@@ -204,7 +203,7 @@ namespace ExpiryMode.Global_
                 }
             }
         }
-        public override bool PreNPCLoot(NPC npc)
+        /*public override bool PreNPCLoot(NPC npc)
         {
             if (npc.type == NPCID.Bunny)
             {
@@ -271,11 +270,8 @@ namespace ExpiryMode.Global_
                     {
                         Main.NewTextMultiline($"Well, you somehow managed to get here. I assure you, you are not getting much further.", false, Color.DarkRed);
                     }
-                    if (npc.boss /*&& npc.type <= NPCID.Spazmatism && npc.type >= NPCID.Retinazer*/)
+                    if (npc.boss /*&& npc.type <= NPCID.Spazmatism && npc.type >= NPCID.Retinazer)
                     {
-                        // downedMechBoss1 == destroyer
-                        // 2 = twins
-                        // 3 skelly prime
                         if (!NPC.downedMechBoss2)
                         {
                             Main.NewText($"The notorious twins... Defeated? This is quite unbelievable. I've got my EYE on you...", Color.DarkRed, true);
@@ -294,11 +290,11 @@ namespace ExpiryMode.Global_
                 }
             }
             return true;
-        }
+        }*/
         public override void NPCLoot(NPC npc)
         {
             Player player = Main.player[Main.myPlayer];
-            if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && Main.hardMode)
+            if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && Main.hardMode && !npc.boss)
             {
                 if (Main.rand.NextFloat(10) == 0)
                 {
@@ -315,7 +311,6 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
-            return;
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {

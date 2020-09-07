@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ExpiryMode.Items.Materials;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Projectiles;
+using ExpiryMode.Global_;
 
 namespace ExpiryMode.Items.Weapons.Bows
 {
@@ -27,8 +28,7 @@ namespace ExpiryMode.Items.Weapons.Bows
 			item.noMelee = true;
 			item.knockBack = 4;
 			item.value = 10000;
-			item.rare = ItemRarityID.LightRed;
-			// item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/HawkScream");
+			item.rare = ExpiryRarity.AcidicRarity;
 			item.UseSound = SoundID.Item99;
 			item.autoReuse = true;
 			item.shoot = ProjectileType<BiohazardBird>();

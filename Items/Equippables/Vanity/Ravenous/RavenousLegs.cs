@@ -30,8 +30,8 @@ namespace ExpiryMode.Items.Equippables.Vanity.Ravenous
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Ruby, 5);
-            recipe.AddIngredient(ItemID.GoldBar, 10);
+            recipe.AddIngredient(ItemID.Sapphire, 5);
+            recipe.AddIngredient(ItemID.SilverBar, 10);
             recipe.AddIngredient(ItemID.Silk, 10);
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);

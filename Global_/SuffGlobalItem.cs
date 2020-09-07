@@ -10,7 +10,6 @@ using ExpiryMode.Items.Useables;
 using ExpiryMode.Buffs.BadBuffs;
 using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework;
-using ReLogic.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ExpiryMode.Global_
@@ -23,6 +22,9 @@ namespace ExpiryMode.Global_
             {
 
             }
+        }
+        public override void UpdateEquip(Item item, Player player)
+        {
         }
         public override void SetDefaults(Item item)
         {
@@ -221,7 +223,7 @@ namespace ExpiryMode.Global_
         }
         public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
         {
-            if (item.rare == ExpiryRarity.ShaderRarityExample)
+            if (item.rare == ExpiryRarity.AcidicRarity)
             {
                 // If the tooltip is the item's name...
                 if (line.Name == "ItemName")
@@ -231,7 +233,7 @@ namespace ExpiryMode.Global_
                     // ...and begin it again with SpriteSortMode.Immediate, which is needed for shaders to be applied.
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
                     // Now, we can apply shaders... Let's just get a shader from an existing dye.
-                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.AcidDye);
                     // ArmorShaderData.Apply() passes parameters to the shader based on drawData.
                     // uSourceRect would usually be set to the sourceRect of given drawData, and
                     // uImageSize0 would usually be set to the width and height of the texture of the drawData
@@ -248,7 +250,7 @@ namespace ExpiryMode.Global_
         }
         public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
         {
-            if (item.rare == ExpiryRarity.ShaderRarityExample)
+            if (item.rare == ExpiryRarity.AcidicRarity)
             {
                 if (line.Name == "ItemName")
                 {
@@ -264,6 +266,6 @@ namespace ExpiryMode.Global_
     public class ExpiryRarity : GlobalItem
     {
         public static int Expiry = 20;
-        public static int ShaderRarityExample = 21;
+        public static int AcidicRarity = 21;
     }
 }

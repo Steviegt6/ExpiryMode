@@ -8,7 +8,8 @@ using Terraria;
 using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.Shaders;
-using Terraria.Graphics.Shaders;
+using ExpiryMode.Global_;
+
 namespace ExpiryMode.Items.Weapons.Magic
 {
 	public class WandoftheRaven : ModItem
@@ -29,7 +30,7 @@ namespace ExpiryMode.Items.Weapons.Magic
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.noMelee = true;
             item.value = 10000;
-            item.rare = ItemRarityID.LightRed;
+            item.rare = ExpiryRarity.AcidicRarity;
             item.UseSound = SoundID.Item73;
             item.autoReuse = true;
             item.shoot = ProjectileType<BiohazardBird>();

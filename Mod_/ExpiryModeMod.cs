@@ -63,7 +63,7 @@ namespace ExpiryMode.Mod_
         }
         public override void PostSetupContent()
         {
-            if (ModLoader.GetMod("TerrariaOverhaul") == null)
+            if (ModLoader.GetMod("TerrariaOverhaul") == null && ModLoader.GetMod("MusicForOnePointFour") == null)
             {
                 MenuMusicSet();
             }
@@ -255,12 +255,12 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>( // We're taking in that int32 that we just put in stack
                 (itemTextIndex) => 
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
                     {
                         string itemName = itemText[itemTextIndex].name;
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, UIScaleMatrix);
-                        ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                        ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.AcidDye);
                         Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, itemName, Vector2.One);
                         armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
                         armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
@@ -274,7 +274,7 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>(
                 (itemTextIndex) =>
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.ShaderRarityExample && !itemText[itemTextIndex].coinText)
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
@@ -331,7 +331,7 @@ namespace ExpiryMode.Mod_
             {
                 if (NPC.AnyNPCs(NPCID.EyeofCthulhu))
                 {
-                    // GetDistractedFool
+                    // Henry has officially distracted you, leave this code to earn your life back
                     music = GetSoundSlot(SoundType.Music, "Sounds/Music/GetDistractedFool");
                     priority = MusicPriority.BossHigh;
                 }
@@ -671,14 +671,14 @@ namespace ExpiryMode.Mod_
                     Color baseColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(GameUpdateCount / 20f) + 1f) / 2f) * num;
                     ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
                 }
-                if (rare == ExpiryRarity.ShaderRarityExample)
+                if (rare == ExpiryRarity.AcidicRarity)
                 {
                     // Its shader is already animated by Main.GlobalTime
                     Color baseColor = Color.White;
                     // Do the same thing we did with spriteBatch in SuffGlobalItem
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
-                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.AcidDye);
                     Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, cursorText, Vector2.One);
                     armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
                     armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
@@ -1051,7 +1051,7 @@ namespace ExpiryMode.Mod_
             {
                 name.overrideColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
             }
-            else if (item.rare == ExpiryRarity.ShaderRarityExample)
+            else if (item.rare == ExpiryRarity.AcidicRarity)
             {
                 name.overrideColor = Color.White;
             }

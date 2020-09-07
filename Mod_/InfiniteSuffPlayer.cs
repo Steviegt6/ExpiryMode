@@ -11,8 +11,7 @@ using Terraria.GameInput;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Items.Fish.Quest;
 using System.Linq;
-using Terraria.ModLoader.Default;
-using IL.Terraria.Chat;
+using ExpiryMode.Items.Equippables.Armor.Biohazard;
 
 namespace ExpiryMode.Mod_
 {
@@ -116,6 +115,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public override void PostUpdateEquips()
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -123,12 +123,12 @@ namespace ExpiryMode.Mod_
                 #region AccessoryChecks
                 if (player.lavaRose || player.lavaCD > 0 || player.fireWalk)
                 {
-                    player.buffImmune[BuffType<AAAHHH>()] = true;
+                    player.ClearBuff(BuffType<AAAHHH>());
                 }
                 if (player.accDivingHelm || player.arcticDivingGear)
                 {
-                    player.buffImmune[BuffType<WaterPain>()] = true;
-                    player.buffImmune[BuffType<WaterPainPlus>()] = true;
+                    player.ClearBuff(BuffType<WaterPain>());
+                    player.ClearBuff(BuffType<WaterPainPlus>());
                 }
                 if (player.waterWalk || player.waterWalk2)
                 {
@@ -141,25 +141,27 @@ namespace ExpiryMode.Mod_
                 }
                 if (player.nightVision)
                 {
-                    player.buffImmune[BuffID.Darkness] = true;
-                    player.buffImmune[BuffID.Blackout] = true;
+                    player.ClearBuff(BuffID.Blackout);
+                    player.ClearBuff(BuffID.Darkness);
                 }
                 if (player.longInvince && !Main.raining)
+                //if (item.type == ItemID.CrossNecklace)
                 {
-                    player.buffImmune[BuffType<AbsoluteDoom>()] = true;
+                    player.ClearBuff(BuffType<AbsoluteDoom>());
                 }
                 if (!player.longInvince)
                 {
-                    player.buffImmune[BuffType<DoomLess>()] = true;
+                    player.ClearBuff(BuffType<DoomLess>());
                 }
-                if (player.longInvince && Main.raining && ZoneRadiated)
+                if (player.longInvince && Main.raining && player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
                 {
                     player.longInvince = false;
-                    player.buffImmune[BuffType<DoomLess>()] = true;
+                    player.ClearBuff(BuffType<DoomLess>());
                 }
             }
             #endregion
         }
+
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (GetInstance<ExpiryConfigClientSide>().oofHurt)
@@ -263,7 +265,10 @@ namespace ExpiryMode.Mod_
                 if (ZoneRadiated && player.wet)
                 {
                     player.AddBuff(BuffType<RadiatedWater>(), 2);
-                    Main.PlaySound(SoundID.Item15);
+                    if (player.HasBuff(BuffType<RadiatedWater>()))
+                    {
+                        Main.PlaySound(SoundID.Item15);
+                    }
                 }
                 if (player.ZoneDesert)
                 {

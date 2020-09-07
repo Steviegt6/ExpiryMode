@@ -5,6 +5,7 @@ using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Projectiles;
 using ExpiryMode.Buffs.BadBuffs;
 using ExpiryMode.Items.Materials;
+using ExpiryMode.Global_;
 
 namespace ExpiryMode.Items.Weapons.Swords
 {
@@ -27,7 +28,7 @@ namespace ExpiryMode.Items.Weapons.Swords
 			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.knockBack = 6;
 			item.value = 10000;
-			item.rare = ItemRarityID.LightRed;
+			item.rare = ExpiryRarity.AcidicRarity;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.useTurn = true;

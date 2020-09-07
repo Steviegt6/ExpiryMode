@@ -21,3 +21,11 @@ Atomic - Composer
 
 TODO:
 Mod exclusive drops (from bosses)
+
+NOTES:
+Please take note that this mod is a WORK IN PROGRESS.
+Some issues we have noticed are listed below:
+- Death counter does not go well with dedicated servers.
+- Expiry Mode does not stay activated in multiplayer servers.
+- Sometimes unloading can make the player catch an irreversable exception, forcing the player to close the game. (Only if other main menu music changing mods are enabled)
+PLEASE leave any bugs in my discord, linked at the top-right of the screen when the mod is loaded.
