@@ -47,6 +47,10 @@ namespace ExpiryMode.Global_
             {
                 player.buffImmune[BuffID.Chilled] = true;
             }
+            if (item.prefix == PrefixType<Healthy>())
+            {
+                player.statLifeMax2 += 50;
+            }
         }
         public override bool CanUseItem(Item item, Player player)
         {
@@ -213,6 +217,14 @@ namespace ExpiryMode.Global_
                     isModifier = true
                 };
                 tooltips.Add(toolLine);
+            }
+            if (item.prefix == PrefixType<Healthy>())
+            {
+                TooltipLine plusHealthLine = new TooltipLine(mod, "Healthy", "+50 max health")
+                {
+                    isModifier = true
+                };
+                tooltips.Add(plusHealthLine);
             }
             if (item.rare == ExpiryRarity.Expiry)
             {
