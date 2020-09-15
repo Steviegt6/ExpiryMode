@@ -2,13 +2,13 @@ using ExpiryMode.Buffs.MiscBuffs;
 using ExpiryMode.Items.Equippables.Accessories;
 using ExpiryMode.Items.Materials;
 using ExpiryMode.Mod_;
-using ExpiryMode.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using System.Linq;
 
 namespace ExpiryMode.Global_
 {
@@ -67,27 +67,28 @@ namespace ExpiryMode.Global_
         }
         public override void GetChat(NPC npc, ref string chat)
         {
+            int armsDealer = NPC.FindFirstNPC(NPCID.ArmsDealer);
             Player player = Main.player[Main.myPlayer];
             if (SuffWorld.ExpiryModeIsActive)
             {
                 if (npc.type == NPCID.ArmsDealer)
                 {
-                    switch (Main.rand.Next(7))
+                    if (Main.rand.NextFloat() <= 0.2f && !player.HasItem(ItemID.GoldCoin))
                     {
-                        default:
-                            chat = "Ay, brother. Get out of my sight.";
-                            break;
-                        case 1:
-                            chat = "Dude. That minishark is mine. Get out.";
-                            break;
-                        case 2:
-                            if (!player.HasItem(ItemID.PlatinumCoin))
-                            {
-                                chat = "These guns ain't that cheap, so get some money!";
-                            }
-                            break;
+                            chat = "These guns ain't that cheap, so get some money!";
                     }
-                    chat.Clone();
+                }
+                if (npc.type == NPCID.Guide)
+                {
+                    if (Main.rand.NextFloat() <= 0.25f && SuffWorld.ExpiryModeIsActive)
+                    {
+                        chat = "In Expiry Mode, enemies regenerate life, do more damage, have more life, and are overall more versatile. During the night time hours, it is wise to not go out, as the"
+                            + " enemies can easily overrun you.";
+                    }
+                    if (Main.rand.NextFloat() <= 0.1f)
+                    {
+                        chat = $"You know, I heard that voodoo doll looks like me is high on {Main.npc[armsDealer].GivenName}'s 'want' list.";
+                    }
                 }
             }
         }
@@ -169,6 +170,27 @@ namespace ExpiryMode.Global_
             {
                 npc.buffImmune[BuffType<Paralysis>()] = true;
             }
+            /*if (npc.type == NPCID.GreenSlime ||
+                npc.type == NPCID.BlueSlime ||
+                npc.type == NPCID.PurpleSlime ||
+                npc.type == NPCID.YellowSlime ||
+                npc.type == NPCID.RedSlime ||
+                npc.type == NPCID.BlackSlime ||
+                npc.type == NPCID.Pinky ||
+                npc.type == NPCID.MotherSlime ||
+                npc.type == NPCID.BabySlime ||
+                npc.type == NPCID.IceSlime ||
+                npc.type == NPCID.SandSlime ||
+                npc.type == NPCID.DungeonSlime ||
+                npc.type == NPCID.UmbrellaSlime ||
+                npc.type == NPCID.SlimeRibbonGreen ||
+                npc.type == NPCID.SlimeRibbonRed ||
+                npc.type == NPCID.SlimeRibbonYellow ||
+                npc.type == NPCID.SlimeRibbonWhite ||
+                npc.type == NPCID.SlimeMasked)
+            {
+                npc.ai[1] = -1f;
+            }*/
         }
         public override bool PreAI(NPC npc)
         {
