@@ -11,6 +11,9 @@ using ExpiryMode.Buffs.BadBuffs;
 using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ExpiryMode.Items.Equippables.Accessories;
+using ExpiryMode.Items.Equippables.Vanity.Ravenous;
+using ExpiryMode.Items.Equippables.Vanity.MonstrousGrim;
 
 namespace ExpiryMode.Global_
 {
@@ -20,7 +23,35 @@ namespace ExpiryMode.Global_
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
-
+                if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
+                {
+                    player.QuickSpawnItem(ItemType<SkeletronArm>());
+                }
+                if (context == "crate" && arg == ItemID.WoodenCrate)
+                {
+                    if (Main.hardMode)
+                    {
+                        player.QuickSpawnItem(ItemType<SkeletronArm>(), Main.rand.Next(2, 5));
+                    }
+                }
+                if (context == "bossBag")
+                {
+                    if (Main.rand.Next(20) == 0)
+                    {
+                        if (Main.hardMode)
+                        {
+                            player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.MonstrousGrim.MonstrousGrimHead>());
+                            player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.MonstrousGrim.MonstrousGrimChest>());
+                            player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.MonstrousGrim.MonstrousGrimLegs>());
+                        }
+                    }
+                    else if (Main.rand.Next(20) == 0)
+                    {
+                        player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.Prismatic.PrismaticDome>());
+                        player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.Prismatic.PrismaticVest>());
+                        player.QuickSpawnItem(ItemType<Items.Equippables.Vanity.Prismatic.PrismaticReflectiveBoots>());
+                    }
+                }
             }
         }
         public override void UpdateEquip(Item item, Player player)
@@ -178,16 +209,6 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
-            if (Mod_.ExpiryModeMod.ShiftIsPressed.Current && item.type == ItemType<RadiantArrowItem>())
-            {
-                foreach (TooltipLine modLine2 in tooltips)
-                {
-                    if (modLine2.mod == "Terraria" && modLine2.Name == "Tooltip0")
-                    {
-                        modLine2.text = $"Stuns your enemies and gives them radiation poisoning!\n[c/303030:Dev Note: If you know why the projectile has a weird tilt to it, contact me on discord with the tag 'RighteousRyan#4321'.]";
-                    }
-                }
-            }
             if (!SuffWorld.ExpiryModeIsActive && item.type == ItemType<ChaliceofDeath>())
             {
                 foreach (TooltipLine modLine3 in tooltips)
@@ -257,12 +278,59 @@ namespace ExpiryMode.Global_
                     // If there's going to be a lot of rarity shaders, these should probably be moved to a separate method.
                 }
             }
-            // We want all the lines to draw, so we're returning true.
+            if (item.rare == ExpiryRarity.PrismaticRarity)
+            {
+                if (line.Name == "ItemName")
+                {
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.MidnightRainbowDye);
+                    Vector2 nameStringDimensions = Terraria.UI.Chat.ChatManager.GetStringSize(line.font, item.Name, line.baseScale);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Apply(null);
+                }
+            }
+            if (item.rare == ExpiryRarity.VortexRarity)
+            {
+                if (line.Name == "ItemName")
+                {
+                    Main.spriteBatch.End();
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    Vector2 nameStringDimensions = Terraria.UI.Chat.ChatManager.GetStringSize(line.font, item.Name, line.baseScale);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Apply(null);
+                }
+            }
             return true;
         }
         public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
         {
             if (item.rare == ExpiryRarity.AcidicRarity)
+            {
+                if (line.Name == "ItemName")
+                {
+                    // We don't want the shader to apply to the rest of the tooltips, so we end the spriteBatch here.
+                    Main.spriteBatch.End();
+                    // Begin the spriteBatch again so the rest of the tooltips can be drawn.
+                    // These begin parameters can be found in Main.MouseTextHackZoom() before the tooltips are drawn.
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+                }
+            }
+            if (item.rare == ExpiryRarity.PrismaticRarity)
+            {
+                if (line.Name == "ItemName")
+                {
+                    // We don't want the shader to apply to the rest of the tooltips, so we end the spriteBatch here.
+                    Main.spriteBatch.End();
+                    // Begin the spriteBatch again so the rest of the tooltips can be drawn.
+                    // These begin parameters can be found in Main.MouseTextHackZoom() before the tooltips are drawn.
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+                }
+            }
+            if (item.rare == ExpiryRarity.VortexRarity)
             {
                 if (line.Name == "ItemName")
                 {
@@ -279,5 +347,7 @@ namespace ExpiryMode.Global_
     {
         public static int Expiry = 20;
         public static int AcidicRarity = 21;
+        public static int PrismaticRarity = 22;
+        public static int VortexRarity = 23;
     }
 }

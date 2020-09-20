@@ -69,6 +69,11 @@ namespace ExpiryMode.Mod_
         [Tooltip("Toggles the good buffs you get from biomes. Affects all players.")]
         public bool noGoodBuffs;
 
+        [Label("Realistic Space")]
+        [DefaultValue(false)]
+        [Tooltip("Makes space a bit more realistic.")]
+        public bool makeSpaceTerrible;
+
         [Header("Server Settings")]
         [Label("Post-Death Counter")]
         [DefaultValue(true)]

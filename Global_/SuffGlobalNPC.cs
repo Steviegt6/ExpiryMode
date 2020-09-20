@@ -323,7 +323,7 @@ namespace ExpiryMode.Global_
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<RadioactiveSoulThingy>(), 1);
                 }
             }
-            if (npc.type == NPCID.SkeletronHead && SuffWorld.ExpiryModeIsActive)
+            /*if (npc.type == NPCID.SkeletronHead && SuffWorld.ExpiryModeIsActive)
             {
                 foreach (Player pl in Main.player)
                 {
@@ -332,7 +332,7 @@ namespace ExpiryMode.Global_
                         Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<SkeletronArm>(), 1);
                     }
                 }
-            }
+            }*/
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {

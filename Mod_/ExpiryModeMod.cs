@@ -266,6 +266,28 @@ namespace ExpiryMode.Mod_
                         armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
                         armorShaderDye.Apply(null);
                     }
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
+                    {
+                        string itemName = itemText[itemTextIndex].name;
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, UIScaleMatrix);
+                        ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.MidnightRainbowDye);
+                        Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, itemName, Vector2.One);
+                        armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Apply(null);
+                    }
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
+                    {
+                        string itemName = itemText[itemTextIndex].name;
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, UIScaleMatrix);
+                        ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                        Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, itemName, Vector2.One);
+                        armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                        armorShaderDye.Apply(null);
+                    }
                 }
             );
             // Now we can skip over the DrawString method and restart the spriteBatch method
@@ -275,6 +297,16 @@ namespace ExpiryMode.Mod_
                 (itemTextIndex) =>
                 {
                     if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
+                    }
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
+                    }
+                    if (rarityText[itemTextIndex].rare == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
@@ -688,6 +720,40 @@ namespace ExpiryMode.Mod_
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
                 }
+                if (rare == ExpiryRarity.PrismaticRarity)
+                {
+                    // Its shader is already animated by Main.GlobalTime
+                    Color baseColor = Color.White;
+                    // Do the same thing we did with spriteBatch in SuffGlobalItem
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.MidnightRainbowDye);
+                    Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, cursorText, Vector2.One);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Apply(null);
+                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
+                    // Make sure to end the spriteBatch to prevent drawing other things with the shader
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
+                }
+                if (rare == ExpiryRarity.VortexRarity)
+                {
+                    // Its shader is already animated by Main.GlobalTime
+                    Color baseColor = Color.White;
+                    // Do the same thing we did with spriteBatch in SuffGlobalItem
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+                    ArmorShaderData armorShaderDye = GameShaders.Armor.GetShaderFromItemId(ItemID.VortexDye);
+                    Vector2 nameStringDimensions = ChatManager.GetStringSize(fontMouseText, cursorText, Vector2.One);
+                    armorShaderDye.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
+                    armorShaderDye.Apply(null);
+                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, fontMouseText, cursorText, new Vector2(X, Y), baseColor, 0f, Vector2.Zero, Vector2.One);
+                    // Make sure to end the spriteBatch to prevent drawing other things with the shader
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
+                }
             }
         }
         private void ItemText_Update(On.Terraria.ItemText.orig_Update orig, ItemText self, int whoAmI)
@@ -974,6 +1040,39 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+        public class RPS : ModCommand
+        {
+            public override CommandType Type
+                => CommandType.Chat;
+
+            public override string Command
+                => "rps";
+
+            public override string Usage
+                => "/rps";
+
+            public override string Description
+                => "Rolls either rock, paper, or scissors";
+
+            public override void Action(CommandCaller caller, string input, string[] args)
+            {
+                Player player = Main.player[Main.myPlayer];
+                int playRolled = Main.rand.Next(1, 4);
+                if (playRolled == 1)
+                {
+                    NetMessage.SendData(MessageID.ChatText);
+                    Main.NewText($"{player.name} rolled rock!");
+                }
+                if (playRolled == 2)
+                {
+                    Main.NewText($"{player.name} rolled paper!");
+                }
+                if (playRolled == 3)
+                {
+                    Main.NewText($"{player.name} rolled scissors!");
+                }
+            }
+        }
         public class DeathCount : ModCommand
         {
             public override CommandType Type
@@ -992,51 +1091,36 @@ namespace ExpiryMode.Mod_
             {
                 if (player[0].active)
                 {
-                    NewText($"{player[0].name} has died {player[0].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[0].name} has died {player[0].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[1].active)
                 {
-                    NewText($"{player[1].name} has died {player[1].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[1].name} has died {player[1].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[2].active)
                 {
-                    NewText($"{player[2].name} has died {player[2].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[2].name} has died {player[2].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[3].active)
                 {
-                    NewText($"{player[3].name} has died {player[3].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[3].name} has died {player[3].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[4].active)
                 {
-                    NewText($"{player[4].name} has died {player[4].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[4].name} has died {player[4].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[5].active)
                 {
-                    NewText($"{player[5].name} has died {player[5].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[5].name} has died {player[5].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (player[6].active)
                 {
-                    NewText($"{player[6].name} has died {player[6].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[6].name} has died {player[6].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
                 if (Main.player[7].active)
                 {
-                    NewText($"{player[7].name} has died {player[7].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.Gainsboro);
+                    NewText($"{player[7].name} has died {player[7].GetModPlayer<DeathCountPlayer>().playerDeathCount} times this session.", Color.CadetBlue);
                 }
-                //foreach (Player pl in Main.player)
-                //{
-                //if (pl.active)
-                //{
-                //int deaths = pl.GetModPlayer<DeathCountPlayer>().playerDeathCount;
-
-                //string playerName = pl.name;
-                //if(playerName.Length > 15)
-                //{
-                //    playerName = playerName.Substring(0, 12);
-                //    playerName += "...";
-                //}
-                //NewText($"You have died {player.GetModPlayer<DeathCountPlayer>().playerDeathCount} times.", Color.Gainsboro);
-                //}
-                //}
             }
         }
     }
@@ -1052,6 +1136,14 @@ namespace ExpiryMode.Mod_
                 name.overrideColor = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
             }
             else if (item.rare == ExpiryRarity.AcidicRarity)
+            {
+                name.overrideColor = Color.White;
+            }
+            else if (item.rare == ExpiryRarity.PrismaticRarity)
+            {
+                name.overrideColor = Color.White;
+            }
+            else if (item.rare == ExpiryRarity.VortexRarity)
             {
                 name.overrideColor = Color.White;
             }

@@ -26,11 +26,11 @@ namespace ExpiryMode.Mod_
         {
             long inv = Utils.CoinsCount(out _, player.inventory, new int[]
             {
-        58, //Mouse item
-        57, //Ammo slots
-        56,
-        55,
-        54
+                58, //Mouse item
+                57, //Ammo slots
+                56,
+                55,
+                54
             });
             int[] empty = new int[0];
             long piggy = Utils.CoinsCount(out _, player.bank.item, empty);
@@ -38,10 +38,10 @@ namespace ExpiryMode.Mod_
             long forge = Utils.CoinsCount(out _, player.bank3.item, empty);
             return Utils.CoinsCombineStacks(out _, new long[]
             {
-        inv,
-        piggy,
-        safe,
-        forge
+                inv,
+                piggy,
+                safe,
+                forge
             });
         }
         public override void ProcessTriggers(TriggersSet triggersSet) { }
@@ -187,8 +187,15 @@ namespace ExpiryMode.Mod_
                     player.AddBuff(BuffType<WaterPain>(), 2);
                     // player.noBuilding = true; too evil
                 }
+                if (GetInstance<ExpiryConfigServerSide>().makeSpaceTerrible)
+                {
+                    if (player.ZoneSkyHeight)
+                    {
+                        player.gravity = 0f;
+                    }
+                }
+                #endregion
             }
-            #endregion
         }
         public override void PostUpdateBuffs()
         {
@@ -235,14 +242,17 @@ namespace ExpiryMode.Mod_
                     player.AddBuff(BuffType<AAAHHH>(), 2);
                 }
                 if (player.lavaWet)
-                    player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} died to lava instantly."), 500, 0);
+                {
+                    player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} died to lava instantly."), player.statLifeMax2, 0);
+                }
                 if (player.ZoneCorrupt)
+                {
                     player.AddBuff(BuffType<RottingAway>(), 2);
+                }
                 if (player.ZoneSnow)
                 {
                     player.AddBuff(BuffID.Chilled, 2);
                 }
-
                 if (player.ZoneHoly)
                 {
                     if (GetInstance<ExpiryConfigServerSide>().noGoodBuffs)
