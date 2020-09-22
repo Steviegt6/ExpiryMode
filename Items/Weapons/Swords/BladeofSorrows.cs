@@ -1,4 +1,7 @@
-using Terraria.ModLoader;
+/*using Terraria.ModLoader;
+using Terraria;
+using Terraria.ID;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Weapons.Swords
 {
@@ -9,7 +12,7 @@ namespace ExpiryMode.Items.Weapons.Swords
 			DisplayName.SetDefault("Blade of Sorrows");
 			Tooltip.SetDefault("Not fully implemented yet, has no use as of now");
 		}
-		/*public override void SetDefaults() 
+		public override void SetDefaults() 
 		{
 			item.damage = 32;
 			item.melee = true;
@@ -24,7 +27,7 @@ namespace ExpiryMode.Items.Weapons.Swords
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.useTurn = true;
-			item.shoot = ProjectileType<SorrowSlash>();
+			item.shoot = ProjectileType<Projectiles.SorrowSlash>();
 			item.shootSpeed = 24f;
 			item.noUseGraphic = true;
 			
@@ -36,6 +39,6 @@ namespace ExpiryMode.Items.Weapons.Swords
 			recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
-        }*/
+        }
     }
-}
+}*/

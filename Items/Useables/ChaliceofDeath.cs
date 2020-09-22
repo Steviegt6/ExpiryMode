@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using ExpiryMode.Mod_;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace ExpiryMode.Items.Useables
 {
@@ -56,22 +57,11 @@ namespace ExpiryMode.Items.Useables
                 }
                 Main.NewText("Expiry Mode has been enabled. Be ready for some real hell.", Color.DarkOrange, true);
             }
-            else if (SuffWorld.ExpiryModeIsActive)
-            {
-                SuffWorld.ExpiryModeIsActive = false;
-                if (Main.netMode == NetmodeID.Server)
-                {
-                    NetMessage.SendData(MessageID.WorldData);
-                    NetMessage.SendData(MessageID.RequestWorldInfo);
-                    SuffWorld.ExpiryModeIsActive = false;
-                }
-                Main.NewText("Expiry Mode has been disabled. Not that much of a man, I see.", Color.Orange, true);
-            }
 			return true;
         }
 		public override bool CanUseItem(Player player)
 		{
-            return /*!Main.npc.Any(n => n.active && n.boss);*/ !SuffWorld.ExpiryModeIsActive;
+            return Main.expertMode && !Main.npc.Any(n => n.active && n.boss) && !SuffWorld.ExpiryModeIsActive;
         }
 	}
 }

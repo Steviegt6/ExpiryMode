@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace ExpiryMode.Items.Ammo
 {
-	public class RadiantArrowItem : ModItem
+	public class BagOfCancer : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Radianite Arrow");
-            Tooltip.SetDefault("Stuns your enemies and gives them radiation poisoning!");
-			Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 9)); // Note: TicksPerFrame, Frames
+			DisplayName.SetDefault("Bottomless Radianite Arrows");
+            Tooltip.SetDefault("Radiate them like no one's business!");
+            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(7, 7)); // Note: TicksPerFrame, Frames
 		}
         public override void SetDefaults()
         {
@@ -26,20 +26,22 @@ namespace ExpiryMode.Items.Ammo
             item.crit = 2;
             item.knockBack = 4;
             item.ammo = AmmoID.Arrow;
-            item.shoot = ProjectileType<RadiantBullet>();
+            item.shoot = ProjectileType<RadiantArrow>();
             item.shootSpeed = 14f;
             item.maxStack = 999;
-            item.consumable = true;
+            item.consumable = false;
             item.rare = ItemRarityID.Lime;
+            item.maxStack = 1;
+        }
+        public override void PostUpdate()
+        {
+            Lighting.AddLight(item.position, Color.Chartreuse.ToVector3() * 0.55f * Main.essScale);
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            // Get the vanilla damage tooltip
             TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
             if (tt != null)
             {
-                // We want to grab the last word of the tooltip, which is the translated word for 'damage' (depending on what language the player is using)
-                // So we split the string by whitespace, and grab the last word from the returned arrays to get the damage word, and the first to get the damage shown in the tooltip
                 string[] splitText = tt.text.Split(' ');
                 string damageValue = splitText.First();
                 string damageWord = splitText.Last();
@@ -47,7 +49,6 @@ namespace ExpiryMode.Items.Ammo
                 tt.text = "Deals your current bow's damage";
             }
         }
-
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			type = ProjectileType<RadiantArrow>();
@@ -56,8 +57,7 @@ namespace ExpiryMode.Items.Ammo
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<RadianiteBarItem>());
-			recipe.AddIngredient(ItemID.WoodenArrow, 50);
+			recipe.AddIngredient(ItemType<RadiantArrowItem>(), 3996);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this, 50);
 			recipe.AddRecipe();

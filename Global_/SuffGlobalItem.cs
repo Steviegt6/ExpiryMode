@@ -4,7 +4,6 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Equippables.Vanity.Rune;
-using ExpiryMode.Items.Ammo;
 using ExpiryMode.Mod_;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Buffs.BadBuffs;
@@ -12,20 +11,34 @@ using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ExpiryMode.Items.Equippables.Accessories;
-using ExpiryMode.Items.Equippables.Vanity.Ravenous;
-using ExpiryMode.Items.Equippables.Vanity.MonstrousGrim;
 
 namespace ExpiryMode.Global_
 {
     public class SuffGlobalItem : GlobalItem
     {
+        public override bool CanEquipAccessory(Item item, Player player, int slot)
+        {
+            if (player.GetModPlayer<InfiniteSuffPlayer>().mechScarf && item.type == ItemID.WormScarf)
+            {
+                return false;
+            }
+            return base.CanEquipAccessory(item, player, slot);
+        }
         public override void OpenVanillaBag(string context, Player player, int arg)
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
+                if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
+                {
+                    player.QuickSpawnItem(ItemType<BumpStock>());
+                }
                 if (context == "bossBag" && arg == ItemID.SkeletronBossBag)
                 {
                     player.QuickSpawnItem(ItemType<SkeletronArm>());
+                }
+                if (context == "bossBag" && arg == ItemID.DestroyerBossBag)
+                {
+                    player.QuickSpawnItem(ItemType<MechanicalWormScarf>());
                 }
                 if (context == "crate" && arg == ItemID.WoodenCrate)
                 {

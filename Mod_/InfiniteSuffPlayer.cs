@@ -11,17 +11,72 @@ using Terraria.GameInput;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Items.Fish.Quest;
 using System.Linq;
-using ExpiryMode.Items.Equippables.Armor.Biohazard;
 
 namespace ExpiryMode.Mod_
 {
     public class InfiniteSuffPlayer : ModPlayer
     {
+        /// <summary>
+        /// The # of Radiated Gravel
+        /// </summary>
         public int DoomBlockCount = 0;
-
+        /// <summary>
+        /// Checks if the player is in the Radiation biome
+        /// </summary>
         public bool ZoneRadiated = false;
-
+        /// <summary>
+        /// Checks if Expiry Mode is active
+        /// </summary>
         public bool ExpiryModeIsActive = false;
+        /// <summary>
+        /// Checks if the player has the Bump Stock on their player/equipped
+        /// </summary>
+        public bool bumpStock = false;
+        /// <summary>
+        /// checks if the mechanical Scarf is equipped
+        /// </summary>
+        public bool mechScarf = false;
+        /// <summary>
+        /// Determines whether this item is a gun
+        /// </summary>
+        public bool isGun;
+        public override void ResetEffects()
+        {
+            bumpStock = false;
+            mechScarf = false;
+        }
+        public override bool PreItemCheck()
+        {
+            Item item = player.HeldItem;
+            if (item.useAmmo == AmmoID.Bullet)
+            {
+                isGun = true;
+            }
+            if (bumpStock)
+            {
+                if (item.useAmmo == AmmoID.Bullet && !item.autoReuse)
+                {
+                    item.autoReuse = true;
+                }
+                else if (isGun)
+                {
+                    player.HeldItem.SetDefaults(player.HeldItem.type);
+                    // Make this check only apply to certain weapons, such as the weapons that get affected by this monstrosity
+                }
+            }
+            return base.PreItemCheck();
+        }
+        public override float UseTimeMultiplier(Item item)
+        {
+            if (bumpStock && item.useAmmo == AmmoID.Bullet && !item.autoReuse)
+            {
+                return 0.8f;
+            }
+            else
+            {
+                return 1f;
+            }
+        }
         public static long GetSavings(Player player)
         {
             long inv = Utils.CoinsCount(out _, player.inventory, new int[]

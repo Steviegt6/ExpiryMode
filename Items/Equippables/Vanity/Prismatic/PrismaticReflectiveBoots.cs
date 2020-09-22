@@ -1,5 +1,9 @@
 using Terraria.ModLoader;
 using ExpiryMode.Global_;
+using Terraria;
+using Ionic.Zip;
+using System.IO;
+using System;
 
 namespace ExpiryMode.Items.Equippables.Vanity.Prismatic
 {
@@ -19,6 +23,13 @@ namespace ExpiryMode.Items.Equippables.Vanity.Prismatic
             item.value = 12314;
             item.rare = ExpiryRarity.PrismaticRarity;
             item.vanity = true;
+        }
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            if (player.velocity.X == 0)
+            {
+                // Do the color looping here :wegud:
+            }
         }
     }
 }

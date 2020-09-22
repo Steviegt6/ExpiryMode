@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System.Linq;
+using System.Net;
 
 namespace ExpiryMode.Global_
 {
@@ -67,7 +68,11 @@ namespace ExpiryMode.Global_
         }
         public override void GetChat(NPC npc, ref string chat)
         {
+            Mod thorium = ModLoader.GetMod("ThoriumMod");
             int armsDealer = NPC.FindFirstNPC(NPCID.ArmsDealer);
+            int truffle = NPC.FindFirstNPC(NPCID.Truffle);
+            int merchant = NPC.FindFirstNPC(NPCID.Merchant);
+            int travellingMerchant = NPC.FindFirstNPC(NPCID.TravellingMerchant);
             Player player = Main.player[Main.myPlayer];
             if (SuffWorld.ExpiryModeIsActive)
             {
@@ -75,7 +80,7 @@ namespace ExpiryMode.Global_
                 {
                     if (Main.rand.NextFloat() <= 0.2f && !player.HasItem(ItemID.GoldCoin))
                     {
-                            chat = "These guns ain't that cheap, so get some money!";
+                        chat = "These guns ain't that cheap, so get some money!";
                     }
                 }
                 if (npc.type == NPCID.Guide)
@@ -90,8 +95,66 @@ namespace ExpiryMode.Global_
                         chat = $"You know, I heard that voodoo doll looks like me is high on {Main.npc[armsDealer].GivenName}'s 'want' list.";
                     }
                 }
+                if (npc.type == NPCID.PartyGirl)
+                {
+                    if (Main.rand.NextFloat() < .05f)
+                    {
+                        chat = "I don't really like the feeling of the air right now... Well, all the more reason to party!";
+                    }
+                }
+                if (npc.type == NPCID.TravellingMerchant)
+                {
+                    if (Main.rand.NextFloat() < .1f)
+                    {
+                        chat = $"My wares are very worth it! {Main.npc[merchant].GivenName} has no taste whatsoever.";
+                    }
+                }
+                if (npc.type == NPCID.Merchant)
+                {
+                    if (Main.rand.NextFloat() < .1f)
+                    {
+                        chat = $"{Main.npc[travellingMerchant].GivenName} makes no sense. Refrain from listening to him.";
+                    }
+                }
+                if (ModLoader.GetMod("ThoriumMod") != null && npc.type == NPCID.Truffle)
+                {
+                    int cook = NPC.FindFirstNPC(ModLoader.GetMod("ThoriumMod").NPCType("Cook"));
+                    if (Main.rand.NextFloat() < .15f)
+                    {
+                        if (Main.npc.Any(n => n.active && n.type == thorium.NPCType("Cook")))
+                        {
+                            chat = $"That {Main.npc[cook].GivenName} character keeps staring, and it's starting to unsettle me!";
+                        }
+                    }
+                }
+                if (thorium != null && npc.type == thorium.NPCType("Cook"))
+                {
+                    int cook = NPC.FindFirstNPC(ModLoader.GetMod("ThoriumMod").NPCType("Cook"));
+                    if (Main.rand.NextFloat() < .15f)
+                    {
+                        if (thorium != null && npc.type ==/*Main.npc.Any(n => n.active && n.type == */thorium.NPCType("Cook"))
+                        {
+                            chat = $"{Main.npc[truffle].GivenName} is really starting to make me drool. Please let me cook him.";
+                        }
+                    }
+                }
+                if (npc.type == NPCID.TaxCollector)
+                {
+                    if (Main.rand.NextFloat() < .05f)
+                    {
+                        chat = "Bah! Get out of my sight. I am not in a good mood.";
+                    }
+                }
+                if (npc.type == NPCID.Wizard)
+                {
+                    if (Main.rand.NextFloat() < .05f)
+                    {
+                        chat = "Want to hear a joke? No? Ok.";
+                    }
+                }
             }
         }
+        // TODO: ...Remember. Make drops for the bump stock after all this...
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
             if (GetInstance<ExpiryConfigClientSide>().PogIsTrue)
@@ -158,7 +221,7 @@ namespace ExpiryMode.Global_
                 #endregion
             }
             #region BuffImmune
-            if (npc.boss)
+            if (npc.boss || npc.type == NPCID.GolemHead || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.SolarCrawltipedeTail)
             {
                 npc.buffImmune[BuffType<Paralysis>()] = true;
             }
@@ -318,21 +381,11 @@ namespace ExpiryMode.Global_
             Player player = Main.player[Main.myPlayer];
             if (player.GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated && Main.hardMode && !npc.boss)
             {
-                if (Main.rand.NextFloat(10) == 0)
+                if (Main.rand.NextFloat() <= .075f)
                 {
                     Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<RadioactiveSoulThingy>(), 1);
                 }
             }
-            /*if (npc.type == NPCID.SkeletronHead && SuffWorld.ExpiryModeIsActive)
-            {
-                foreach (Player pl in Main.player)
-                {
-                    if (pl.active)
-                    {
-                        Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, ItemType<SkeletronArm>(), 1);
-                    }
-                }
-            }*/
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {

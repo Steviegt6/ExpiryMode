@@ -121,21 +121,22 @@ namespace ExpiryMode.Mod_
                     yOffset = 2;
                 }
                 string text5 = $"Join the Expiry Mode discord server!";
-                string text6 = $"The discord server is a nice place to hang out and discuss\nthings about this mod. For now, there is no wiki, but in the\nnear future, there will be one! Click on the top line to join my\ndiscord server!";
+                string text6 = $"Click the top line to join. We are waiting!";
                 string text7 = $"Expiry Mode v{ModLoader.GetMod("ExpiryMode").Version}";
                 Vector2 origin2 = fontMouseText.MeasureString(text5);
                 origin2.X *= 0.5f;
                 origin2.Y *= 0.5f;
-                spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                //spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X + 120f, screenHeight - origin2.Y * 2 + yOffset - 12f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(fontMouseText, text7, new Vector2(screenWidth + xOffset - origin2.X - 1615f, screenHeight - origin2.Y * 2 + yOffset - 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 if (ModLoader.GetMod("HamstarHelpers") == null)
                 {
-                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 210f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 62f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 else
                 {
-                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 450f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(fontMouseText, text6, new Vector2(screenWidth + xOffset - origin2.X - 390f, origin2.Y + yOffset + 40f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
-                Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 108), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
+                Rectangle discordLink = new Rectangle((int)(screenWidth - origin2.X * 2 - 50), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 Rectangle discordLinkFurtherOut = new Rectangle((int)(screenWidth - origin2.X * 2 - 375), 0, (int)(origin2.X * 2), (int)(origin2.Y * 2));
                 if (discordLink.Contains(MouseScreen.ToPoint()) && ModLoader.GetMod("HamstarHelpers") == null)
                 {
@@ -161,7 +162,7 @@ namespace ExpiryMode.Mod_
                 }
                 if (ModLoader.GetMod("HamstarHelpers") == null)
                 {
-                    spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 105f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(fontMouseText, text5, new Vector2(screenWidth + xOffset - origin2.X - 50f, origin2.Y + yOffset + 10f), color, 0f, origin2, 1f, SpriteEffects.None, 0f);
                 }
                 else
                 {
@@ -1040,36 +1041,76 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
-        public class RPS : ModCommand
+        public class BlackJack : ModCommand
         {
             public override CommandType Type
                 => CommandType.Chat;
 
             public override string Command
-                => "rps";
+                => "bj";
 
             public override string Usage
-                => "/rps";
+                => "/bj";
 
             public override string Description
-                => "Rolls either rock, paper, or scissors";
+                => "Play some good ol' blackjack!";
 
             public override void Action(CommandCaller caller, string input, string[] args)
             {
-                Player player = Main.player[Main.myPlayer];
-                int playRolled = Main.rand.Next(1, 4);
-                if (playRolled == 1)
+                int hit1 = rand.Next(1, 12);
+                int hit2 = rand.Next(1, 12);
+                int hit3 = rand.Next(1, 12);
+                int hit4 = rand.Next(1, 12);
+                int hit5 = rand.Next(1, 12);
+                int hit6 = rand.Next(1, 12);
+                string gameOver = "Game Over!";
+                NewText(hit1);
+                NewText(hit2);
+                if (hit1 + hit2 > 21)
                 {
-                    NetMessage.SendData(MessageID.ChatText);
-                    Main.NewText($"{player.name} rolled rock!");
+                    NewText(gameOver);
+                    return;
                 }
-                if (playRolled == 2)
+                if (hit1 + hit2 < 21)
                 {
-                    Main.NewText($"{player.name} rolled paper!");
+                    NewText(hit3);
                 }
-                if (playRolled == 3)
+                if (hit1 + hit2 + hit3 > 21)
                 {
-                    Main.NewText($"{player.name} rolled scissors!");
+                    NewText(gameOver);
+                    return;
+                }
+                if (hit1 + hit2 + hit3 < 21)
+                {
+                    NewText(hit4);
+                }
+                if (hit1 + hit2 + hit3 + hit4 > 21)
+                {
+                    NewText(gameOver);
+                    return;
+                }
+                if (hit1 + hit2 + hit3 + hit4 < 21)
+                {
+                    NewText(hit5);
+                }
+                if (hit1 + hit2 + hit3 + hit4 + hit5 > 21)
+                {
+                    NewText(gameOver);
+                    return;
+                }
+                if (hit1 + hit2 + hit3 + hit4 + hit5 < 21)
+                {
+                    NewText(hit6);
+                }
+                if (hit1 + hit2 + hit3 + hit4 + hit5 + hit6 > 21)
+                {
+                    NewText(gameOver);
+                    return;
+                }
+                if (hit1 + hit2 == 21 || hit1 + hit2 + hit3 == 21 || hit1 + hit2 + hit3 + hit4 == 21 || hit1 + hit2 + hit3 + hit4 + hit5 == 21 || hit1 + hit2 + hit3 + hit4 + hit5 + hit6 == 21)
+                {
+                    NewText("You Win!");
+                    return;
                 }
             }
         }

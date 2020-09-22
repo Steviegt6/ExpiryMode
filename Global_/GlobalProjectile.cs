@@ -1,16 +1,8 @@
 using Terraria.ID;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Items.Equippables.Vanity.Rune;
-using ExpiryMode.Items.Ammo;
+using Microsoft.Xna.Framework;
 using ExpiryMode.Mod_;
-using ExpiryMode.Items.Useables;
-using ExpiryMode.Items.Equippables.Vanity.Ravenous;
-using ExpiryMode.Items.Equippables.Accessories;
-using System.Drawing;
-using System;
 
 namespace ExpiryMode.Global_
 {
@@ -29,5 +21,27 @@ namespace ExpiryMode.Global_
             }
         }*/
         // ask 4mbr0s3 2 for help here :ech:
+        public override void ModifyHitPlayer(Projectile projectile, Player target, ref int damage, ref bool crit)
+        {
+            if (projectile.type == ProjectileID.PhantasmalDeathray)
+            {
+                damage = 999999;
+            }
+        }
+        public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
+        {
+            if (Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().bumpStock)
+            {
+                for (int numTimes = 0; numTimes <= 10; numTimes++)
+                {
+                    Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire, 0, 0, 25, Color.DarkOrange);
+                }
+                return true;
+            }
+            else
+            {
+                return base.OnTileCollide(projectile, oldVelocity);
+            }
+        }
     }
 }
