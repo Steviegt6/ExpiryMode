@@ -37,18 +37,6 @@ namespace ExpiryMode.Items.Ammo
         {
             Lighting.AddLight(item.position, Color.Chartreuse.ToVector3() * 0.55f * Main.essScale);
         }
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            TooltipLine tt = tooltips.FirstOrDefault(x => x.Name == "Damage" && x.mod == "Terraria");
-            if (tt != null)
-            {
-                string[] splitText = tt.text.Split(' ');
-                string damageValue = splitText.First();
-                string damageWord = splitText.Last();
-                // Change the tooltip text
-                tt.text = "Deals your current bow's damage";
-            }
-        }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			type = ProjectileType<RadiantArrow>();

@@ -11,11 +11,41 @@ using Terraria.Graphics.Shaders;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ExpiryMode.Items.Equippables.Accessories;
+using System;
+using ExpiryMode.Projectiles.ClonedInstances;
 
 namespace ExpiryMode.Global_
 {
     public class SuffGlobalItem : GlobalItem
     {
+        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            // TODO: For future reference, make the skelly prime bag drop the "Prime Tool" that gives a random chance to fire either: A laser or a cannonball upon firing with this accessory equipped.
+            //if (item.useAmmo == AmmoID.Arrow || item.shoot == ProjectileID.WoodenArrowFriendly)
+            if (item.useAmmo == AmmoID.Arrow)
+            {
+                if (player.GetModPlayer<InfiniteSuffPlayer>().primeUtils)
+                {
+                    if (Main.rand.NextFloat() <= 0.18f)
+                    {
+                        int bombPrime = Projectile.NewProjectile(position, new Vector2(speedX, speedY), ProjectileID.BombSkeletronPrime, (int)(item.damage * 1.5f), item.knockBack, player.whoAmI);
+                        Main.projectile[bombPrime].hostile = false;
+                        Main.projectile[bombPrime].friendly = true;
+                        Main.projectile[bombPrime].owner = Main.myPlayer;
+                        //Projectile.NewProjectile(position, new Vector2(speedX, speedY), ProjectileID.BombSkeletronPrime, item.damage, item.knockBack, Main.myPlayer);
+                    }
+                    else if (Main.rand.NextFloat() <= 0.10f)
+                    {
+                        int laserPink = Projectile.NewProjectile(position, new Vector2(speedX, speedY), ProjectileID.PinkLaser, (int)(item.damage * 1.25f), item.knockBack, player.whoAmI);
+                        Main.projectile[laserPink].hostile = false;
+                        Main.projectile[laserPink].friendly = true;
+                        Main.projectile[laserPink].owner = Main.myPlayer;
+                        //Projectile.NewProjectile(position, new Vector2(speedX, speedY), ProjectileID.PinkLaser, item.damage, item.knockBack, Main.myPlayer);
+                    }
+                }
+            }
+            return base.Shoot(item, player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+        }
         public override bool CanEquipAccessory(Item item, Player player, int slot)
         {
             if (player.GetModPlayer<InfiniteSuffPlayer>().mechScarf && item.type == ItemID.WormScarf)
@@ -28,7 +58,7 @@ namespace ExpiryMode.Global_
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
-                if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
+                if (context == "bossBag" && arg == ItemID.TwinsBossBag)
                 {
                     player.QuickSpawnItem(ItemType<BumpStock>());
                 }
@@ -39,6 +69,10 @@ namespace ExpiryMode.Global_
                 if (context == "bossBag" && arg == ItemID.DestroyerBossBag)
                 {
                     player.QuickSpawnItem(ItemType<MechanicalWormScarf>());
+                }
+                if (context == "bossBag" && arg == ItemID.SkeletronPrimeBossBag)
+                {
+                    player.QuickSpawnItem(ItemType<PrimeUtils>());
                 }
                 if (context == "crate" && arg == ItemID.WoodenCrate)
                 {
@@ -362,5 +396,11 @@ namespace ExpiryMode.Global_
         public static int AcidicRarity = 21;
         public static int PrismaticRarity = 22;
         public static int VortexRarity = 23;
+    }
+    public class OnTerrariaHook : GlobalItem
+    {
+        public bool defAutoReuse;
+        public override bool InstancePerEntity => true;
+        public override bool CloneNewInstances => true;
     }
 }

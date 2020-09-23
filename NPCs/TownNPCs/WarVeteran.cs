@@ -37,7 +37,6 @@ namespace ExpiryMode.NPCs.TownNPCs
 			npc.knockBackResist = 0.5f;
 			animationType = NPCID.Guide;
 		}
-
 		public override void HitEffect(int hitDirection, double damage)
 		{
 			int num = npc.life > 0 ? 1 : 5;
@@ -45,7 +44,6 @@ namespace ExpiryMode.NPCs.TownNPCs
 				Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood);
 			}
 		}
-
 		public override bool CanTownNPCSpawn(int numTownNPCs, int money) 
 		{
 			return false;

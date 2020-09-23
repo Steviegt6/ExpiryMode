@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Buffs.BadBuffs;
 using Microsoft.Xna.Framework;
+using ExpiryMode.Util;
 
 namespace ExpiryMode.NPCs
 {
@@ -26,9 +27,9 @@ namespace ExpiryMode.NPCs
             npc.DeathSound = SoundID.NPCDeath2;
             npc.value = 60f;
             npc.knockBackResist = 0f;
-            npc.aiStyle = NPCID.Zombie;
+            npc.aiStyle = NPCAIStyleID.Fighter;
             Main.npcFrameCount[npc.type] = 16;
-            aiType = NPCID.Zombie;
+            aiType = NPCAIStyleID.Fighter;
             animationType = NPCID.Guide;
             if (Main.hardMode)
             {

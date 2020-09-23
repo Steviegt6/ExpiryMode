@@ -21,8 +21,8 @@ namespace ExpiryMode.Projectiles
         public override void SetDefaults()
         {
             Player player = Main.player[Main.myPlayer];
-            projectile.width = 1;
-            projectile.height = 1;
+            projectile.width = 6;
+            projectile.height = 6;
             projectile.friendly = true;
             projectile.ranged = true;
             projectile.tileCollide = true;

@@ -116,7 +116,7 @@ namespace ExpiryMode.Mod_
                 {
                     yOffset = -2;
                 }
-                if (textIndex == 3) 
+                if (textIndex == 3)
                 {
                     yOffset = 2;
                 }
@@ -199,8 +199,10 @@ namespace ExpiryMode.Mod_
         }
         public override void Load()
         {
+            /*On.Terraria.Projectile.SetDefaults += Projectile_SetDefaults;*/ // Potential Method swap for later, idk
             IL.Terraria.Main.DrawMenu += HookMenuSplash;
             IL.Terraria.Main.DoDraw += HookItemTextDraw;
+            On.Terraria.Item.SetDefaults += Item_SetDefaults;
             if (!dedServ)
             {
                 On.Terraria.Lang.GetRandomGameTitle += Lang_GetRandomGameTitle;
@@ -224,13 +226,33 @@ namespace ExpiryMode.Mod_
             On.Terraria.ItemText.Update += ItemText_Update;
         }
 
+        /*private void Projectile_SetDefaults(On.Terraria.Projectile.orig_SetDefaults orig, Projectile self, int Type)
+        {
+            orig(self, Type);
+            self.GetGlobalProjectile<MakeFriendly>().defFriendly = self.friendly;
+            self.GetGlobalProjectile<MakeFriendly>().defNoHostile = self.hostile;
+        }*/
+
+        /// <summary>
+        /// Makes the autoReuse thingy work, so yeah.
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        /// <param name="Type"></param>
+        /// <param name="noMatCheck"></param>
+        private void Item_SetDefaults(On.Terraria.Item.orig_SetDefaults orig, Item self, int Type, bool noMatCheck)
+        {
+            orig(self, Type, noMatCheck);
+            self.GetGlobalItem<OnTerrariaHook>().defAutoReuse = self.autoReuse;
+        }
+
         private void HookItemTextDraw(ILContext il)
         {
             // Apparently, Terraria draws item pickup texts in the DoDraw() method... so let's use IL editing to inject our code! That's fun, isn't it?
             ILCursor cursor = new ILCursor(il);
             // In the whole method, there are four IL instructions that call DrawString; the third one is the one that draws the item pickup text
             int matches = 0; // Make a variable that keeps track of how many IL instructions that call DrawString we've been through
-            bool success = cursor.TryGotoNext(MoveType.Before, (i) => 
+            bool success = cursor.TryGotoNext(MoveType.Before, (i) =>
             {
                 // Oh no!!! There are multiple overloads for DrawString!!! Now we have to put all the arguments' types to specify specifically which overload we want to look for :/
                 // Optional arguments also count. If you miss one argument, the method returns null!
@@ -254,7 +276,7 @@ namespace ExpiryMode.Mod_
             cursor.Emit(OpCodes.Ldloc, 124); // 124 is the index of local variable num64 (item index); you can find this in dnSpy all the way at the top
             // Now that we're before the DrawString method, we can basically do what we did for the other items
             cursor.EmitDelegate<Action<int>>( // We're taking in that int32 that we just put in stack
-                (itemTextIndex) => 
+                (itemTextIndex) =>
                 {
                     if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
                     {
@@ -412,7 +434,7 @@ namespace ExpiryMode.Mod_
         }
         public override void PreSaveAndQuit()
         {
-            if (ModLoader.GetMod("TerrariaOverhaul") == null || ModLoader.GetMod("CalamityModMusic") == null)
+            if (ModLoader.GetMod("TerrariaOverhaul") == null && ModLoader.GetMod("CalamityModMusic") == null && ModLoader.GetMod("MusicFromOnePointFour") == null)
             {
                 MenuMusicSet(); // Mirsario, you suck ass. Your mod takes all priority. So do you, Fabsol.
             }
@@ -436,7 +458,7 @@ namespace ExpiryMode.Mod_
                 }
                 if (ExpiryModeIsActive)
                 {
-                    if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated) // TODO: Change this 'scale' value
+                    if (!dayTime && !Main.player[player.whoAmI].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated) // TODO: Change this 'scale' value (I think I resolved this)
                     {
                         scale = .90f;
                     }

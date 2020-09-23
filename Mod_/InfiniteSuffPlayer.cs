@@ -11,11 +11,26 @@ using Terraria.GameInput;
 using ExpiryMode.Items.Useables;
 using ExpiryMode.Items.Fish.Quest;
 using System.Linq;
+using ExpiryMode.Util;
+using ExpiryMode.Global_;
 
 namespace ExpiryMode.Mod_
 {
     public class InfiniteSuffPlayer : ModPlayer
     {
+        public bool primeUtils = false;
+        /// <summary>
+        /// Determines whether the Prismatic Head is equipped.
+        /// </summary>
+        public bool accPrisHead = false;
+        /// <summary>
+        /// Determines whether the Prismatic Body is equipped.
+        /// </summary>
+        public bool accPrisBody = false;
+        /// <summary>
+        /// Determines whether the Prismatic Legs is equipped.
+        /// </summary>
+        public bool accPrisLegs = false;
         /// <summary>
         /// The # of Radiated Gravel
         /// </summary>
@@ -44,6 +59,7 @@ namespace ExpiryMode.Mod_
         {
             bumpStock = false;
             mechScarf = false;
+            primeUtils = false;
         }
         public override bool PreItemCheck()
         {
@@ -58,11 +74,11 @@ namespace ExpiryMode.Mod_
                 {
                     item.autoReuse = true;
                 }
-                else if (isGun)
-                {
-                    player.HeldItem.SetDefaults(player.HeldItem.type);
-                    // Make this check only apply to certain weapons, such as the weapons that get affected by this monstrosity
-                }
+            }
+            else if (isGun && !bumpStock)
+            {
+                player.HeldItem.autoReuse = player.HeldItem.GetGlobalItem<OnTerrariaHook>().defAutoReuse; // This is really faulty, if anyone can fix it please let me know. - Ryan
+                // Make this check only apply to certain weapons, such as the weapons that get affected by this monstrosity
             }
             return base.PreItemCheck();
         }
@@ -498,7 +514,7 @@ namespace ExpiryMode.Mod_
                 {
                     return;
                 }
-                if (questFish == ItemType<GlowingCatfish>() && liquidType == 0 && Main.rand.NextBool(3) && Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
+                if (questFish == ItemType<GlowingCatfish>() && liquidType == LiquidID.Water && Main.rand.NextBool(3) && Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().ZoneRadiated)
                 {
                     caughtType = ItemType<GlowingCatfish>();
                 }

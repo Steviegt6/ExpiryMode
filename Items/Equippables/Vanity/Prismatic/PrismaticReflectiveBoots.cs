@@ -1,9 +1,9 @@
 using Terraria.ModLoader;
 using ExpiryMode.Global_;
 using Terraria;
-using Ionic.Zip;
-using System.IO;
-using System;
+using Microsoft.Xna.Framework;
+using Terraria.ID;
+using ExpiryMode.Mod_;
 
 namespace ExpiryMode.Items.Equippables.Vanity.Prismatic
 {
@@ -23,6 +23,22 @@ namespace ExpiryMode.Items.Equippables.Vanity.Prismatic
             item.value = 12314;
             item.rare = ExpiryRarity.PrismaticRarity;
             item.vanity = true;
+        }
+        public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor)
+        {
+            color = Main.DiscoColor;
+        }
+        public override bool IsVanitySet(int head, int body, int legs)
+        {
+            return true;
+        }
+        public override void PreUpdateVanitySet(Player player)
+        {
+            Lighting.AddLight(player.Center, Main.DiscoColor.ToVector3() * 0.55f * Main.essScale);
+        }
+        public override void UpdateEquip(Player player)
+        {
+            player.GetModPlayer<InfiniteSuffPlayer>().accPrisLegs = true;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {

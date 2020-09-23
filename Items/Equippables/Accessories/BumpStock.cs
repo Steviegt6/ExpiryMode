@@ -11,7 +11,7 @@ namespace ExpiryMode.Items.Equippables.Accessories
 		public override void SetStaticDefaults() 
 		{
 			DisplayName.SetDefault("Bump Stock");
-			Tooltip.SetDefault("Allows for any gun to be used automatically\nIncreases all ranged damage by 18%\nMakes all guns affected to fire 20% faster\n'I don't know how much longer I can hold this'");
+			Tooltip.SetDefault("Allows for any gun to be used automatically\nIncreases all ranged damage by 18%\nMakes all guns affected to fire 20% faster\nIncreases ranged crit chance by 10%\n'I don't know how much longer I can hold this'");
 		}
 		public override void SetDefaults() 
 		{
@@ -23,7 +23,8 @@ namespace ExpiryMode.Items.Equippables.Accessories
 		}
 		public override void UpdateEquip(Player player) 
 		{
-			player.rangedDamageMult = 1.18f;
+            player.rangedDamageMult = 1.18f;
+			player.rangedCrit += 10;
             player.GetModPlayer<InfiniteSuffPlayer>().bumpStock = true;
 		}
 	}

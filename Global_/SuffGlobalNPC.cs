@@ -218,8 +218,8 @@ namespace ExpiryMode.Global_
                 {
                     npc.defense = (int)(npc.defense * 1.1f);
                 }
-                #endregion
             }
+            #endregion
             #region BuffImmune
             if (npc.boss || npc.type == NPCID.GolemHead || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.SolarCrawltipedeTail)
             {

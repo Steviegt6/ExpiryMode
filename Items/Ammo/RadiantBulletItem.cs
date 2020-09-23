@@ -26,7 +26,7 @@ namespace ExpiryMode.Items.Ammo
             item.ammo = AmmoID.Bullet;
             item.shoot = ProjectileType<RadiantBullet>();
             item.shootSpeed = 14f;
-            item.maxStack = 999;
+			item.maxStack = 999;
             item.consumable = true;
             item.rare = ItemRarityID.Lime;
         }

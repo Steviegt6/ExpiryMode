@@ -26,7 +26,7 @@ namespace ExpiryMode.Items.Ammo
             item.crit = 2;
             item.knockBack = 4;
             item.ammo = AmmoID.Arrow;
-            item.shoot = ProjectileType<RadiantBullet>();
+            item.shoot = ProjectileType<RadiantArrow>();
             item.shootSpeed = 14f;
             item.maxStack = 999;
             item.consumable = true;
