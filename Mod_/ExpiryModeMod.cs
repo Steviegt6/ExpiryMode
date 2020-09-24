@@ -34,7 +34,7 @@ namespace ExpiryMode.Mod_
         private bool stopTitleMusic;
         private ManualResetEvent titleMusicStopped;
         private int customTitleMusicSlot;
-        private RarityPopupText[] rarityText = new RarityPopupText[20];
+        public static int[] itemRarity;
         public ExpiryModeMod() { GetInstance<ExpiryModeMod>(); }
         private void TitleMusicIL(ILContext il)
         {
@@ -215,9 +215,11 @@ namespace ExpiryMode.Mod_
                 SkyManager.Instance["InfniteSuffering:RadiatedBiomeSky"] = new RadiatedSky();
             }
 
+            itemRarity = new int[20];
+
             for (int i = 0; i < 20; i++)
             {
-                rarityText[i] = new RarityPopupText();
+                itemRarity[i] = new int();
             }
 
             On.Terraria.Item.Prefix += Item_Prefix;
@@ -278,7 +280,7 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>( // We're taking in that int32 that we just put in stack
                 (itemTextIndex) =>
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
                     {
                         string itemName = itemText[itemTextIndex].name;
                         spriteBatch.End();
@@ -289,7 +291,7 @@ namespace ExpiryMode.Mod_
                         armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
                         armorShaderDye.Apply(null);
                     }
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
                     {
                         string itemName = itemText[itemTextIndex].name;
                         spriteBatch.End();
@@ -300,7 +302,7 @@ namespace ExpiryMode.Mod_
                         armorShaderDye.Shader.Parameters["uImageSize0"].SetValue(new Vector2(nameStringDimensions.X, nameStringDimensions.Y));
                         armorShaderDye.Apply(null);
                     }
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
                     {
                         string itemName = itemText[itemTextIndex].name;
                         spriteBatch.End();
@@ -319,17 +321,17 @@ namespace ExpiryMode.Mod_
             cursor.EmitDelegate<Action<int>>(
                 (itemTextIndex) =>
                 {
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.AcidicRarity && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
                     }
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.PrismaticRarity && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
                     }
-                    if (rarityText[itemTextIndex].rare == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
+                    if (itemRarity[itemTextIndex] == ExpiryRarity.VortexRarity && !itemText[itemTextIndex].coinText)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, UIScaleMatrix);
@@ -657,7 +659,7 @@ namespace ExpiryMode.Mod_
             {                                                                                                                // Timer between color swaps
                 itemText[num4].color = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(Main.GameUpdateCount / 20f) + 1f) / 2f);
             }
-            rarityText[num4].rare = newItem.rare;
+            itemRarity[num4] = newItem.rare;
             itemText[num4].expert = newItem.expert;
             itemText[num4].name = newItem.AffixName();
             itemText[num4].stack = stack;
@@ -801,7 +803,7 @@ namespace ExpiryMode.Mod_
             {
                 itemText[whoAmI].color = new Color((byte)DiscoR, (byte)DiscoG, (byte)DiscoB, mouseTextColor);
             }
-            if (rarityText[whoAmI].rare == ExpiryRarity.Expiry)
+            if (itemRarity[whoAmI] == ExpiryRarity.Expiry)
             {
                 itemText[whoAmI].color = Color.Lerp(Color.DarkGreen, Color.Lime, (float)(Math.Sin(GameUpdateCount / 10f) + 1f) / 2f);
             }
