@@ -1,5 +1,5 @@
-using Terraria.ModLoader;
 using ExpiryMode.Global_;
+using Terraria.ModLoader;
 
 namespace ExpiryMode.Items.Equippables.Vanity.MonstrousGrim
 {

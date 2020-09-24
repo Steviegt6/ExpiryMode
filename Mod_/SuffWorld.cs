@@ -1,12 +1,12 @@
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.World.Generation;
-using Terraria.GameContent.Generation;
-using System.Collections.Generic;
 using ExpiryMode.Tiles;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader.IO;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.GameContent.Generation;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.World.Generation;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Mod_
 {
@@ -15,20 +15,24 @@ namespace ExpiryMode.Mod_
         public static int playerDeathCount;
         public static bool ExpiryModeIsActive = false;
         public static int DoomBlockCount = 0;
+
         public override void Initialize()
         {
             ExpiryModeIsActive = false;
             playerDeathCount = 0;
         }
+
         public override void Load(TagCompound tag)
         {
             ExpiryModeIsActive = tag.GetBool("ExpiryModeIsActive");
         }
+
         public override TagCompound Save()
         {
-            return new TagCompound 
+            return new TagCompound
             { {  "ExpiryModeIsActive", ExpiryModeIsActive } };
         }
+
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
             int ShiniesIndex = tasks.FindIndex((GenPass genpass) => genpass.Name.Equals("Shinies"));
@@ -57,11 +61,13 @@ namespace ExpiryMode.Mod_
                 }
             }));
         }
+
         public override void TileCountsAvailable(int[] tileCounts)
         {
             DoomBlockCount = tileCounts[TileType<DoomGravel>()];
         }
     }
+
     public class RadiantDirt : ModWorld
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
@@ -71,6 +77,7 @@ namespace ExpiryMode.Mod_
             if (ShiniesIndex != -1)
                 tasks.Insert(ShiniesIndex + 1, new PassLegacy("Radiant Dirt Generation", RadiantDirtGen));
         }
+
         private void RadiantDirtGen(GenerationProgress progress)
         {
             progress.Message = "Dirt inside your doom...";
@@ -88,6 +95,7 @@ namespace ExpiryMode.Mod_
             }
         }
     }
+
     public class Radianite : ModWorld
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
@@ -97,9 +105,9 @@ namespace ExpiryMode.Mod_
             if (ShiniesIndex != -1)
                 tasks.Insert(ShiniesIndex + 1, new PassLegacy("Radiant OreGen", RadianiteOreGen));
         }
+
         private void RadianiteOreGen(GenerationProgress progress)
         {
-
             progress.Message = "Generating ores that cause doom...";
 
             for (int k = 0; k < (int)((Main.maxTilesX * Main.maxTilesY) * .0007); k++)
@@ -114,11 +122,13 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         // TODO: This stupid ass shit won't save. Get this thing's gay ass to work.
         public override void Load(TagCompound tag)
         {
             Main.player[Main.myPlayer].GetModPlayer<DeathCountPlayer>().playerDeathCount = tag.GetInt("playerDeathCount");
         }
+
         public override TagCompound Save()
         {
             if (Main.gameMenu)

@@ -5,13 +5,14 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Potions
 {
-	public class PotionPure : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Purity Potion");
-			Tooltip.SetDefault("Makes you immune to pure evil");
-		}
+    public class PotionPure : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Purity Potion");
+            Tooltip.SetDefault("Makes you immune to pure evil");
+        }
+
         public override void SetDefaults()
         {
             item.UseSound = SoundID.Item3;
@@ -28,15 +29,15 @@ namespace ExpiryMode.Items.Potions
             item.buffType = BuffType<PurityBuff>();
             item.buffTime = 28800;
         }
-		public override void AddRecipes() 
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.BottledWater, 1);
-			recipe.AddIngredient(null, "BunnyEar", 3);
-			recipe.AddTile(TileID.Bottles);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
 
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.BottledWater, 1);
+            recipe.AddIngredient(null, "BunnyEar", 3);
+            recipe.AddTile(TileID.Bottles);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
+    }
 }

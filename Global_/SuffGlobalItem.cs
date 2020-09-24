@@ -1,18 +1,16 @@
-using Terraria.ID;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Items.Equippables.Vanity.Rune;
-using ExpiryMode.Mod_;
-using ExpiryMode.Items.Useables;
 using ExpiryMode.Buffs.BadBuffs;
-using Terraria.Graphics.Shaders;
+using ExpiryMode.Items.Equippables.Accessories;
+using ExpiryMode.Items.Equippables.Vanity.Rune;
+using ExpiryMode.Items.Useables;
+using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ExpiryMode.Items.Equippables.Accessories;
-using System;
-using ExpiryMode.Projectiles.ClonedInstances;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Global_
 {
@@ -46,6 +44,7 @@ namespace ExpiryMode.Global_
             }
             return base.Shoot(item, player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
         }
+
         public override bool CanEquipAccessory(Item item, Player player, int slot)
         {
             if (player.GetModPlayer<InfiniteSuffPlayer>().mechScarf && item.type == ItemID.WormScarf)
@@ -54,6 +53,7 @@ namespace ExpiryMode.Global_
             }
             return base.CanEquipAccessory(item, player, slot);
         }
+
         public override void OpenVanillaBag(string context, Player player, int arg)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -101,9 +101,11 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         public override void UpdateEquip(Item item, Player player)
         {
         }
+
         public override void SetDefaults(Item item)
         {
             if (item.type == ItemID.CrossNecklace)
@@ -111,6 +113,7 @@ namespace ExpiryMode.Global_
                 item.SetNameOverride("Holy Pendant");
             }
         }
+
         public override bool UseItem(Item item, Player player)
         {
             if (item.healMana > 0)
@@ -119,6 +122,7 @@ namespace ExpiryMode.Global_
             }
             return false;
         }
+
         public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
             if (item.prefix == PrefixType<Warm>())
@@ -130,6 +134,7 @@ namespace ExpiryMode.Global_
                 player.statLifeMax2 += 50;
             }
         }
+
         public override bool CanUseItem(Item item, Player player)
         {
             if (item.healMana > 0)
@@ -141,9 +146,11 @@ namespace ExpiryMode.Global_
             }
             return true;
         }
+
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             #region Vanilla ItemTypes
+
             if (item.type == ItemID.ObsidianRose)
             {
                 foreach (TooltipLine line1 in tooltips)
@@ -244,8 +251,11 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
-            #endregion
+
+            #endregion Vanilla ItemTypes
+
             #region Mod ItemTypes
+
             if (Mod_.ExpiryModeMod.ShiftIsPressed.Current && item.type == ItemType<RunePlateBoots>())
             {
                 foreach (TooltipLine modLine1 in tooltips)
@@ -276,8 +286,11 @@ namespace ExpiryMode.Global_
                     }
                 }
             }
-            #endregion
+
+            #endregion Mod ItemTypes
+
             #region All Items
+
             if (item.prefix == PrefixType<Warm>())
             {
                 TooltipLine toolLine = new TooltipLine(mod, "Warm", "Immune to chills")
@@ -299,8 +312,10 @@ namespace ExpiryMode.Global_
                 TooltipLine expiryAdd = new TooltipLine(mod, "Expiry", "Expiry");
                 tooltips.Add(expiryAdd);
             }
-            #endregion
+
+            #endregion All Items
         }
+
         public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
         {
             if (item.rare == ExpiryRarity.AcidicRarity)
@@ -353,6 +368,7 @@ namespace ExpiryMode.Global_
             }
             return true;
         }
+
         public override void PostDrawTooltipLine(Item item, DrawableTooltipLine line)
         {
             if (item.rare == ExpiryRarity.AcidicRarity)
@@ -390,6 +406,7 @@ namespace ExpiryMode.Global_
             }
         }
     }
+
     public class ExpiryRarity : GlobalItem
     {
         public static int Expiry = 20;
@@ -397,6 +414,7 @@ namespace ExpiryMode.Global_
         public static int PrismaticRarity = 22;
         public static int VortexRarity = 23;
     }
+
     public class OnTerrariaHook : GlobalItem
     {
         public bool defAutoReuse;

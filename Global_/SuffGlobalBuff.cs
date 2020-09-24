@@ -1,12 +1,10 @@
-using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-using ExpiryMode.Mod_;
 
 namespace ExpiryMode.Global_
 {
-	public class SuffGlobalBuff : GlobalBuff
-	{
+    public class SuffGlobalBuff : GlobalBuff
+    {
         public override void Update(int type, Player player, ref int buffIndex)
         {
             /*if (Main.GameUpdateCount % 2 == 0)

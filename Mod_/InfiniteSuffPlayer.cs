@@ -1,66 +1,77 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.DataStructures;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader;
 using ExpiryMode.Buffs.BadBuffs;
 using ExpiryMode.Buffs.GoodBuffs;
-using System.Collections.Generic;
-using ExpiryMode.Items.Materials;
-using Terraria.GameInput;
-using ExpiryMode.Items.Useables;
-using ExpiryMode.Items.Fish.Quest;
-using System.Linq;
-using ExpiryMode.Util;
 using ExpiryMode.Global_;
+using ExpiryMode.Items.Fish.Quest;
+using ExpiryMode.Items.Materials;
+using ExpiryMode.Items.Useables;
+using ExpiryMode.Util;
+using System.Collections.Generic;
+using System.Linq;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameInput;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Mod_
 {
     public class InfiniteSuffPlayer : ModPlayer
     {
         public bool primeUtils = false;
+
         /// <summary>
         /// Determines whether the Prismatic Head is equipped.
         /// </summary>
         public bool accPrisHead = false;
+
         /// <summary>
         /// Determines whether the Prismatic Body is equipped.
         /// </summary>
         public bool accPrisBody = false;
+
         /// <summary>
         /// Determines whether the Prismatic Legs is equipped.
         /// </summary>
         public bool accPrisLegs = false;
+
         /// <summary>
         /// The # of Radiated Gravel
         /// </summary>
         public int DoomBlockCount = 0;
+
         /// <summary>
         /// Checks if the player is in the Radiation biome
         /// </summary>
         public bool ZoneRadiated = false;
+
         /// <summary>
         /// Checks if Expiry Mode is active
         /// </summary>
         public bool ExpiryModeIsActive = false;
+
         /// <summary>
         /// Checks if the player has the Bump Stock on their player/equipped
         /// </summary>
         public bool bumpStock = false;
+
         /// <summary>
         /// checks if the mechanical Scarf is equipped
         /// </summary>
         public bool mechScarf = false;
+
         /// <summary>
         /// Determines whether this item is a gun
         /// </summary>
         public bool isGun;
+
         public override void ResetEffects()
         {
             bumpStock = false;
             mechScarf = false;
             primeUtils = false;
         }
+
         public override bool PreItemCheck()
         {
             Item item = player.HeldItem;
@@ -82,6 +93,7 @@ namespace ExpiryMode.Mod_
             }
             return base.PreItemCheck();
         }
+
         public override float UseTimeMultiplier(Item item)
         {
             if (bumpStock && item.useAmmo == AmmoID.Bullet && !item.autoReuse)
@@ -93,6 +105,7 @@ namespace ExpiryMode.Mod_
                 return 1f;
             }
         }
+
         public static long GetSavings(Player player)
         {
             long inv = Utils.CoinsCount(out _, player.inventory, new int[]
@@ -115,12 +128,20 @@ namespace ExpiryMode.Mod_
                 forge
             });
         }
-        public override void ProcessTriggers(TriggersSet triggersSet) { }
-        public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff) { }
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+        }
+
+        public override void UpdateEquips(ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff)
+        {
+        }
+
         public override void UpdateBiomeVisuals()
         {
-             player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
+            player.ManageSpecialBiomeVisuals("InfniteSuffering:RadiatedBiomeSky", ZoneRadiated);
         }
+
         public override void ModifyNursePrice(NPC nurse, int health, bool removeDebuffs, ref int price)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -146,7 +167,8 @@ namespace ExpiryMode.Mod_
                     removeDebuffs = false;
                 }
             }
-        }   
+        }
+
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
             Item item1 = new Item();
@@ -156,10 +178,12 @@ namespace ExpiryMode.Mod_
             item2.SetDefaults(ItemType<ChaliceofDeath>(), false);
             items.Add(item2);
         }
+
         public override void UpdateBiomes()
         {
             ZoneRadiated = SuffWorld.DoomBlockCount >= 125;
         }
+
         public override void PostUpdate()
         {
             if (ZoneRadiated && player.whoAmI == Main.myPlayer)
@@ -192,6 +216,7 @@ namespace ExpiryMode.Mod_
             if (SuffWorld.ExpiryModeIsActive)
             {
                 #region AccessoryChecks
+
                 if (player.lavaRose || player.lavaCD > 0 || player.fireWalk)
                 {
                     player.ClearBuff(BuffType<AAAHHH>());
@@ -230,7 +255,8 @@ namespace ExpiryMode.Mod_
                     player.ClearBuff(BuffType<DoomLess>());
                 }
             }
-            #endregion
+
+            #endregion AccessoryChecks
         }
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
@@ -239,7 +265,6 @@ namespace ExpiryMode.Mod_
             {
                 playSound = false;
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/MinecraftOof"), player.Center);
-
             }
             else
             {
@@ -247,12 +272,15 @@ namespace ExpiryMode.Mod_
             }
             return true;
         }
+
         public override void PostUpdateMiscEffects()
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
                 player.breathMax = 100;
+
                 #region WetChecks
+
                 if (player.breath < 1 && player.wet && player.Center.Y <= Main.rockLayer * 16)
                 {
                     player.AddBuff(BuffType<WaterPain>(), 2);
@@ -265,9 +293,11 @@ namespace ExpiryMode.Mod_
                         player.gravity = 0f;
                     }
                 }
-                #endregion
+
+                #endregion WetChecks
             }
         }
+
         public override void PostUpdateBuffs()
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -281,15 +311,20 @@ namespace ExpiryMode.Mod_
                     player.buffImmune[BuffType<HeatStroke>()] = true;
                     player.buffImmune[BuffType<LesserHeatStroke>()] = true;
                 }
+
                 #region underground checks
+
                 if (player.ZoneDirtLayerHeight && !player.ZoneUnderworldHeight && player.Center.Y <= Main.rockLayer * 16)
                 {
                     player.gravity = .5f;
                     player.AddBuff(BuffType<GravityPlus>(), 2);
                     // Rectangle _ = new Rectangle(100, 100, 100, 100);
                 }
-                #endregion
+
+                #endregion underground checks
+
                 #region Cavern Gravity effects and more
+
                 if (player.Center.Y >= Main.rockLayer * 16 && player.breath < 1 && player.wet)
                 {
                     player.AddBuff(BuffType<WaterPainPlus>(), 2);
@@ -304,8 +339,11 @@ namespace ExpiryMode.Mod_
                     player.gravity = .65f;
                     player.AddBuff(BuffType<GravityPlusPlus>(), 2);
                 }
-                #endregion
+
+                #endregion Cavern Gravity effects and more
+
                 #region other debuffs
+
                 if (player.ZoneUnderworldHeight)
                 {
                     player.gravity = .8f;
@@ -375,8 +413,11 @@ namespace ExpiryMode.Mod_
                 {
                     player.AddBuff(BuffID.Chilled, 600);
                 }
-                #endregion
+
+                #endregion other debuffs
+
                 #region More Evil Debuffs
+
                 if (player.ZoneCrimson && player.ZoneBeach || player.ZoneCorrupt && player.ZoneBeach /* || player.ZoneCrimson && player.ZoneDesert || player.ZoneCorrupt && player.ZoneDesert*/)
                 {
                     player.buffImmune[BuffType<Refreshed>()] = true;
@@ -404,8 +445,11 @@ namespace ExpiryMode.Mod_
                 {
                     player.AddBuff(BuffType<Murky>(), 2);
                 }
-                #endregion
+
+                #endregion More Evil Debuffs
+
                 #region if this, dont do that thanks
+
                 if (player.ZoneDirtLayerHeight)
                 {
                     player.AddBuff(BuffID.Darkness, 2);
@@ -415,9 +459,11 @@ namespace ExpiryMode.Mod_
                 {
                     player.AddBuff(BuffID.Blackout, 2);
                 }
-                #endregion
+
+                #endregion if this, dont do that thanks
             }
         }
+
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             bool notKilledByNPC = damageSource.SourceNPCIndex <= 0;
@@ -484,11 +530,12 @@ namespace ExpiryMode.Mod_
                 return true;
             }
         }
+
         public override bool ModifyNurseHeal(NPC nurse, ref int health, ref bool removeDebuffs, ref string chatText)
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
-                if(Main.npc.Any(n => n.active && n.boss))
+                if (Main.npc.Any(n => n.active && n.boss))
                 {
                     chatText = "I'm too frightened by that boss to heal you!";
                     return false;
@@ -506,6 +553,7 @@ namespace ExpiryMode.Mod_
             }
             return base.ModifyNurseHeal(nurse, ref health, ref removeDebuffs, ref chatText);
         }
+
         public override void CatchFish(Item fishingRod, Item bait, int power, int liquidType, int poolSize, int worldLayer, int questFish, ref int caughtType, ref bool junk)
         {
             if (SuffWorld.ExpiryModeIsActive)

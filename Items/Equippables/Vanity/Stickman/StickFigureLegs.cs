@@ -20,6 +20,7 @@ namespace ExpiryMode.Items.Equippables.Vanity.Stickman
             item.rare = ItemRarityID.Orange;
             item.vanity = true;
         }
+
         public override bool DrawLegs()
         {
             return false;

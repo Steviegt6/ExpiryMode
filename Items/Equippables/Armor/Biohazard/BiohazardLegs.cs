@@ -1,6 +1,5 @@
 using ExpiryMode.Global_;
 using ExpiryMode.Items.Materials;
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -24,6 +23,7 @@ namespace ExpiryMode.Items.Equippables.Armor.Biohazard
             item.rare = ExpiryRarity.AcidicRarity;
             item.defense = 9;
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

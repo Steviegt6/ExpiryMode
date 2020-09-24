@@ -1,15 +1,13 @@
 using ExpiryMode.Buffs.MiscBuffs;
-using ExpiryMode.Items.Equippables.Accessories;
 using ExpiryMode.Items.Materials;
 using ExpiryMode.Mod_;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System.Linq;
-using System.Net;
 
 namespace ExpiryMode.Global_
 {
@@ -19,11 +17,13 @@ namespace ExpiryMode.Global_
         {
             return true;
         }
+
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
                 #region !Boss regen
+
                 if (!npc.boss && !npc.friendly && !Main.hardMode && !Main.expertMode)
                 {
                     npc.lifeRegen += 8;
@@ -40,8 +40,11 @@ namespace ExpiryMode.Global_
                 {
                     npc.lifeRegen += 24;
                 }
-                #endregion
+
+                #endregion !Boss regen
+
                 #region Boss Regen
+
                 if (npc.boss && !Main.hardMode && !Main.expertMode)
                 {
                     npc.lifeRegen += 6;
@@ -58,14 +61,17 @@ namespace ExpiryMode.Global_
                 {
                     npc.lifeRegen += 18;
                 }
-                #endregion
+
+                #endregion Boss Regen
             }
         }
+
         public override void BuffTownNPC(ref float damageMult, ref int defense)
         {
             defense += 10;
             damageMult = 1.3f;
         }
+
         public override void GetChat(NPC npc, ref string chat)
         {
             Mod thorium = ModLoader.GetMod("ThoriumMod");
@@ -154,6 +160,7 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         // TODO: ...Remember. Make drops for the bump stock after all this...
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
@@ -176,11 +183,13 @@ namespace ExpiryMode.Global_
             }
             return true;
         }
+
         public override void SetDefaults(NPC npc)
         {
             if (SuffWorld.ExpiryModeIsActive)
             {
-            #region NPC Life Scaling
+                #region NPC Life Scaling
+
                 if (Main.hardMode && !Main.expertMode && !npc.friendly)
                 {
                     npc.lifeMax = (int)(npc.lifeMax * 1.8f);
@@ -198,8 +207,11 @@ namespace ExpiryMode.Global_
                     npc.lifeMax = (int)(npc.lifeMax * 1.6f);
                 }
             }
-            #endregion
+
+            #endregion NPC Life Scaling
+
             #region NPC Defense Scaling (Not Much)
+
             if (SuffWorld.ExpiryModeIsActive)
             {
                 if (Main.hardMode && !Main.expertMode && !npc.friendly)
@@ -219,14 +231,19 @@ namespace ExpiryMode.Global_
                     npc.defense = (int)(npc.defense * 1.1f);
                 }
             }
-            #endregion
+
+            #endregion NPC Defense Scaling (Not Much)
+
             #region BuffImmune
+
             if (npc.boss || npc.type == NPCID.GolemHead || npc.type == NPCID.GolemFistLeft || npc.type == NPCID.GolemFistRight || npc.type == NPCID.SolarCrawltipedeTail)
             {
                 npc.buffImmune[BuffType<Paralysis>()] = true;
             }
-            #endregion
+
+            #endregion BuffImmune
         }
+
         public override void PostAI(NPC npc)
         {
             if (npc.boss)
@@ -255,6 +272,7 @@ namespace ExpiryMode.Global_
                 npc.ai[1] = -1f;
             }*/
         }
+
         public override bool PreAI(NPC npc)
         {
             if (!npc.boss && npc.HasBuff(BuffType<Paralysis>()))
@@ -266,6 +284,7 @@ namespace ExpiryMode.Global_
                 return true;
             }
         }
+
         public override void ModifyHitPlayer(NPC npc, Player target, ref int damage, ref bool crit)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -288,6 +307,7 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         /*public override bool PreNPCLoot(NPC npc)
         {
             if (npc.type == NPCID.Bunny)
@@ -376,6 +396,7 @@ namespace ExpiryMode.Global_
             }
             return true;
         }*/
+
         public override void NPCLoot(NPC npc)
         {
             Player player = Main.player[Main.myPlayer];
@@ -387,6 +408,7 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {
             if (SuffWorld.ExpiryModeIsActive)
@@ -403,13 +425,15 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         public override bool Autoload(ref string name)
         {
             return mod.Properties.Autoload;
         }
     }
 }
+
 /* Ideas for drops:
 Duke Fishron: Sharknado Staff
-Eye of Cthulhu: 
+Eye of Cthulhu:
 */

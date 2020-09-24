@@ -8,32 +8,35 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Equippables.Armor.Biohazard
 {
-	[AutoloadEquip(EquipType.Head)]
-	public class BiohazardHead : ModItem
-	{
-		public override void SetStaticDefaults() 
+    [AutoloadEquip(EquipType.Head)]
+    public class BiohazardHead : ModItem
+    {
+        public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Reinforced Hazmat Mask");
-			Tooltip.SetDefault("Allows breathing in space\n'Fresh air > Breathing Despair'");
-		}
+            DisplayName.SetDefault("Reinforced Hazmat Mask");
+            Tooltip.SetDefault("Allows breathing in space\n'Fresh air > Breathing Despair'");
+        }
 
-		public override void SetDefaults() 
+        public override void SetDefaults()
         {
-			item.width = 18;
-			item.height = 18;
-			item.value = 12342;
+            item.width = 18;
+            item.height = 18;
+            item.value = 12342;
             item.rare = ExpiryRarity.AcidicRarity;
             item.defense = 10;
-		}
+        }
+
         public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
         {
             drawHair = false;
             drawAltHair = false;
         }
+
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
             return legs.type == ItemType<BiohazardLegs>() && body.type == ItemType<BiohazardBody>();
         }
+
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "Completely Immune to all radiation effects\n5% damage increase to all damage types";
@@ -45,19 +48,21 @@ namespace ExpiryMode.Items.Equippables.Armor.Biohazard
             player.ClearBuff(BuffType<AbsoluteDoom>());
             player.ClearBuff(BuffType<RadiatedWater>());
         }
+
         public override void UpdateEquip(Player player)
         {
             player.buffImmune[BuffType<CantBreathe>()] = true;
         }
-        public override void AddRecipes() 
+
+        public override void AddRecipes()
         {
-			ModRecipe recipe = new ModRecipe(mod);
+            ModRecipe recipe = new ModRecipe(mod);
             recipe.AddRecipeGroup(RecipeGroupID.IronBar, 8);
             recipe.AddIngredient(ItemType<RadianiteBarItem>(), 12);
             recipe.AddIngredient(ItemType<RadioactiveSoulThingy>(), 4);
             recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
+    }
 }

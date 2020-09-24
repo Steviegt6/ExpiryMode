@@ -3,13 +3,14 @@ using Terraria.ModLoader;
 
 namespace ExpiryMode.Items.Equippables.Vanity.Stickman
 {
-	[AutoloadEquip(EquipType.Body)]
-	public class StickFigureBody : ModItem
-	{
-		public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Stickman Body");
-			Tooltip.SetDefault("Unobtainable (Legitamately)");
-		}
+    [AutoloadEquip(EquipType.Body)]
+    public class StickFigureBody : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Stickman Body");
+            Tooltip.SetDefault("Unobtainable (Legitamately)");
+        }
 
         public override void SetDefaults()
         {
@@ -19,6 +20,7 @@ namespace ExpiryMode.Items.Equippables.Vanity.Stickman
             item.rare = ItemRarityID.Orange;
             item.vanity = true;
         }
+
         public override bool DrawBody()
         {
             return false;

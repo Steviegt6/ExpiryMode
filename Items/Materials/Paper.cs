@@ -4,13 +4,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Materials
 {
-	public class Paper : ModItem
-	{
-		public override void SetStaticDefaults() 
-		{
-			DisplayName.SetDefault("Paper");
-			Tooltip.SetDefault($"Looks like a doctor wrote it");
-		}
+    public class Paper : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Paper");
+            Tooltip.SetDefault($"Looks like a doctor wrote it");
+        }
 
         public override void SetDefaults()
         {
@@ -19,6 +19,7 @@ namespace ExpiryMode.Items.Materials
             item.rare = ItemRarityID.White;
             item.maxStack = 999;
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

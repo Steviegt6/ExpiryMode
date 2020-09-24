@@ -1,14 +1,12 @@
+using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Buffs.MiscBuffs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
 using static Terraria.Dust;
-using ExpiryMode.Buffs.MiscBuffs;
-using Terraria.Graphics.Shaders;
-using ExpiryMode.Buffs.BadBuffs;
-using System;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Projectiles
 {
@@ -18,6 +16,7 @@ namespace ExpiryMode.Projectiles
         {
             DisplayName.SetDefault("Radiant Bullet");
         }
+
         public override void SetDefaults()
         {
             Player player = Main.player[Main.myPlayer];
@@ -34,6 +33,7 @@ namespace ExpiryMode.Projectiles
             projectile.knockBack = 2;
             projectile.arrow = true;
         }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate--;
@@ -46,9 +46,10 @@ namespace ExpiryMode.Projectiles
                 dust.noGravity = true;
                 dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
             }
-            projectile.Kill();  
+            projectile.Kill();
             return false;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Dust dust;
@@ -63,6 +64,7 @@ namespace ExpiryMode.Projectiles
             target.AddBuff(BuffType<Paralysis>(), 30);
             target.AddBuff(BuffType<RadiatedWater>(), 30);
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffType<RadiatedWater>(), 30, false);
@@ -76,6 +78,7 @@ namespace ExpiryMode.Projectiles
                 dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
             }
         }
+
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffType<RadiatedWater>(), 30, false);
@@ -89,6 +92,7 @@ namespace ExpiryMode.Projectiles
                 dust.shader = GameShaders.Armor.GetSecondaryShader(61, Main.LocalPlayer);
             }
         }
+
         public override void AI()
         {
             projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;

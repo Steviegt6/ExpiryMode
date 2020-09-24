@@ -1,13 +1,15 @@
-﻿using Terraria.ModLoader.Config;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Terraria.ModLoader.Config;
 
 namespace ExpiryMode.Mod_
 {
-	[Label("Expiry Mode Client Changes")]
+    [Label("Expiry Mode Client Changes")]
     public class ExpiryConfigClientSide : ModConfig
     {
         #region Meme Settings
+
         public override ConfigScope Mode => ConfigScope.ClientSide;
+
         [Header("Funny Configuration Settings")]
         [Label("Skeletron PogChamp")]
         [DefaultValue(false)]
@@ -28,22 +30,26 @@ namespace ExpiryMode.Mod_
         [DefaultValue(false)]
         [Tooltip("Turn King Slime into pinky")]
         public bool pinkySlimeKing;
-        #endregion
+
+        #endregion Meme Settings
 
         #region Overrides
+
         [Header("Overrides")]
         [Label("Change the Main Menu music")]
         [DefaultValue(true)]
         [ReloadRequired]
         [Tooltip("Toggle off to disable the music change. After changing this config, you must reload.\nIf any mods that change the menu music are enabled, this config will not affect anything.")]
         public bool MusicChange;
-        #endregion
+
+        #endregion Overrides
 
         /// <summary>
         /// Change Biome Brightness!
         /// </summary>
 
         #region QoL Config
+
         [Header("QoL Config")]
         [Label("Radiance Darkness")]
         [DefaultValue(true)]
@@ -56,13 +62,17 @@ namespace ExpiryMode.Mod_
         [ReloadRequired]
         [Tooltip("Toggles the annoying cough the player does when suffocating (Yes, this makes no logical sense).")]
         public bool noCough;
-        #endregion
+
+        #endregion QoL Config
     }
-	[Label("Expiry Mode Server Changes")]
+
+    [Label("Expiry Mode Server Changes")]
     public class ExpiryConfigServerSide : ModConfig
     {
         #region Difficulty Enhancers
+
         public override ConfigScope Mode => ConfigScope.ServerSide;
+
         [Header("[c/FF0000:Difficulty Enhancers]")]
         [Label("Good Biome Buffs")]
         [DefaultValue(true)]
@@ -79,6 +89,7 @@ namespace ExpiryMode.Mod_
         [DefaultValue(true)]
         [Tooltip("Toggles the death counter that displays after every death.")]
         public bool trackDeathCounter;
-        #endregion
+
+        #endregion Difficulty Enhancers
     }
 }

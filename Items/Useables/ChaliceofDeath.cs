@@ -1,23 +1,21 @@
+using ExpiryMode.Mod_;
+using Microsoft.Xna.Framework;
+using System.Linq;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using ExpiryMode.Mod_;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 
 namespace ExpiryMode.Items.Useables
 {
-	public class ChaliceofDeath : ModItem
-	{
+    public class ChaliceofDeath : ModItem
+    {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Chalice of Demise");
             Tooltip.SetDefault("HahaFunny");
             //Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(4, 7)); // Note: TicksPerFrame, Frames
         }
+
         /// <summary>
         /// Where the gayass properties are set.
         /// </summary>
@@ -32,8 +30,9 @@ namespace ExpiryMode.Items.Useables
             item.UseSound = SoundID.Item119;
             item.autoReuse = false;
             //item.noUseGraphic = true;
-            //item.shoot = ProjectileType<Projectiles.ChaliceOfDeath>();  
+            //item.shoot = ProjectileType<Projectiles.ChaliceOfDeath>();
         }
+
         /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             //return spriteBatch.Draw(GetTexture("ExpiryMode/Items/Useables/ChaliceofDeathAnim"), )
@@ -45,9 +44,10 @@ namespace ExpiryMode.Items.Useables
             }
             return true;
         }*/
+
         public override bool UseItem(Player player)
         {
-			if (!SuffWorld.ExpiryModeIsActive)
+            if (!SuffWorld.ExpiryModeIsActive)
             {
                 SuffWorld.ExpiryModeIsActive = true;
                 if (Main.netMode == NetmodeID.Server)
@@ -57,11 +57,12 @@ namespace ExpiryMode.Items.Useables
                 }
                 Main.NewText("Expiry Mode has been enabled. Be ready for some real hell.", Color.DarkOrange, true);
             }
-			return true;
+            return true;
         }
-		public override bool CanUseItem(Player player)
-		{
+
+        public override bool CanUseItem(Player player)
+        {
             return Main.expertMode && !Main.npc.Any(n => n.active && n.boss) && !SuffWorld.ExpiryModeIsActive;
         }
-	}
+    }
 }

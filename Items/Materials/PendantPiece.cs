@@ -1,18 +1,18 @@
+using System.Collections.Generic;
+using System.Linq;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ExpiryMode.Items.Materials
 {
-	public class PendantPiece : ModItem
-	{
-		public override void SetStaticDefaults() 
-		{
-			DisplayName.SetDefault("Pendant Piece");
-			Tooltip.SetDefault("Material\nIt could be used for something good...");
-		}
+    public class PendantPiece : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Pendant Piece");
+            Tooltip.SetDefault("Material\nIt could be used for something good...");
+        }
 
         public override void SetDefaults()
         {
@@ -21,6 +21,7 @@ namespace ExpiryMode.Items.Materials
             item.rare = ItemRarityID.Yellow;
             item.maxStack = 1;
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
@@ -29,6 +30,7 @@ namespace ExpiryMode.Items.Materials
             recipe.SetResult(ItemID.CrossNecklace);
             recipe.AddRecipe();
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             // Get the vanilla damage tooltip
@@ -44,5 +46,5 @@ namespace ExpiryMode.Items.Materials
                 tt.text = "[c/00FF00:(Exotic Artifact)]";
             }
         }
-        }
+    }
 }

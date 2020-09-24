@@ -1,31 +1,31 @@
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
-using static Terraria.Main;
-using System;
-using Terraria.Localization;
-using Terraria.ID;
+using ExpiryMode.Global_;
 using ExpiryMode.Items.Blocks;
+using ExpiryMode.Items.Misc;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using ReLogic.Graphics;
-using System.Diagnostics;
-using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Items.Misc;
-using Mono.Cecil.Cil;
-using static ExpiryMode.Mod_.SuffWorld;
-using Terraria.ModLoader.Audio;
-using System.Threading;
-using System.Reflection;
-using Terraria.ModLoader.Config;
-using System.IO;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Audio;
+using Terraria.ModLoader.Config;
 using Terraria.UI.Chat;
-using ExpiryMode.Global_;
+using static ExpiryMode.Mod_.SuffWorld;
+using static Terraria.Main;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Mod_
 {
@@ -35,7 +35,12 @@ namespace ExpiryMode.Mod_
         private ManualResetEvent titleMusicStopped;
         private int customTitleMusicSlot;
         public static int[] itemRarity;
-        public ExpiryModeMod() { GetInstance<ExpiryModeMod>(); }
+
+        public ExpiryModeMod()
+        {
+            GetInstance<ExpiryModeMod>();
+        }
+
         private void TitleMusicIL(ILContext il)
         {
             ILCursor ilcursor = new ILCursor(il);
@@ -53,6 +58,7 @@ namespace ExpiryMode.Mod_
                 return customTitleMusicSlot;
             });
         }
+
         private void MenuMusicSet()
         {
             if (GetInstance<ExpiryConfigClientSide>().MusicChange)
@@ -61,6 +67,7 @@ namespace ExpiryMode.Mod_
                 IL.Terraria.Main.UpdateAudio += new ILContext.Manipulator(TitleMusicIL);
             }
         }
+
         public override void PostSetupContent()
         {
             if (ModLoader.GetMod("TerrariaOverhaul") == null && ModLoader.GetMod("MusicForOnePointFour") == null)
@@ -68,6 +75,7 @@ namespace ExpiryMode.Mod_
                 MenuMusicSet();
             }
         }
+
         public override void Close()
         {
             int soundSlot = GetSoundSlot((SoundType)51, "Sounds/Music/CreepyMusic");
@@ -81,6 +89,7 @@ namespace ExpiryMode.Mod_
             }
             base.Close();
         }
+
         internal static void HookMenuSplash(ILContext il)
         {
             var c = new ILCursor(il).Goto(0);
@@ -88,6 +97,7 @@ namespace ExpiryMode.Mod_
                 return;
             c.Emit(OpCodes.Call, typeof(ExpiryModeMod).GetMethod("DrawSplashText"));
         }
+
         public static void DrawSplashText()
         {
             for (int textIndex = 0; textIndex < 5; textIndex++)
@@ -170,6 +180,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "BiomeSouls", new int[] { ItemID.SoulofLight, ItemID.SoulofNight });
@@ -181,9 +192,17 @@ namespace ExpiryMode.Mod_
                 group.ValidItems.Add(ModContent.ItemType<IrridiatedWood>());
             }
         }
+
         public static ModHotKey ShiftIsPressed;
-        public override void AddRecipes() { }
-        public override void PostUpdateEverything() { }
+
+        public override void AddRecipes()
+        {
+        }
+
+        public override void PostUpdateEverything()
+        {
+        }
+
         public override void Unload()
         {
             ShiftIsPressed = null;
@@ -197,6 +216,7 @@ namespace ExpiryMode.Mod_
             }
             titleMusicStopped = null;
         }
+
         public override void Load()
         {
             /*On.Terraria.Projectile.SetDefaults += Projectile_SetDefaults;*/ // Potential Method swap for later, idk
@@ -350,21 +370,27 @@ namespace ExpiryMode.Mod_
                 default:
                     ScreenLoadChance = "tModLoader: Ever heard of a guy called pollen__?";
                     break;
+
                 case 1:
                     ScreenLoadChance = "tModLoader: You've Been Distracted!";
                     break;
+
                 case 2:
                     ScreenLoadChance = "tModLoader: Close the application";
                     break;
+
                 case 3:
                     ScreenLoadChance = "tStandalone: Wait, wrong app";
                     break;
+
                 case 4:
                     ScreenLoadChance = "tModLoader: what.ogg is the best song";
                     break;
+
                 case 5:
                     ScreenLoadChance = "tModLoader_1.4.0.5: Wait, wrong version";
                     break;
+
                 case 6:
                     if (ModLoader.GetMod("CalamityMod") != null)
                         ScreenLoadChance = "tModLoader: Calamity isn't really that good";
@@ -372,6 +398,7 @@ namespace ExpiryMode.Mod_
             }
             return ScreenLoadChance;
         }
+
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
             Player player = Main.player[myPlayer];
@@ -406,7 +433,6 @@ namespace ExpiryMode.Mod_
                 }
                 if (GetInstance<ExpiryConfigClientSide>().MusicChange)
                 {
-
                 }
                 customTitleMusicSlot = 6;
                 Music music2 = GetMusic("Sounds/Music/CreepyMusic");
@@ -418,6 +444,7 @@ namespace ExpiryMode.Mod_
                 stopTitleMusic = false;
             }
         }
+
         /// <summary>
         /// Saves the config of the said mod config file.
         /// </summary>
@@ -434,6 +461,7 @@ namespace ExpiryMode.Mod_
                 return;
             }
         }
+
         public override void PreSaveAndQuit()
         {
             if (ModLoader.GetMod("TerrariaOverhaul") == null && ModLoader.GetMod("CalamityModMusic") == null && ModLoader.GetMod("MusicFromOnePointFour") == null)
@@ -445,6 +473,7 @@ namespace ExpiryMode.Mod_
                 return;
             }
         }
+
         public override void ModifyLightingBrightness(ref float scale)
         {
             Player player = Main.player[myPlayer];
@@ -470,8 +499,8 @@ namespace ExpiryMode.Mod_
                     }
                 }
             }
-
         }
+
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             DeathCountMessageType packetID = (DeathCountMessageType)reader.ReadByte();
@@ -481,6 +510,7 @@ namespace ExpiryMode.Mod_
                 case DeathCountMessageType.PlayerSync:
                     player[playerID].GetModPlayer<DeathCountPlayer>().playerDeathCount = reader.ReadInt32();
                     break;
+
                 case DeathCountMessageType.PlayerValueChange:
                     int deathCount = reader.ReadInt32();
                     player[playerID].GetModPlayer<DeathCountPlayer>().playerDeathCount = deathCount;
@@ -492,7 +522,7 @@ namespace ExpiryMode.Mod_
                         pack.Write(deathCount);
                         pack.Send(-1, playerID);
                     }
-                break;
+                    break;
             }
         }
 
@@ -781,6 +811,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         private void ItemText_Update(On.Terraria.ItemText.orig_Update orig, ItemText self, int whoAmI)
         {
             if (!itemText[whoAmI].active)
@@ -883,11 +914,13 @@ namespace ExpiryMode.Mod_
             }
         }
     }
+
     internal enum DeathCountMessageType : byte
     {
         PlayerSync,
         PlayerValueChange,
     }
+
     public class KillCommand : ModCommand
     {
         public override CommandType Type
@@ -921,6 +954,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public class HurtSelf : ModCommand
         {
             public override CommandType Type
@@ -962,6 +996,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public class SetMaxLife : ModCommand
         {
             public override CommandType Type
@@ -1003,6 +1038,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         /// <summary>
         /// Enables and disables Expiry Mode upon use with the debugging item in your inventory.
         /// </summary>
@@ -1039,6 +1075,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public class Heal : ModCommand
         {
             public override CommandType Type
@@ -1065,6 +1102,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public class BlackJack : ModCommand
         {
             public override CommandType Type
@@ -1138,6 +1176,7 @@ namespace ExpiryMode.Mod_
                 }
             }
         }
+
         public class DeathCount : ModCommand
         {
             public override CommandType Type

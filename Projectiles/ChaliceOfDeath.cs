@@ -1,15 +1,8 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
-using static Terraria.Dust;
-using ExpiryMode.Buffs.MiscBuffs;
-using Terraria.Graphics.Shaders;
-using ExpiryMode.Buffs.BadBuffs;
-using ExpiryMode.Items.Useables;
-using System;
 
 namespace ExpiryMode.Projectiles
 {
@@ -20,6 +13,7 @@ namespace ExpiryMode.Projectiles
             DisplayName.SetDefault("Chalice of Death");
             Main.projFrames[projectile.type] = 7; // Define frames
         }
+
         public override void SetDefaults()
         {
             projectile.width = 32;
@@ -27,6 +21,7 @@ namespace ExpiryMode.Projectiles
             projectile.friendly = true;
             projectile.timeLeft = 60;
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Rectangle frame = new Rectangle(0, projectile.frame * 62, 32, 62);
@@ -37,8 +32,9 @@ namespace ExpiryMode.Projectiles
                 new Vector2(18, 36) / 2,
                 projectile.scale,
                 projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-            return false; // Return false to stop drawing more 
+            return false; // Return false to stop drawing more
         }
+
         public override void AI()
         {
             if (++projectile.frameCounter >= 3)
@@ -49,7 +45,7 @@ namespace ExpiryMode.Projectiles
                     projectile.frame = 0;
                 }
             }
-			Player player = Main.player[projectile.owner];
+            Player player = Main.player[projectile.owner];
             Vector2 center = player.RotatedRelativePoint(player.itemLocation, true);
 
             projectile.Center = center;
@@ -60,6 +56,6 @@ namespace ExpiryMode.Projectiles
             player.itemTime = 2;
             player.itemAnimation = 2;
             player.itemRotation = (projectile.velocity * projectile.direction).ToRotation();
-		}
+        }
     }
 }

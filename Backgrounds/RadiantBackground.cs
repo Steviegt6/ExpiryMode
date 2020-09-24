@@ -39,12 +39,10 @@ namespace ExpiryMode.Backgrounds
             return mod.GetBackgroundSlot("Backgrounds/RadiantFar");    //this is the surface biome far bg
         }
 
-
         public override int ChooseMiddleTexture()
         {
             return mod.GetBackgroundSlot("Backgrounds/RadiantMedium");      //this is the surface biome middle gackground
         }
-
 
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {

@@ -1,17 +1,17 @@
-using Terraria.ID;
+using ExpiryMode.Items.Materials;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria.Enums;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using ExpiryMode.Items.Materials;
 
 namespace ExpiryMode.Tiles
 {
-	public class RadianiteBar : ModTile
-	{
+    public class RadianiteBar : ModTile
+    {
         public override void SetDefaults()
         {
             Main.tileShine[Type] = 1100;
@@ -26,6 +26,7 @@ namespace ExpiryMode.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             //TileObjectData.addTile(Type);
         }
+
         public override bool Drop(int i, int j)
         {
             if (Main.tile[i, j].frameX / 18 == 0)
@@ -34,6 +35,7 @@ namespace ExpiryMode.Tiles
             }
             return base.Drop(i, j);
         }
+
         public override bool CreateDust(int i, int j, ref int type)
         {
             if (Main.rand.Next(1) == 0)
@@ -46,11 +48,12 @@ namespace ExpiryMode.Tiles
             }
             return false;
         }
+
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-		{
-			r = 0.0f;
-			g = 0.0f;
-			b = 0.0f;
-		}
-	}
+        {
+            r = 0.0f;
+            g = 0.0f;
+            b = 0.0f;
+        }
+    }
 }

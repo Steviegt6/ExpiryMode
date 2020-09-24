@@ -2,7 +2,7 @@ using ExpiryMode.Tiles.Decoration;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
- 
+
 namespace ExpiryMode.Items.Decoration
 {
     public class BiohazardContainer : ModItem
@@ -11,6 +11,7 @@ namespace ExpiryMode.Items.Decoration
         {
             Tooltip.SetDefault("Labeled: 'Extremely Dangerous'\nDEVNOTE: Tile does not properly drop.");
         }
+
         public override void SetDefaults()
         {
             item.width = 28;
@@ -25,7 +26,7 @@ namespace ExpiryMode.Items.Decoration
             item.value = 150;
             item.createTile = TileType<BiohazardBarrel>();
         }
- 
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

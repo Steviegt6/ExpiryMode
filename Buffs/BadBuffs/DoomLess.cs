@@ -1,10 +1,5 @@
-using ExpiryMode.Mod_;
-using System;
-using System.Security.Cryptography.X509Certificates;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Buffs.BadBuffs
 {
@@ -19,6 +14,7 @@ namespace ExpiryMode.Buffs.BadBuffs
             Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.lifeRegenTime = 0;
@@ -32,6 +28,7 @@ namespace ExpiryMode.Buffs.BadBuffs
                 player.lifeRegen = 0;
             }
         }
+
         /*public class DoomedPlayer : ModPlayer
         {
             public override void PostUpdateBuffs()

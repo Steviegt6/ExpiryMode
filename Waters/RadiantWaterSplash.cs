@@ -1,6 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
- 
+
 namespace ExpiryMode.Waters
 {
     public class RadiantWaterSplash : ModDust
@@ -9,6 +9,7 @@ namespace ExpiryMode.Waters
         {
             updateType = 33; // Copy defaults of another DustID
         }
+
         public override void OnSpawn(Dust dust)
         {
             dust.alpha = 170; // The higher you go with this field, the more transparent the dust gets

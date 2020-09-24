@@ -1,6 +1,4 @@
-using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ExpiryMode.Buffs.BadBuffs
@@ -17,6 +15,7 @@ namespace ExpiryMode.Buffs.BadBuffs
             canBeCleared = false;
             Main.pvpBuff[Type] = true;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.lifeRegen > 0)
@@ -24,13 +23,13 @@ namespace ExpiryMode.Buffs.BadBuffs
             player.lifeRegen -= 40;
             player.statDefense = 0;
         }
+
         public override void Update(NPC npc, ref int buffIndex)
         {
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
             npc.lifeRegen -= 90;
             npc.defense = 0;
-            
         }
     }
 }

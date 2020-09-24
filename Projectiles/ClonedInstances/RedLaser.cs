@@ -1,11 +1,9 @@
-using Terraria;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
 namespace ExpiryMode.Projectiles.ClonedInstances
 {
-    class RedLaser : ModProjectile
+    internal class RedLaser : ModProjectile
     {
         public override void SetStaticDefaults()
         {

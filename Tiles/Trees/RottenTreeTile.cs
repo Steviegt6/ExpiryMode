@@ -6,7 +6,7 @@ using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
- 
+
 namespace ExpiryMode.Tiles.Trees
 {
     public class RottenTreeTile : ModTile
@@ -34,6 +34,7 @@ namespace ExpiryMode.Tiles.Trees
             AddMapEntry(new Color(200, 200, 0));
             adjTiles = new int[] { TileID.Saplings };
         }
+
         public override void RandomUpdate(int i, int j)
         {
             if (WorldGen.genRand.Next(20) == 0)
@@ -46,6 +47,7 @@ namespace ExpiryMode.Tiles.Trees
                 }
             }
         }
+
         public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects)
         {
             if (i % 2 == 1)

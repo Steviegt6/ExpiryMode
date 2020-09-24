@@ -1,11 +1,11 @@
-using System;
+using ExpiryMode.Buffs.BadBuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.Graphics.Shaders;
-using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Projectiles
 {
@@ -17,6 +17,7 @@ namespace ExpiryMode.Projectiles
             Main.projFrames[projectile.type] = 8; // Define frames
             Main.frameRate = 6;
         }
+
         public override void SetDefaults()
         {
             projectile.width = 22;
@@ -33,6 +34,7 @@ namespace ExpiryMode.Projectiles
             drawOriginOffsetY = -20;
             projectile.ranged = true;
         }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate--;
@@ -59,12 +61,11 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
             return false;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             projectile.penetrate--;
@@ -89,11 +90,10 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
         }
+
         public override void Kill(int timeLeft)
         {
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/Pop"), projectile.position);
@@ -115,6 +115,7 @@ namespace ExpiryMode.Projectiles
                 }
             }
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffType<RadiatedWater>(), 120, false);
@@ -139,11 +140,10 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
         }
+
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffType<RadiatedWater>(), 120, false);
@@ -170,17 +170,17 @@ namespace ExpiryMode.Projectiles
                         dust = Main.dust[Terraria.Dust.NewDust(position, 30, 30, 73, 0f, 0f, 0, new Color(255, 0, 0), 1f)];
                         dust.shader = GameShaders.Armor.GetSecondaryShader(56, Main.LocalPlayer);
                     }
-
                 }
-
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Rectangle frame = new Rectangle(0, projectile.frame * 72, 56, 72);
             spriteBatch.Draw(GetTexture("ExpiryMode/Projectiles/BiohazardBird"), projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition, frame, lightColor, projectile.rotation + (float)0.1 * projectile.spriteDirection, new Vector2(56, 72) / 2, projectile.scale, projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
-            return false; // Return false to stop drawing more 
+            return false; // Return false to stop drawing more
         }
+
         public override void AI()
         {
             if (++projectile.frameCounter >= 5)
@@ -227,6 +227,7 @@ namespace ExpiryMode.Projectiles
         }
     }
 }
+
 /*
 	Dust dust;
 	// You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.

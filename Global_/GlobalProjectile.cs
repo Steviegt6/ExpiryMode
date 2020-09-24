@@ -1,10 +1,8 @@
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using ExpiryMode.Mod_;
-using log4net.Util;
-using System.Security.Policy;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ExpiryMode.Global_
 {
@@ -22,18 +20,21 @@ namespace ExpiryMode.Global_
                 if (projectile.type == ProjectileID.MiniSharkron && projectile.type == ProjectileID.Sharknado)
             }
         }*/
+
         // ask 4mbr0s3 2 for help here :ech:
         public override void SetDefaults(Projectile projectile)
         {
         }
+
         public override bool CanHitPlayer(Projectile projectile, Player target)
         {
             if (projectile.owner == Main.myPlayer)
             {
-                 return false;
+                return false;
             }
             return base.CanHitPlayer(projectile, target);
         }
+
         public override void PostAI(Projectile projectile)
         {
             if (projectile.owner == Main.myPlayer)
@@ -43,6 +44,7 @@ namespace ExpiryMode.Global_
             }
             base.PostAI(projectile);
         }
+
         public override void ModifyHitPlayer(Projectile projectile, Player target, ref int damage, ref bool crit)
         {
             if (projectile.type == ProjectileID.PhantasmalDeathray)
@@ -50,6 +52,7 @@ namespace ExpiryMode.Global_
                 damage = 999999;
             }
         }
+
         public override void Kill(Projectile projectile, int timeLeft)
         {
             int numBees = Main.rand.Next(1, 4);
@@ -67,10 +70,12 @@ namespace ExpiryMode.Global_
                 }
             }
         }
+
         public override bool? CanHitNPC(Projectile projectile, NPC target)
         {
             return base.CanHitNPC(projectile, target);
         }
+
         public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
         {
             if (Main.player[Main.myPlayer].GetModPlayer<InfiniteSuffPlayer>().bumpStock && projectile.type == ProjectileID.Bullet)
@@ -87,6 +92,7 @@ namespace ExpiryMode.Global_
             }
         }
     }
+
     public class MakeFriendly : GlobalProjectile
     {
         public override bool CloneNewInstances => true;

@@ -1,18 +1,19 @@
+using ExpiryMode.Items.Blocks;
+using ExpiryMode.Tiles;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ExpiryMode.Tiles;
 using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Items.Blocks;
 
 namespace ExpiryMode.Items.Materials
 {
-	public class RadianiteBarItem : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
+    public class RadianiteBarItem : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
             DisplayName.SetDefault("Radianite Bar");
-			Tooltip.SetDefault("Gleams with radioactive energy");
-		}
+            Tooltip.SetDefault("Gleams with radioactive energy");
+        }
+
         public override void SetDefaults()
         {
             item.width = 16;
@@ -28,6 +29,7 @@ namespace ExpiryMode.Items.Materials
             item.rare = ItemRarityID.LightRed;
             item.value = 12500;
         }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

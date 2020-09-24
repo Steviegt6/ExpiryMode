@@ -1,20 +1,21 @@
+using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Util;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Buffs.BadBuffs;
-using Microsoft.Xna.Framework;
-using ExpiryMode.Util;
 
 namespace ExpiryMode.NPCs
 {
-	public class RadioactiveZombie : ModNPC
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Radioactive Zombie");
-			Main.npcFrameCount[npc.type] = Main.npcFrameCount[16];
-		}
+    public class RadioactiveZombie : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Radioactive Zombie");
+            Main.npcFrameCount[npc.type] = Main.npcFrameCount[16];
+        }
+
         public override void SetDefaults()
         {
             npc.buffImmune[BuffType<RadiatedWater>()] = true;
@@ -44,6 +45,7 @@ namespace ExpiryMode.NPCs
                 npc.knockBackResist = .15f;
             }
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             if (!Main.hardMode)
@@ -55,10 +57,12 @@ namespace ExpiryMode.NPCs
                 target.AddBuff(BuffType<RadiatedWater>(), 300);
             }
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
-		{
-			return spawnInfo.player.GetModPlayer<Mod_.InfiniteSuffPlayer>().ZoneRadiated && !Main.dayTime ? .8f : 0f;
-		}
+        {
+            return spawnInfo.player.GetModPlayer<Mod_.InfiniteSuffPlayer>().ZoneRadiated && !Main.dayTime ? .8f : 0f;
+        }
+
         public override void FindFrame(int frameHeight)
         {
             if (npc.frame.Y / npc.frame.Height > 15)
@@ -71,6 +75,7 @@ namespace ExpiryMode.NPCs
             npc.frame.Y = frame * frameHeight;
             npc.spriteDirection = npc.direction;*/
         }
+
         public override void HitEffect(int hitDirection, double damage)
         {
             Dust dust;
@@ -90,8 +95,8 @@ namespace ExpiryMode.NPCs
                 dust = Main.dust[Terraria.Dust.NewDust(npc.Center, 30, 30, 275, npc.direction * -1, -1f * (npc.direction * -1), 0, new Color(8, 255, 0), 1f)];
                 dust = Main.dust[Terraria.Dust.NewDust(npc.Center, 30, 30, 275, npc.direction * -1, -1f * (npc.direction * -1), 0, new Color(8, 255, 0), 1f)];
             }
-
         }
+
         /*public override void NPCLoot()
 		{
             if (Main.rand.Next(1) == 1)
@@ -107,5 +112,5 @@ namespace ExpiryMode.NPCs
 			if (Main.rand.Next(6) == 1)
 				Item.NewItem(npc.getRect(), ItemID.Gel, 6);
 		}*/
-	}
+    }
 }

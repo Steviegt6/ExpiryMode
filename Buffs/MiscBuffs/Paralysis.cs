@@ -15,11 +15,13 @@ namespace ExpiryMode.Buffs.MiscBuffs
             canBeCleared = false;
             Main.pvpBuff[Type] = true;
         }
+
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.velocity.Y = 0;
             npc.velocity.X = 0;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.velocity.X = 0;

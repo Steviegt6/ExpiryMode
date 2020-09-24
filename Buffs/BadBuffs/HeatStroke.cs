@@ -1,6 +1,4 @@
-using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ExpiryMode.Buffs.BadBuffs
@@ -16,6 +14,7 @@ namespace ExpiryMode.Buffs.BadBuffs
             Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.meleeSpeed = .4f;

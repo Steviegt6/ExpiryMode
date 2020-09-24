@@ -1,21 +1,20 @@
-using Terraria.DataStructures;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.ID;
 using Microsoft.Xna.Framework;
-using System.Threading.Tasks;
-using ExpiryMode.Mod_;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ExpiryMode.Mod_
 {
     public class DeathCountPlayer : ModPlayer
     {
         public int playerDeathCount;
+
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             DelayedSync(toWho, fromWho, newPlayer);
         }
+
         private void DelayedSync(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket pack = mod.GetPacket();

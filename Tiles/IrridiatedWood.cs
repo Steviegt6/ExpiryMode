@@ -1,13 +1,13 @@
-using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Tiles
 {
-	public class IrridiatedWood : ModTile
-	{
+    public class IrridiatedWood : ModTile
+    {
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
@@ -16,11 +16,12 @@ namespace ExpiryMode.Tiles
             Main.tileLighted[Type] = true;
             drop = ItemType<Items.Blocks.IrridiatedWood>();
             AddMapEntry(new Color(50, 50, 50));
-            soundType = SoundID.Dig ;
+            soundType = SoundID.Dig;
             minPick = 100;
             Main.tileMerge[Type][TileID.Stone] = true;
             Main.tileMerge[TileID.Stone][Type] = true;
         }
+
         public override bool CreateDust(int i, int j, ref int type)
         {
             if (Main.rand.Next(1) == 0)
@@ -33,11 +34,12 @@ namespace ExpiryMode.Tiles
             }
             return false;
         }
+
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-		{
-			r = 0.0f;
-			g = 0.0f;
-			b = 0.0f;
-		}
-	}
+        {
+            r = 0.0f;
+            g = 0.0f;
+            b = 0.0f;
+        }
+    }
 }

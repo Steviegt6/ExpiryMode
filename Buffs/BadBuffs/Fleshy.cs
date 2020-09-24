@@ -1,6 +1,4 @@
-using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ExpiryMode.Buffs.BadBuffs
@@ -16,11 +14,12 @@ namespace ExpiryMode.Buffs.BadBuffs
             Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             player.lifeRegenCount = 0;
-			player.aggro += 150;
-			player.statDefense -= 2;
+            player.aggro += 150;
+            player.statDefense -= 2;
             player.statLifeMax2 = (int)(player.statLifeMax2 * 0.95f);
         }
     }

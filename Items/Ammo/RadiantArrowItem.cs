@@ -1,24 +1,25 @@
-	using Microsoft.Xna.Framework;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using ExpiryMode.Items.Materials;
-using Terraria.DataStructures;
 using ExpiryMode.Projectiles;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ExpiryMode.Items.Ammo
 {
-	public class RadiantArrowItem : ModItem
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Radianite Arrow");
+    public class RadiantArrowItem : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Radianite Arrow");
             Tooltip.SetDefault("Stuns your enemies and gives them radiation poisoning!");
-			Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 9)); // Note: TicksPerFrame, Frames
-		}
+            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 9)); // Note: TicksPerFrame, Frames
+        }
+
         public override void SetDefaults()
         {
             Player player = Main.player[Main.myPlayer];
@@ -32,6 +33,7 @@ namespace ExpiryMode.Items.Ammo
             item.consumable = true;
             item.rare = ItemRarityID.Lime;
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             // Get the vanilla damage tooltip
@@ -49,18 +51,19 @@ namespace ExpiryMode.Items.Ammo
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
-		{
-			type = ProjectileType<RadiantArrow>();
-			return true;
-		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<RadianiteBarItem>());
-			recipe.AddIngredient(ItemID.WoodenArrow, 50);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this, 50);
-			recipe.AddRecipe();
-		}	
-	}
+        {
+            type = ProjectileType<RadiantArrow>();
+            return true;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemType<RadianiteBarItem>());
+            recipe.AddIngredient(ItemID.WoodenArrow, 50);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.SetResult(this, 50);
+            recipe.AddRecipe();
+        }
+    }
 }

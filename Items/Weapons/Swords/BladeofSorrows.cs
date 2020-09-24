@@ -7,12 +7,12 @@ namespace ExpiryMode.Items.Weapons.Swords
 {
 	public class BladeofSorrows : ModItem
 	{
-		public override void SetStaticDefaults() 
+		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Blade of Sorrows");
 			Tooltip.SetDefault("Not fully implemented yet, has no use as of now");
 		}
-		public override void SetDefaults() 
+		public override void SetDefaults()
 		{
 			item.damage = 32;
 			item.melee = true;
@@ -30,7 +30,6 @@ namespace ExpiryMode.Items.Weapons.Swords
 			item.shoot = ProjectileType<Projectiles.SorrowSlash>();
 			item.shootSpeed = 24f;
 			item.noUseGraphic = true;
-			
 		}
         public override void AddRecipes()
         {

@@ -1,22 +1,23 @@
-using System;
+using ExpiryMode.Buffs.BadBuffs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.Graphics.Shaders;
-using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Projectiles
 {
-	public class Plaguebird : ModProjectile
-	{
-		public override void SetStaticDefaults()
-		{
+    public class Plaguebird : ModProjectile
+    {
+        public override void SetStaticDefaults()
+        {
             DisplayName.SetDefault("Plaguebird");
             Main.projFrames[projectile.type] = 8;
             Main.frameRate = 6;
-		}
+        }
+
         public override void SetDefaults()
         {
             projectile.width = 22;
@@ -33,6 +34,7 @@ namespace ExpiryMode.Projectiles
             drawOriginOffsetX = -15;
             drawOriginOffsetY = -20;
         }
+
         /*public override bool OnTileCollide(Vector2 oldVelocity)
         {
             projectile.penetrate--;
@@ -59,12 +61,11 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
             return false;
         }*/
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             projectile.penetrate--;
@@ -89,16 +90,15 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
         }
+
         public override void Kill(int timeLeft)
         {
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/Pop"), projectile.position);
             if (Main.rand.NextFloat() < 1f)
-                {
+            {
                 if (Main.rand.NextFloat() < 1f)
                 {
                     Dust dust;
@@ -115,6 +115,7 @@ namespace ExpiryMode.Projectiles
                 }
             }
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             projectile.penetrate--;
@@ -139,11 +140,10 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
         }
+
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
             target.AddBuff(BuffType<RadiatedWater>(), 120, false);
@@ -169,17 +169,17 @@ namespace ExpiryMode.Projectiles
                             dust.fadeIn = 1.144737f;
                         }
                     }
-
                 }
-
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Rectangle frame = new Rectangle(0, projectile.frame * 72, 56, 72);
             spriteBatch.Draw(GetTexture("ExpiryMode/Projectiles/BiohazardBird"), projectile.position + new Vector2(projectile.width, projectile.height) / 2 - Main.screenPosition, frame, lightColor, projectile.rotation + (float)0.1 * (projectile.spriteDirection), new Vector2(56, 72) / 2, projectile.scale, projectile.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
             return false;
         }
+
         public override void AI()
         {
             if (++projectile.frameCounter >= 5)
@@ -218,8 +218,9 @@ namespace ExpiryMode.Projectiles
             //Increase the counter/angle in degrees by 1 point, you can change the rate here too, but the orbit may look choppy depending on the value
             projectile.ai[1] += 2f;
         }
-	}
+    }
 }
+
 /*
 	Dust dust;
 	// You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.

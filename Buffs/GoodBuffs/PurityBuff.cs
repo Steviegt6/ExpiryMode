@@ -1,9 +1,7 @@
-using System;
+using ExpiryMode.Buffs.BadBuffs;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Buffs.BadBuffs;
 
 namespace ExpiryMode.Buffs.GoodBuffs
 {
@@ -18,6 +16,7 @@ namespace ExpiryMode.Buffs.GoodBuffs
             Main.buffNoTimeDisplay[Type] = false;
             canBeCleared = true;
         }
+
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.HasBuff(ModContent.BuffType<PurityBuff>()))

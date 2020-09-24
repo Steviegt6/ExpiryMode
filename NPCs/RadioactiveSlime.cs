@@ -1,20 +1,21 @@
+using ExpiryMode.Buffs.BadBuffs;
+using ExpiryMode.Util;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using ExpiryMode.Buffs.BadBuffs;
-using Microsoft.Xna.Framework;
-using ExpiryMode.Util;
 
 namespace ExpiryMode.NPCs
 {
-	public class RadioactiveSlime : ModNPC
-	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Radioactive Slime");
-			Main.npcFrameCount[npc.type] = Main.npcFrameCount[2];
-		}
+    public class RadioactiveSlime : ModNPC
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Radioactive Slime");
+            Main.npcFrameCount[npc.type] = Main.npcFrameCount[2];
+        }
+
         public override void SetDefaults()
         {
             npc.buffImmune[BuffType<RadiatedWater>()] = true;
@@ -44,6 +45,7 @@ namespace ExpiryMode.NPCs
                 npc.knockBackResist = 0f;
             }
         }
+
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             if (!Main.hardMode)
@@ -55,10 +57,12 @@ namespace ExpiryMode.NPCs
                 target.AddBuff(BuffType<RadiatedWater>(), 300);
             }
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
-		{
-			return spawnInfo.player.GetModPlayer<Mod_.InfiniteSuffPlayer>().ZoneRadiated ? .5f : 0f;
-		}
+        {
+            return spawnInfo.player.GetModPlayer<Mod_.InfiniteSuffPlayer>().ZoneRadiated ? .5f : 0f;
+        }
+
         /*public override void FindFrame(int frameHeight)
         {
             npc.frameCounter = 1f;
@@ -67,6 +71,7 @@ namespace ExpiryMode.NPCs
             npc.frame.Y = frame * frameHeight;
             npc.spriteDirection = npc.direction;
         }*/
+
         public override void HitEffect(int hitDirection, double damage)
         {
             Dust dust;
@@ -86,10 +91,10 @@ namespace ExpiryMode.NPCs
                 dust = Main.dust[Terraria.Dust.NewDust(npc.Center, 30, 30, 275, npc.direction * -1, -1f * (npc.direction * -1), 0, new Color(8, 255, 0), 1f)];
                 dust = Main.dust[Terraria.Dust.NewDust(npc.Center, 30, 30, 275, npc.direction * -1, -1f * (npc.direction * -1), 0, new Color(8, 255, 0), 1f)];
             }
-
         }
+
         public override void NPCLoot()
-		{
+        {
             if (Main.rand.Next(1) == 1)
                 Item.NewItem(npc.getRect(), ItemID.Gel, 1);
             if (Main.rand.Next(2) == 1)
@@ -100,8 +105,8 @@ namespace ExpiryMode.NPCs
                 Item.NewItem(npc.getRect(), ItemID.Gel, 4);
             if (Main.rand.Next(5) == 1)
                 Item.NewItem(npc.getRect(), ItemID.Gel, 5);
-			if (Main.rand.Next(6) == 1)
-				Item.NewItem(npc.getRect(), ItemID.Gel, 6);
-		}
-	}
+            if (Main.rand.Next(6) == 1)
+                Item.NewItem(npc.getRect(), ItemID.Gel, 6);
+        }
+    }
 }
